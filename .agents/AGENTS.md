@@ -1,4 +1,4 @@
-# GEMINI.md
+# AGENTS.md
 
 This is your primary context file. Read this completely before starting any task.
 This file tells you where the project stands, what the rules are, and where to find details.
@@ -25,7 +25,7 @@ Always read these before writing code:
 | docs/DECISIONS.md | All finalized architectural and product decisions |
 | docs/API.md | Complete API contract |
 | docs/ARCHITECTURE.md | System structure, folder layout, request flows |
-| docs/AI_RULES.md | Non-negotiable coding rules including size limits and architecture constraints |
+| .agents/AI_RULES.md | Non-negotiable coding rules including size limits and architecture constraints |
 
 For the current task, also read the specific task file in docs/tasks/.
 
@@ -37,13 +37,13 @@ For the current task, also read the specific task file in docs/tasks/.
 > It reflects what is built, tested, and committed.
 
 ### Completed Tasks
-None yet.
+- TASK-001: Worker init and Hono routing scaffold
 
 ### In Progress
 None.
 
 ### Not Started
-- TASK-001 through TASK-019
+- TASK-002 through TASK-019
 
 ---
 

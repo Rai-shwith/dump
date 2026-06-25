@@ -17,7 +17,7 @@ Apply it to every response in the worker.
 
 ## Files That Must Not Be Changed
 - All other files
-- docs/ (except GEMINI.md at the end)
+- docs/ (except AGENTS.md at the end)
 
 ## Suggested AI Model
 Gemini 2.5 Flash
@@ -88,7 +88,7 @@ OPTIONS handled correctly.
 ## Commit Suggestion
 feat(worker): implement security headers and CORS middleware
 
-## How to Update GEMINI.md After Completion
+## How to Update AGENTS.md After Completion
 In the Current Project State section:
 - Move TASK-014 from Not Started to Completed Tasks
 - Add summary: "Security headers and CORS middleware applied to all responses"

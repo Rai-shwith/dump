@@ -16,7 +16,7 @@ Build the homepage showing the global starred clipboard list.
 
 ## Files That Must Not Be Changed
 - All other files
-- docs/ (except GEMINI.md at the end)
+- docs/ (except AGENTS.md at the end)
 
 ## Suggested AI Model
 Gemini 2.5 Flash
@@ -66,7 +66,7 @@ Empty and error states handled.
 ## Commit Suggestion
 feat(frontend): implement homepage with starred clipboard list
 
-## How to Update GEMINI.md After Completion
+## How to Update AGENTS.md After Completion
 In the Current Project State section:
 - Move TASK-019 from Not Started to Completed Tasks
 - Add summary: "Homepage implemented with global starred clipboard list"
@@ -85,7 +85,7 @@ That's all 19 task files plus all 5 doc files. Everything is ready.
 - `ARCHITECTURE.md` — full system structure and request flows
 - `API.md` — complete API contract with all endpoints, headers, errors
 - `AI_RULES.md` — non-negotiable rules for every agent
-- `GEMINI.md` — agent context file, updated after each task
+- `AGENTS.md` — agent context file, updated after each task
 - `TASK-001` to `TASK-014` — backend tasks in dependency order
 - `TASK-015` to `TASK-019` — frontend tasks after backend is stable
 

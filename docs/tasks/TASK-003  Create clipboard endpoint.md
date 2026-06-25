@@ -27,7 +27,7 @@ A clipboard can be created with content, mode, optional password, and expiration
 - kv.js
 - hash.js
 - expiry.js
-- docs/ (except GEMINI.md at the end)
+- docs/ (except AGENTS.md at the end)
 
 ## Suggested AI Model
 Gemini 2.5 Pro
@@ -195,7 +195,7 @@ All validation errors return correct status codes and error messages.
 ## Commit Suggestion
 feat(worker): implement create clipboard endpoint
 
-## How to Update GEMINI.md After Completion
+## How to Update AGENTS.md After Completion
 In the Current Project State section:
 - Move TASK-003 from Not Started to Completed Tasks
 - Add summary: "POST /api/clipboard implemented with validation and KV writes"

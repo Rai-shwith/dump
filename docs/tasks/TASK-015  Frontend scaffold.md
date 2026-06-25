@@ -21,7 +21,7 @@ No real pages yet. A working scaffold that compiles without errors.
 
 ## Files That Must Not Be Changed
 - workers/
-- docs/ (except GEMINI.md at the end)
+- docs/ (except AGENTS.md at the end)
 
 ## Suggested AI Model
 Gemini 2.5 Pro
@@ -29,7 +29,7 @@ Gemini 2.5 Pro
 ## Coding Prompt
 
 Set up the React + Vite + TypeScript frontend scaffold for Dump.
-Read docs/ARCHITECTURE.md (Frontend section) and docs/AI_RULES.md before writing code.
+Read docs/ARCHITECTURE.md (Frontend section) and .agents/AI_RULES.md before writing code.
 Follow all rules in AI_RULES.md strictly.
 
 1. Confirm tsconfig.json has strict: true. If not, add it.
@@ -283,7 +283,7 @@ Follow all rules in AI_RULES.md strictly.
 ## Commit Suggestion
 feat(frontend): initialize TypeScript scaffold with routing, types, and service layer
 
-## How to Update GEMINI.md After Completion
+## How to Update AGENTS.md After Completion
 In the Current Project State section:
 - Move TASK-015 from Not Started to Completed Tasks
 - Add summary: "Frontend scaffold initialized with TypeScript, routing, types, services, and utilities"

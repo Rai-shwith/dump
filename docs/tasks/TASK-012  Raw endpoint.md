@@ -17,7 +17,7 @@ Verify handleRaw is complete, returns plain text, and is correctly wired in the 
 
 ## Files That Must Not Be Changed
 - All other files
-- docs/ (except GEMINI.md at the end)
+- docs/ (except AGENTS.md at the end)
 
 ## Suggested AI Model
 Gemini 2.5 Flash
@@ -58,7 +58,7 @@ Raw endpoint returns plain text with correct headers and enforces all same rules
 ## Commit Suggestion
 feat(worker): verify and finalize raw clipboard endpoint
 
-## How to Update GEMINI.md After Completion
+## How to Update AGENTS.md After Completion
 In the Current Project State section:
 - Move TASK-012 from Not Started to Completed Tasks
 - Add summary: "Raw endpoint verified and finalized"

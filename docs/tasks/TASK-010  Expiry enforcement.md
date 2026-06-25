@@ -17,7 +17,7 @@ Replace ad-hoc expiration checks in handlers with utility functions.
 
 ## Files That Must Not Be Changed
 - All other files
-- docs/ (except GEMINI.md at the end)
+- docs/ (except AGENTS.md at the end)
 
 ## Suggested AI Model
 Gemini 2.5 Pro
@@ -85,7 +85,7 @@ KV TTL set on write for time-based expiration.
 ## Commit Suggestion
 feat(worker): centralize expiry logic in utils/expiry.js
 
-## How to Update GEMINI.md After Completion
+## How to Update AGENTS.md After Completion
 In the Current Project State section:
 - Move TASK-010 from Not Started to Completed Tasks
 - Add summary: "Expiry logic centralized in utils/expiry.js, KV TTL applied on write"

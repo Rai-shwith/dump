@@ -17,7 +17,7 @@ Allows updating content, expiration, and password of an existing clipboard.
 
 ## Files That Must Not Be Changed
 - All other files
-- docs/ (except GEMINI.md at the end)
+- docs/ (except AGENTS.md at the end)
 
 ## Suggested AI Model
 Gemini 2.5 Pro
@@ -117,7 +117,7 @@ Partial updates work (only provided fields change).
 ## Commit Suggestion
 feat(worker): implement update clipboard endpoint
 
-## How to Update GEMINI.md After Completion
+## How to Update AGENTS.md After Completion
 In the Current Project State section:
 - Move TASK-005 from Not Started to Completed Tasks
 - Add summary: "PUT /api/clipboard/:code implemented with partial updates and auth"

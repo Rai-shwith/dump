@@ -16,7 +16,7 @@ Wire up edit and delete functionality on the view page.
 
 ## Files That Must Not Be Changed
 - All other files
-- docs/ (except GEMINI.md at the end)
+- docs/ (except AGENTS.md at the end)
 
 ## Suggested AI Model
 Gemini 2.5 Pro
@@ -83,7 +83,7 @@ Auth handled correctly per mode.
 ## Commit Suggestion
 feat(frontend): implement edit and delete flows on view page
 
-## How to Update GEMINI.md After Completion
+## How to Update AGENTS.md After Completion
 In the Current Project State section:
 - Move TASK-018 from Not Started to Completed Tasks
 - Add summary: "Edit and delete flows implemented on view page"

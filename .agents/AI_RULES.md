@@ -7,8 +7,8 @@ Read this file completely before writing a single line of code.
 
 ## General Behavior
 
-- Read GEMINI.md first on every task, without exception.
-- Read the referenced files in GEMINI.md before starting work.
+- Read AGENTS.md first on every task, without exception.
+- Read the referenced files in AGENTS.md before starting work.
 - Never modify files outside the "Files allowed to change" list in the task.
 - Never add features not described in the current task.
 - Never refactor code outside the current task scope.
@@ -149,7 +149,7 @@ These limits exist to keep AI-generated code auditable and testable.
 ## Task Discipline
 
 - Complete one task fully before moving to the next.
-- After completing a task, update GEMINI.md as described at the end of the task file.
+- After completing a task, update AGENTS.md as described at the end of the task file.
 - Run the manual testing checklist before marking a task complete.
 - Never skip the manual testing checklist.
 - Make the suggested commit after each task.
@@ -160,7 +160,7 @@ These limits exist to keep AI-generated code auditable and testable.
 
 - Never add authentication or user accounts.
 - Never add features outside V1 scope.
-- Never modify docs/ files except GEMINI.md (and only as instructed per task).
+- Never modify docs/ files except AGENTS.md (and only as instructed per task).
 - Never change the KV key structure without a new DECISIONS.md entry.
 - Never expose internal errors or stack traces in API responses.
 - Never add analytics, tracking, or logging beyond what tasks require.

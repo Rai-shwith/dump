@@ -15,7 +15,7 @@ Replace plaintext owner token storage and comparison with SHA-256 hashed storage
 
 ## Files That Must Not Be Changed
 - All other files
-- docs/ (except GEMINI.md at the end)
+- docs/ (except AGENTS.md at the end)
 
 ## Suggested AI Model
 Gemini 2.5 Pro
@@ -60,7 +60,7 @@ All owner token flows work correctly after hashing.
 ## Commit Suggestion
 feat(worker): implement SHA-256 owner token hashing
 
-## How to Update GEMINI.md After Completion
+## How to Update AGENTS.md After Completion
 In the Current Project State section:
 - Move TASK-008 from Not Started to Completed Tasks
 - Add summary: "Owner token hashed with SHA-256 before KV storage"

@@ -19,7 +19,7 @@ Returns clipboard content with auth checks and locked state for view-password cl
 
 ## Files That Must Not Be Changed
 - All other files
-- docs/ (except GEMINI.md at the end)
+- docs/ (except AGENTS.md at the end)
 
 ## Suggested AI Model
 Gemini 2.5 Pro
@@ -119,7 +119,7 @@ One-time view clipboards deleted after first read.
 ## Commit Suggestion
 feat(worker): implement read clipboard endpoint
 
-## How to Update GEMINI.md After Completion
+## How to Update AGENTS.md After Completion
 In the Current Project State section:
 - Move TASK-004 from Not Started to Completed Tasks
 - Add summary: "GET /api/clipboard/:code implemented with auth checks and one-time view"

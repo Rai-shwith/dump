@@ -19,7 +19,7 @@ Establish the canonical KV key structure across the codebase.
 - All handler files
 - index.js
 - Any other utility file
-- docs/ (except GEMINI.md at the end)
+- docs/ (except AGENTS.md at the end)
 
 ## Suggested AI Model
 Gemini 2.5 Pro
@@ -97,7 +97,7 @@ No errors in console = pass.
 ## Commit Suggestion
 feat(worker): implement KV helper utilities
 
-## How to Update GEMINI.md After Completion
+## How to Update AGENTS.md After Completion
 In the Current Project State section:
 - Move TASK-002 from Not Started to Completed Tasks
 - Add summary: "KV helper utilities implemented in utils/kv.js"

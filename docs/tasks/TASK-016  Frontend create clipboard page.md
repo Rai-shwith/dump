@@ -18,7 +18,7 @@ User can create a clipboard and be redirected to the view page.
 
 ## Files That Must Not Be Changed
 - All other files
-- docs/ (except GEMINI.md at the end)
+- docs/ (except AGENTS.md at the end)
 
 ## Suggested AI Model
 Gemini 2.5 Pro
@@ -91,7 +91,7 @@ Errors displayed on failure.
 ## Commit Suggestion
 feat(frontend): implement create clipboard page
 
-## How to Update GEMINI.md After Completion
+## How to Update AGENTS.md After Completion
 In the Current Project State section:
 - Move TASK-016 from Not Started to Completed Tasks
 - Add summary: "Create clipboard page functional"

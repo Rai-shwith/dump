@@ -15,7 +15,7 @@ Implement the star and unstar endpoints and the global starred list endpoint.
 
 ## Files That Must Not Be Changed
 - All other files
-- docs/ (except GEMINI.md at the end)
+- docs/ (except AGENTS.md at the end)
 
 ## Suggested AI Model
 Gemini 2.5 Pro
@@ -97,7 +97,7 @@ Expired clipboards lazily removed from starred list.
 ## Commit Suggestion
 feat(worker): implement starred global list endpoints
 
-## How to Update GEMINI.md After Completion
+## How to Update AGENTS.md After Completion
 In the Current Project State section:
 - Move TASK-011 from Not Started to Completed Tasks
 - Add summary: "Star/unstar/getStarred endpoints implemented with lazy expiry cleanup"

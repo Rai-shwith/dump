@@ -24,7 +24,7 @@ dump/
 │   ├── ARCHITECTURE.md    # This file
 │   ├── API.md             # API contract
 │   ├── DECISIONS.md       # All finalized decisions
-│   ├── GEMINI.md          # AI agent context file
+│   ├── AGENTS.md          # AI agent context file
 │   ├── AI_RULES.md        # Rules for AI coding agents
 │   └── tasks/             # Incremental task files
 └── README.md

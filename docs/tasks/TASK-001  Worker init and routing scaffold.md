@@ -22,7 +22,7 @@ establish the folder structure, and confirm the worker runs locally.
 
 ## Files That Must Not Be Changed
 - apps/
-- docs/ (except GEMINI.md at the end)
+- docs/ (except AGENTS.md at the end)
 
 ## Suggested AI Model
 Gemini 2.5 Pro
@@ -30,7 +30,7 @@ Gemini 2.5 Pro
 ## Coding Prompt
 
 You are initializing a Cloudflare Worker for the Dump clipboard service using Hono and TypeScript.
-Read docs/ARCHITECTURE.md and docs/AI_RULES.md before writing any code.
+Read docs/ARCHITECTURE.md and .agents/AI_RULES.md before writing any code.
 
 Follow all rules in AI_RULES.md strictly. Pay attention to:
 - TypeScript strict mode everywhere
@@ -239,7 +239,7 @@ Test each route:
 ## Commit Suggestion
 feat(worker): initialize Hono + TypeScript worker scaffold with typed routes
 
-## How to Update GEMINI.md After Completion
+## How to Update AGENTS.md After Completion
 In the Current Project State section:
 - Move TASK-001 from Not Started to Completed Tasks
 - Add summary: "Hono + TypeScript worker initialized with typed scaffold and route stubs"

@@ -17,7 +17,7 @@ Ensure reserved keyword enforcement is consistent across create.
 
 ## Files That Must Not Be Changed
 - All other files
-- docs/ (except GEMINI.md at the end)
+- docs/ (except AGENTS.md at the end)
 
 ## Suggested AI Model
 Gemini 2.5 Flash
@@ -75,7 +75,7 @@ All reserved keywords blocked.
 ## Commit Suggestion
 feat(worker): finalize code validation and reserved keyword enforcement
 
-## How to Update GEMINI.md After Completion
+## How to Update AGENTS.md After Completion
 In the Current Project State section:
 - Move TASK-013 from Not Started to Completed Tasks
 - Add summary: "Code validation and reserved keywords enforced in utils/validate.js"
