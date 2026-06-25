@@ -1,0 +1,213 @@
+This file documents all finalized architectural and product decisions for the Dump project.
+AI agents must read this file before making any structural or design decisions.
+
+---
+
+## D-001 — Repository Structure
+
+**Decision:** Monorepo with split apps and workers.
+
+**Structure:**
+- apps/dump-web → React + Vite frontend
+- workers/dump-worker → Cloudflare Worker API
+- Future: apps/host-web, workers/host-worker
+
+**Reason:** Keeps dump and host cleanly separated from day one. No migration needed later.
+
+---
+
+## D-002 — Technology Stack
+
+**Frontend:** React, Vite, Cloudflare Pages
+**Backend:** Cloudflare Workers
+**Storage:** Cloudflare KV
+**Future storage (host):** Cloudflare R2
+
+---
+
+## D-003 — KV Key Structure
+
+Two keys per clipboard. No secondary indexes in V1.
+
+```
+clip:<code>:meta     → JSON object (metadata)
+clip:<code>:content  → raw string (clipboard text)
+```
+
+**Metadata schema:**
+```json
+{
+  "code": "string",
+  "mode": "public | reserved | protected",
+  "passwordHash": "string | null",
+  "passwordMode": "view | edit | null",
+  "ownerTokenHash": "string",
+  "createdAt": "ISO8601 UTC",
+  "expiresAt": "ISO8601 UTC | null",
+  "isOneTimeView": "boolean",
+  "starCount": "number",
+  "isStarred": "boolean"
+}
+```
+
+**Global starred list:**
+```
+app:starred → JSON array of up to 5 clipboard codes (most recently starred first)
+```
+
+**Reason:** Simple two-key structure is easy to reason about, avoids over-normalization,
+and content can grow independently of metadata reads.
+
+---
+
+## D-004 — Password Hashing
+
+**Algorithm:** SHA-256(password + pepper)
+**Pepper:** Stored as a Worker environment secret (env var: PASSWORD_PEPPER)
+**Library:** Node crypto (SubtleCrypto in Workers runtime)
+**Storage:** Hash stored in clip:<code>:meta as passwordHash
+
+**Reason:** bcryptjs exceeds Cloudflare Workers CPU time limits at cost factor 10+.
+SHA-256 with a secret pepper is fast, sufficient for this use case, and fits the
+serverless constraint cleanly.
+
+---
+
+## D-005 — Owner Token
+
+**Generation:** Worker generates a random token (crypto.randomUUID()) on clipboard creation.
+**Returned to client:** Yes, in the creation response body (once, never again).
+**Client storage:** Browser localStorage under key: ownerTokens.<code>
+**KV storage:** SHA-256 hash of the token stored in metadata as ownerTokenHash.
+**Bypass:** Owner token bypasses all password prompts (view and edit passwords).
+**Recovery:** No recovery mechanism. If localStorage is cleared, token is lost.
+
+---
+
+## D-006 — Clipboard Modes
+
+Three modes:
+
+| Mode       | View | Edit | Delete | Code Reserved |
+|------------|------|------|--------|---------------|
+| public     | all  | all  | all    | no            |
+| reserved   | all  | all  | all    | yes           |
+| protected  | *    | *    | *      | yes           |
+
+*protected: depends on passwordMode (view or edit)
+
+---
+
+## D-007 — Expiration Options
+
+Supported expiration presets:
+- 1 minute
+- 5 minutes
+- 15 minutes
+- 1 hour
+- 1 day
+- 1 week
+- 1 month
+- 1 year
+- Infinite (public mode only)
+- One-Time View
+- Custom (date + time picker, frontend converts to UTC before sending)
+
+Backend stores only UTC timestamps in ISO 8601 format.
+Frontend converts UTC to user local timezone for display.
+Expired clipboards return 404. The service does not reveal prior existence.
+
+---
+
+## D-008 — One-Time View
+
+- Clipboard is deleted after the first successful content read.
+- "Read" means the content was returned to the client, not just password verification.
+- If password protected, unlocking alone does not trigger deletion.
+- Deletion is triggered by the GET content endpoint after content is returned.
+- If the clipboard was starred, it is removed from app:starred on deletion.
+- All future requests return 404 after deletion.
+
+---
+
+## D-009 — Starring
+
+- Only public clipboards can be starred.
+- One pin per clipboard (not per user). A clipboard is either pinned or not.
+- Global state stored in app:starred (JSON array, max 5 codes).
+- When a new clipboard is pinned and the list is full, the oldest entry is dropped silently.
+- If a starred clipboard is deleted (manually or via one-time view), it is removed
+  from app:starred by the deletion handler.
+- No per-user starring. No star counts. isStarred boolean in metadata is the source of truth.
+
+---
+
+## D-010 — Reserved Codes
+
+- Reserved codes prevent another user from claiming the same URL.
+- They do not protect content (anyone can still edit or delete).
+- Enforced at creation time: if clip:<code>:meta exists, the code is taken.
+- Reserved mode requires mandatory expiration (max 1 year).
+- After expiration, the code becomes available again.
+
+---
+
+## D-011 — Clipboard Code Rules
+
+- Case insensitive, stored and compared in lowercase.
+- Allowed characters: a-z, 0-9, hyphen (-), underscore (_)
+- Minimum length: 4 characters
+- Default suggestion: 8 random characters (generated by frontend)
+- Reserved keywords cannot be used (validated on Worker)
+
+**Reserved keywords list:**
+admin, api, raw, json, create, edit, delete, settings, help, docs, host
+
+---
+
+## D-012 — Raw Endpoint
+
+GET /api/clipboard/<code>/raw
+
+Returns plain text content only.
+No JSON wrapper.
+Intended for scripts and automation.
+Respects password protection and expiration.
+One-time view deletion applies here too.
+
+---
+
+## D-013 — Security Headers
+
+All Worker responses must include:
+- Content-Security-Policy
+- X-Frame-Options: DENY
+- X-Content-Type-Options: nosniff
+- Referrer-Policy: no-referrer
+
+Applied via middleware on every response.
+
+---
+
+## D-014 — SEO Blocking
+
+robots.txt served from frontend:
+```
+User-agent: *
+Disallow: /
+```
+
+All clipboard pages include:
+```html
+<meta name="robots" content="noindex,nofollow">
+```
+
+---
+
+## D-015 — Build Philosophy
+
+- Backend first, functional ugly frontend second.
+- No premature abstraction.
+- No authentication system.
+- No features outside documented V1 scope.
+- UI polish phase handled separately via Lovable after backend is stable.
