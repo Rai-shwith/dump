@@ -211,3 +211,70 @@ All clipboard pages include:
 - No authentication system.
 - No features outside documented V1 scope.
 - UI polish phase handled separately via Lovable after backend is stable.
+
+## D-016 — Language and Tooling
+
+**Decision:** TypeScript for both frontend and backend from day one.
+
+**Frontend:** React + Vite + TypeScript (strict mode)
+**Backend:** Cloudflare Workers + Hono + TypeScript (strict mode)
+
+**Reason:** The project is heavily AI-assisted. TypeScript strict mode forces
+explicit contracts between modules, catches mistakes across task boundaries,
+and makes AI-generated code more predictable and auditable.
+
+Hono replaces the manual URL router in the worker. It provides type-safe
+routing, built-in middleware support, and first-class Cloudflare Workers
+compatibility with zero overhead.
+
+**Implications:**
+- All source files use .ts (worker) and .tsx/.ts (frontend)
+- tsconfig.json with strict: true in both apps/dump-web and workers/dump-worker
+- No plain .js files in src/ directories
+- ESLint with TypeScript rules enabled in both packages
+
+---
+
+## D-017 — Code Size and Complexity Limits
+
+**Decision:** Enforce file, function, and component size limits across the codebase.
+
+These limits exist because the project is AI-assisted. Large files cause AI agents
+to lose context, append instead of refactor, and produce untestable output.
+
+| Unit | Soft Limit | Hard Limit |
+|------|-----------|------------|
+| File | 250 lines | 400 lines |
+| Function | 40 lines | 60 lines |
+| React component | 150 lines | 250 lines |
+| Nesting depth | 3 levels | — |
+| Function parameters | 5 | — |
+
+**Rules:**
+- When a file approaches the soft limit, split before adding more code.
+- When modifying an already-large file, refactor first, then add.
+- Never append to a file that already exceeds the hard limit.
+- Business logic goes in services/ and hooks/. Components stay presentational.
+- Services must not import React.
+- Components must not import pages.
+- No circular imports.
+- Prefer centralized constants and configuration files.
+- Prefer existing libraries over reinventing utilities.
+
+---
+
+## D-018 — Monorepo Future-Proofing
+
+**Decision:** Repository structure is monorepo-friendly from day one.
+
+Current:
+  apps/dump-web, workers/dump-worker
+
+Future (no migration needed):
+  apps/dump-web, apps/host-web
+  workers/dump-worker, workers/host-worker
+  packages/shared (if shared types or utilities emerge)
+
+Each app and worker is an independent package with its own tsconfig,
+package.json, and deployment config. No root-level build tooling yet.
+A packages/ directory may be introduced later for shared types — not in V1.

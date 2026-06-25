@@ -17,9 +17,9 @@ It consists of a React frontend deployed on Cloudflare Pages and a Cloudflare Wo
 ```
 dump/
 ├── apps/
-│   └── dump-web/          # React + Vite frontend
+│   └── dump-web/          # React + Vite + TypeScript frontend
 ├── workers/
-│   └── dump-worker/       # Cloudflare Worker API
+│   └── dump-worker/       # Cloudflare Worker + Hono API (TypeScript)
 ├── docs/
 │   ├── ARCHITECTURE.md    # This file
 │   ├── API.md             # API contract
@@ -30,11 +30,23 @@ dump/
 └── README.md
 ```
 
+Future additions slot in without restructuring:
+```
+apps/
+  dump-web/
+  host-web/
+workers/
+  dump-worker/
+  host-worker/
+packages/
+  shared/     (if shared types emerge — not in V1)
+```
+
 ---
 
 ## Frontend — apps/dump-web
 
-**Tech:** React, Vite
+**Tech:** React, Vite, TypeScript (strict)
 **Deployment:** Cloudflare Pages
 **Domain:** dump.ashwithrai.me
 
@@ -55,23 +67,35 @@ apps/dump-web/
 │   └── robots.txt
 ├── src/
 │   ├── assets/
-│   ├── components/       # Reusable UI components
+│   ├── components/       # Presentational UI components (no business logic)
 │   ├── pages/            # Route-level page components
-│   ├── hooks/            # Custom React hooks
-│   ├── utils/            # Helper functions (code gen, time conversion, localStorage)
-│   ├── App.jsx
-│   ├── main.jsx
+│   ├── hooks/            # Custom React hooks (data fetching, state logic)
+│   ├── services/         # API calls and business logic (no React imports)
+│   ├── utils/            # Pure utility functions (time, codegen, tokens)
+│   ├── types/            # Shared TypeScript types and interfaces
+│   ├── constants/        # App-wide constants (reserved keywords, limits)
+│   ├── App.tsx
+│   ├── main.tsx
 │   └── index.css
 ├── index.html
-├── vite.config.js
+├── vite.config.ts
+├── tsconfig.json
 └── package.json
 ```
+
+### Architecture Constraints
+- Components must not contain API call logic — use hooks and services
+- Services must not import React
+- Components must not import pages
+- Business logic lives in services/ and hooks/
+- Shared types live in types/
+- Constants and config live in constants/
 
 ---
 
 ## Worker — workers/dump-worker
 
-**Tech:** Cloudflare Workers (ES modules)
+**Tech:** Cloudflare Workers, Hono, TypeScript (strict)
 **Deployment:** Cloudflare Workers
 **Base URL:** dump.ashwithrai.me/api
 
@@ -90,20 +114,35 @@ apps/dump-web/
 ```
 workers/dump-worker/
 ├── src/
-│   ├── handlers/
-│   │   ├── clipboard.js      # CRUD handlers
-│   │   └── starred.js        # Starred list handlers
+│   ├── routes/
+│   │   ├── clipboard.ts      # Hono route handlers for clipboard CRUD
+│   │   └── starred.ts        # Hono route handlers for starred endpoints
+│   ├── services/
+│   │   ├── clipboardService.ts   # Clipboard business logic
+│   │   └── starredService.ts     # Starring business logic
 │   ├── utils/
-│   │   ├── hash.js           # SHA-256 hashing
-│   │   ├── validate.js       # Code validation, reserved keywords
-│   │   ├── kv.js             # KV read/write helpers
-│   │   └── expiry.js         # Expiration calculation and checks
+│   │   ├── hash.ts           # SHA-256 hashing
+│   │   ├── validate.ts       # Code validation, reserved keywords
+│   │   ├── kv.ts             # KV read/write helpers
+│   │   └── expiry.ts         # Expiration calculation and checks
 │   ├── middleware/
-│   │   └── cors.js           # CORS + security headers
-│   └── index.js              # Router and entry point
+│   │   └── security.ts       # CORS + security headers middleware
+│   ├── types/
+│   │   └── index.ts          # Shared TypeScript types (ClipboardMeta, Env, etc.)
+│   ├── constants/
+│   │   └── index.ts          # Reserved keywords, limits, allowed origins
+│   └── index.ts              # Hono app entry point
 ├── wrangler.toml
+├── tsconfig.json
 └── package.json
 ```
+
+### Architecture Constraints
+- Route handlers in routes/ are thin — extract logic to services/
+- Services contain business logic and call utils/
+- Utils are pure functions with no business logic
+- Types are defined in types/index.ts and imported where needed
+- Constants are defined in constants/index.ts — never inline magic values
 
 ---
 
@@ -118,17 +157,17 @@ workers/dump-worker/
 
 ### Metadata schema
 
-```json
-{
-  "code": "string",
-  "mode": "public | reserved | protected",
-  "passwordHash": "string | null",
-  "passwordMode": "view | edit | null",
-  "ownerTokenHash": "string",
-  "createdAt": "ISO8601 UTC",
-  "expiresAt": "ISO8601 UTC | null",
-  "isOneTimeView": "boolean",
-  "isStarred": "boolean"
+```typescript
+interface ClipboardMeta {
+  code: string;
+  mode: "public" | "reserved" | "protected";
+  passwordHash: string | null;
+  passwordMode: "view" | "edit" | null;
+  ownerTokenHash: string;
+  createdAt: string;   // ISO8601 UTC
+  expiresAt: string | null;  // ISO8601 UTC
+  isOneTimeView: boolean;
+  isStarred: boolean;
 }
 ```
 
@@ -146,72 +185,76 @@ workers/dump-worker/
 
 ```
 Client → POST /api/clipboard
-       → Worker validates code, checks reserved keywords
-       → Worker checks code availability in KV
-       → Worker hashes password (if provided)
-       → Worker generates owner token, hashes it
-       → Worker writes clip:<code>:meta and clip:<code>:content to KV
-       → Worker returns { code, ownerToken, expiresAt }
+       → Hono router → clipboard route handler
+       → clipboardService.createClipboard()
+       → validate code, check reserved keywords
+       → check code availability in KV
+       → hash password (if provided)
+       → generate owner token, hash it
+       → write clip:<code>:meta and clip:<code>:content to KV
+       → return { code, ownerToken, expiresAt }
        → Client stores ownerToken in localStorage
 ```
 
 ### Read Clipboard
 
 ```
-Client → GET /api/clipboard/<code>
-       → Worker reads clip:<code>:meta
-       → Worker checks expiration → 404 if expired
-       → Worker checks password mode
+Client → GET /api/clipboard/:code
+       → Hono router → clipboard route handler
+       → clipboardService.readClipboard()
+       → read clip:<code>:meta
+       → check expiration → 404 if expired
+       → check password mode
          → if view password required and no valid token → return { locked: true }
          → if owner token provided → bypass password
-       → Worker reads clip:<code>:content
-       → Worker returns content
-       → If isOneTimeView → Worker deletes both KV keys, removes from app:starred
+       → read clip:<code>:content
+       → return content
+       → If isOneTimeView → delete both KV keys, remove from app:starred
 ```
 
 ### Update Clipboard
 
 ```
-Client → PUT /api/clipboard/<code>
-       → Worker reads meta
-       → Worker checks expiration → 404 if expired
-       → Worker verifies owner token or edit password
-       → Worker updates meta and/or content in KV
-       → Worker returns { success: true }
+Client → PUT /api/clipboard/:code
+       → clipboardService.updateClipboard()
+       → read meta → check expiration
+       → verify owner token or edit password
+       → update meta and/or content in KV
+       → return { success: true }
 ```
 
 ### Delete Clipboard
 
 ```
-Client → DELETE /api/clipboard/<code>
-       → Worker reads meta
-       → Worker verifies owner token or password (if protected)
-       → Worker deletes clip:<code>:meta and clip:<code>:content
-       → Worker removes code from app:starred if present
-       → Worker returns { success: true }
+Client → DELETE /api/clipboard/:code
+       → clipboardService.deleteClipboard()
+       → read meta → verify auth
+       → delete clip:<code>:meta and clip:<code>:content
+       → remove code from app:starred if present
+       → return { success: true }
 ```
 
 ### Star Clipboard
 
 ```
-Client → POST /api/clipboard/<code>/star
-       → Worker reads meta → verifies clipboard is public mode
-       → If already starred → return { success: true } (idempotent)
-       → Worker reads app:starred
-       → Worker prepends code to list
-       → If list length > 5 → removes oldest entry, updates that clipboard's isStarred to false
-       → Worker updates app:starred and sets isStarred: true in meta
-       → Worker returns { success: true }
+Client → POST /api/clipboard/:code/star
+       → starredService.starClipboard()
+       → verify clipboard is public mode
+       → read app:starred
+       → prepend code, enforce max 5, update displaced clipboard's isStarred
+       → update app:starred and meta.isStarred
+       → return { success: true }
 ```
 
 ### Unstar Clipboard
 
 ```
-Client → DELETE /api/clipboard/<code>/star
-       → Worker reads meta → verifies clipboard is public mode
-       → Worker removes code from app:starred
-       → Worker sets isStarred: false in meta
-       → Worker returns { success: true }
+Client → DELETE /api/clipboard/:code/star
+       → starredService.unstarClipboard()
+       → verify clipboard is public mode
+       → remove code from app:starred
+       → set meta.isStarred = false
+       → return { success: true }
 ```
 
 ---
@@ -220,9 +263,10 @@ Client → DELETE /api/clipboard/<code>/star
 
 | Variable | Description |
 |----------|-------------|
-| PASSWORD_PEPPER | Secret string appended to passwords before hashing |
+| PASSWORD_PEPPER | Secret string appended to passwords before SHA-256 hashing |
 
 Stored as a Cloudflare Worker secret (not in wrangler.toml).
+Typed via the Env interface in src/types/index.ts.
 
 ---
 
@@ -248,13 +292,14 @@ Worker allows requests from:
 - http://localhost:5173 (local development)
 
 All other origins are rejected.
+Allowed origins defined in constants/index.ts.
 
 ---
 
 ## Future: host.ashwithrai.me
 
 When the host service is added:
-- apps/host-web → new Vite app
-- workers/host-worker → new Worker with R2 storage
+- apps/host-web → new Vite + TypeScript app
+- workers/host-worker → new Hono Worker with R2 storage
 - No changes required to dump-web or dump-worker
-- Docs updated with host-specific ARCHITECTURE section
+- A packages/shared directory may be introduced for shared types if overlap is significant

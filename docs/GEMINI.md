@@ -12,7 +12,7 @@ share text between devices, and optionally protect them with passwords.
 No accounts. No email. Anonymous usage.
 
 Live domain: dump.ashwithrai.me
-Tech: React + Vite (Cloudflare Pages) + Cloudflare Workers + Cloudflare KV
+Tech: React + Vite + TypeScript (Cloudflare Pages) + Hono + Cloudflare Workers (TypeScript) + Cloudflare KV
 
 ---
 
@@ -24,8 +24,8 @@ Always read these before writing code:
 |------|---------|
 | docs/DECISIONS.md | All finalized architectural and product decisions |
 | docs/API.md | Complete API contract |
-| docs/ARCHITECTURE.md | System structure and request flows |
-| docs/AI_RULES.md | Non-negotiable coding rules |
+| docs/ARCHITECTURE.md | System structure, folder layout, request flows |
+| docs/AI_RULES.md | Non-negotiable coding rules including size limits and architecture constraints |
 
 For the current task, also read the specific task file in docs/tasks/.
 
@@ -52,18 +52,59 @@ None.
 ```
 dump/
 ├── apps/
-│   └── dump-web/          # React + Vite frontend
+│   └── dump-web/              # React + Vite + TypeScript frontend
+│       └── src/
+│           ├── components/    # Presentational components only
+│           ├── pages/         # Route-level pages (orchestrate hooks + components)
+│           ├── hooks/         # React hooks with data/state logic
+│           ├── services/      # API calls and business logic (no React)
+│           ├── utils/         # Pure utility functions
+│           ├── types/         # Shared TypeScript interfaces and types
+│           └── constants/     # App-wide constants
 ├── workers/
-│   └── dump-worker/       # Cloudflare Worker API
+│   └── dump-worker/           # Hono + Cloudflare Workers (TypeScript)
+│       └── src/
+│           ├── routes/        # Thin Hono route handlers
+│           ├── services/      # Business logic
+│           ├── utils/         # Pure utility functions
+│           ├── middleware/    # Hono middleware (security headers, CORS)
+│           ├── types/         # Shared TypeScript types (ClipboardMeta, Env)
+│           └── constants/     # Reserved keywords, limits, allowed origins
 ├── docs/
-│   ├── ARCHITECTURE.md
-│   ├── API.md
-│   ├── DECISIONS.md
-│   ├── GEMINI.md          # This file
-│   ├── AI_RULES.md
-│   └── tasks/
 └── README.md
 ```
+
+---
+
+## Language and Tooling
+
+- TypeScript everywhere. No plain .js files in src/.
+- Strict mode enabled in all tsconfig.json files.
+- Never use `any`. Use `unknown` or define proper types.
+- Worker uses Hono for routing and middleware.
+- Frontend uses React Router for routing.
+- ESLint with TypeScript rules enabled in both packages.
+
+---
+
+## Architectural Constraints (summary — full rules in AI_RULES.md)
+
+### Size Limits
+| Unit | Soft | Hard |
+|------|------|------|
+| File | 250 lines | 400 lines |
+| Function | 40 lines | 60 lines |
+| React component | 150 lines | 250 lines |
+| Nesting depth | 3 | — |
+| Function params | 5 | — |
+
+### Layer Rules
+- Route handlers are thin. Logic goes in services/.
+- Services must not import React.
+- Components must not import pages/.
+- Components are presentational. Hooks and services hold logic.
+- Types in src/types/. Constants in src/constants/. Never inline magic values.
+- No circular imports.
 
 ---
 
@@ -82,6 +123,7 @@ Full details in docs/DECISIONS.md. Quick reference only:
 - One-time view: deleted after content is returned, not after password verification
 - Starring: public clipboards only, one pin per clipboard, global list max 5
 - Reserved keywords blocked: admin, api, raw, json, create, edit, delete, settings, help, docs, host
+- TypeScript strict mode, Hono on worker, no plain JS in src/
 
 ---
 
@@ -92,6 +134,7 @@ Full details in docs/DECISIONS.md. Quick reference only:
 | PASSWORD_PEPPER | Cloudflare Worker secret | Appended to passwords before SHA-256 hashing |
 
 Set via: npx wrangler secret put PASSWORD_PEPPER
+Typed in workers/dump-worker/src/types/index.ts as the Env interface.
 
 ---
 
@@ -100,25 +143,25 @@ Set via: npx wrangler secret put PASSWORD_PEPPER
 Backend tasks first. Frontend tasks after backend is stable.
 
 ```
-"TASK-001  Worker init and routing scaffold"
-"TASK-002  KV schema and helper utilities"
-"TASK-003  Create clipboard endpoint"
-"TASK-004  Read clipboard endpoint"
-"TASK-005  Update clipboard endpoint"
-"TASK-006  Delete clipboard endpoint"
-"TASK-007  Password protection logic"
-"TASK-008  Owner token generation and verification"
-"TASK-009  One-time view logic"
-"TASK-010  Expiry enforcement"
-"TASK-011  Starred global list"
-"TASK-012  Raw endpoint"
-"TASK-013  Reserved codes enforcement"
-"TASK-014  Security headers middleware"
-"TASK-015  Frontend scaffold"
-"TASK-016  Frontend create clipboard page"
-"TASK-017  Frontend read clipboard page"
-"TASK-018  Frontend edit and delete flows"
-"TASK-019  Frontend homepage starred list"
+TASK-001  Worker init and Hono routing scaffold
+TASK-002  KV schema and helper utilities
+TASK-003  Create clipboard endpoint
+TASK-004  Read clipboard endpoint
+TASK-005  Update clipboard endpoint
+TASK-006  Delete clipboard endpoint
+TASK-007  Password protection logic
+TASK-008  Owner token generation and verification
+TASK-009  One-time view logic
+TASK-010  Expiry enforcement
+TASK-011  Starred global list
+TASK-012  Raw endpoint
+TASK-013  Reserved codes enforcement
+TASK-014  Security headers middleware
+TASK-015  Frontend scaffold
+TASK-016  Frontend create clipboard page
+TASK-017  Frontend read clipboard page
+TASK-018  Frontend edit and delete flows
+TASK-019  Frontend homepage starred list
 ```
 
 ---
