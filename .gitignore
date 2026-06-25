@@ -6,6 +6,7 @@ dist/
 build/
 
 # Environment files
+.dev.vars
 .env
 .env.*
 !.env.example

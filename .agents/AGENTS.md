@@ -38,12 +38,13 @@ For the current task, also read the specific task file in docs/tasks/.
 
 ### Completed Tasks
 - TASK-001: Worker init and Hono routing scaffold
+- TASK-002: KV schema and helper utilities implemented in kv.ts
 
 ### In Progress
 None.
 
 ### Not Started
-- TASK-002 through TASK-019
+- TASK-003 through TASK-019
 
 ---
 
