@@ -40,12 +40,13 @@ For the current task, also read the specific task file in docs/tasks/.
 - TASK-001: Worker init and Hono routing scaffold
 - TASK-002: KV schema and helper utilities implemented in kv.ts
 - TASK-003: Create clipboard endpoint implemented with validation, code generation, and KV storage
+- TASK-004: Read clipboard endpoint implemented with password, owner token, expiration and one-time view logic
 
 ### In Progress
 None.
 
 ### Not Started
-- TASK-004 through TASK-019
+- TASK-005 through TASK-019
 
 ---
 

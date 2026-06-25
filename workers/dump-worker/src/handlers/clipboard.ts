@@ -1,5 +1,5 @@
 import { Env, ClipboardMeta, ClipboardMode, PasswordMode } from "../types";
-import { getMeta, setMeta, setContent } from "../utils/kv";
+import { getMeta, setMeta, setContent, getContent, deleteClipboard, getStarred, setStarred } from "../utils/kv";
 import { isValidCode, isReservedCode, generateCode } from "../utils/validate";
 
 export async function handleCreate(request: Request, env: Env, ctx: any): Promise<Response> {
@@ -170,4 +170,80 @@ export async function handleCreate(request: Request, env: Env, ctx: any): Promis
       headers: { "Content-Type": "application/json" }
     }
   );
+}
+
+export async function handleRead(request: Request, env: Env, codeParam: string): Promise<Response> {
+  const code = codeParam.toLowerCase();
+
+  const meta = await getMeta<ClipboardMeta>(env, code);
+  if (!meta) {
+    return new Response(JSON.stringify({ error: "Clipboard not found or expired" }), {
+      status: 404,
+      headers: { "Content-Type": "application/json" }
+    });
+  }
+
+  if (meta.expiresAt) {
+    const expiresDate = new Date(meta.expiresAt);
+    if (expiresDate.getTime() <= Date.now()) {
+      return new Response(JSON.stringify({ error: "Clipboard not found or expired" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+  }
+
+  const ownerToken = request.headers.get("X-Owner-Token");
+  const password = request.headers.get("X-Clipboard-Password");
+
+  let isAuthorized = false;
+  if (ownerToken && ownerToken === meta.ownerTokenHash) {
+    isAuthorized = true;
+  }
+
+  if (!isAuthorized && meta.passwordMode === "view") {
+    if (!password) {
+      return new Response(JSON.stringify({ locked: true, passwordMode: "view" }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+    if (password !== meta.passwordHash) {
+      return new Response(JSON.stringify({ error: "Invalid password" }), {
+        status: 403,
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+  }
+
+  const content = await getContent(env, code);
+  if (!content) {
+    return new Response(JSON.stringify({ error: "Clipboard not found or expired" }), {
+      status: 404,
+      headers: { "Content-Type": "application/json" }
+    });
+  }
+
+  if (meta.isOneTimeView) {
+    await deleteClipboard(env, code);
+    const starred = await getStarred(env);
+    if (starred.includes(code)) {
+      const filtered = starred.filter(c => c !== code);
+      await setStarred(env, filtered);
+    }
+  }
+
+  return new Response(JSON.stringify({
+    code: meta.code,
+    content,
+    mode: meta.mode,
+    passwordMode: meta.passwordMode,
+    expiresAt: meta.expiresAt,
+    isOneTimeView: meta.isOneTimeView,
+    isStarred: meta.isStarred,
+    createdAt: meta.createdAt
+  }), {
+    status: 200,
+    headers: { "Content-Type": "application/json" }
+  });
 }
