@@ -278,3 +278,18 @@ Future (no migration needed):
 Each app and worker is an independent package with its own tsconfig,
 package.json, and deployment config. No root-level build tooling yet.
 A packages/ directory may be introduced later for shared types — not in V1.
+
+---
+
+## D-019 — Password Bypass Option
+
+**Decision:** The owner can opt to bypass the password prompt on their own device.
+
+**Mechanism:** 
+- When an owner creates a protected clipboard, a checkbox "Bypass password for me" is presented.
+- If selected, the frontend stores the *raw password* locally (e.g., inside `localStorage`) alongside the `ownerToken`.
+- If *not* selected, the `ownerToken` is not saved for this clipboard, enforcing the password prompt even for the creator.
+- When viewing a protected clipboard, if the user possesses the `ownerToken` and bypasses the lock, a toast notification (e.g., using `react-hot-toast`) will be displayed indicating that the password was bypassed.
+- The raw password will be hidden by default on the view page but can be revealed by the owner (via a "show password" button).
+
+**Reason:** Improves user experience for creators who do not want to re-enter passwords on their own device, while giving them explicit control over whether this bypass credential is saved locally.

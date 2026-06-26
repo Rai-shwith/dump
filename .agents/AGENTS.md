@@ -61,6 +61,7 @@ None.
 ### Not Started
 - TASK-018: Frontend edit and delete flows
 - TASK-019: Frontend homepage starred list
+- TASK-020: Password Bypass Feature
 
 ---
 
@@ -179,6 +180,7 @@ TASK-016  Frontend create clipboard page
 TASK-017  Frontend read clipboard page
 TASK-018  Frontend edit and delete flows
 TASK-019  Frontend homepage starred list
+TASK-020  Password Bypass Feature
 ```
 
 ---

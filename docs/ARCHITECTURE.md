@@ -54,7 +54,7 @@ packages/
 - Render clipboard create, read, edit, delete flows
 - Display homepage with globally starred clipboards
 - Generate suggested clipboard codes (8 random chars)
-- Store owner tokens in localStorage under ownerTokens.<code>
+- Store owner tokens (and optional bypass passwords) in localStorage
 - Convert expiration datetime to UTC before sending to API
 - Convert UTC expiration from API back to user local timezone for display
 - Enforce noindex/nofollow meta tags on all pages
