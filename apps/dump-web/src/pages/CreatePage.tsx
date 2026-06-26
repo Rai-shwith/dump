@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { createClipboard } from "../services/clipboardApi";
+import { createClipboard, starClipboard } from "../services/clipboardApi";
 import { generateCode } from "../utils/codegen";
 import { addMilliseconds, toUTCString } from "../utils/time";
 import { setOwnerToken } from "../utils/tokens";
@@ -18,6 +18,7 @@ export default function CreatePage() {
   const [expiration, setExpiration] = useState("1_hour");
   const [customDateTime, setCustomDateTime] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [isStarred, setIsStarred] = useState(false);
 
   useEffect(() => {
     setCodePlaceholder(generateCode(8));
@@ -83,6 +84,13 @@ export default function CreatePage() {
     try {
       const res = await createClipboard(body);
       setOwnerToken(res.code, res.ownerToken);
+      if (mode === "public" && isStarred) {
+        try {
+          await starClipboard(res.code);
+        } catch (err) {
+          console.error("Failed to star clipboard", err);
+        }
+      }
       navigate(`/${res.code}`);
     } catch (err: any) {
       setError(err.message || "An error occurred");
@@ -130,6 +138,19 @@ export default function CreatePage() {
             <option value="protected">Protected</option>
           </select>
         </div>
+        
+        {mode === "public" && (
+          <div title="Star this clipboard so it appears on the global public homepage">
+            <label>
+              <input 
+                type="checkbox" 
+                checked={isStarred} 
+                onChange={(e) => setIsStarred(e.target.checked)} 
+              />
+              Star this clipboard
+            </label>
+          </div>
+        )}
         
         {mode === "protected" && (
           <div>

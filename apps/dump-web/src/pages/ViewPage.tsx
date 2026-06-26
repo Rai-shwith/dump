@@ -280,7 +280,7 @@ export default function ViewPage() {
         <h3>Content:</h3>
         {isEditing ? (
           <form onSubmit={handleEditSubmit}>
-            {!getOwnerToken(code) && data.passwordMode === "edit" && (
+            {!getOwnerToken(code!) && data.passwordMode === "edit" && (
               <div style={{ marginBottom: "1rem" }}>
                 <label>
                   Edit Password:

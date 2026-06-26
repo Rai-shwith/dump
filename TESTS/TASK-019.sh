@@ -1,0 +1,12 @@
+#!/bin/bash
+echo "Manual Testing Instructions for TASK-019:"
+echo "Test 1 — Homepage with no starred clipboards:"
+echo "  → 'No starred clipboards yet' shown"
+echo "Test 2 — Homepage with starred clipboards:"
+echo "  Star some public clipboards"
+echo "  → they appear on homepage with correct info"
+echo "Test 3 — Click starred clipboard link:"
+echo "  → navigate to view page"
+echo "Test 4 — Create link:"
+echo "  → navigate to /new"
+echo "Please perform these tests manually in your browser."
