@@ -54,12 +54,12 @@ For the current task, also read the specific task file in docs/tasks/.
 - TASK-015: Frontend scaffold initialized with TypeScript, routing, types, services, and utilities
 - TASK-016: Frontend create clipboard page
 - TASK-017: View clipboard page functional with auth, locked state, and star toggle
+- TASK-018: Edit and delete flows implemented on view page
 
 ### In Progress
 None.
 
 ### Not Started
-- TASK-018: Frontend edit and delete flows
 - TASK-019: Frontend homepage starred list
 - TASK-020: Password Bypass Feature
 
