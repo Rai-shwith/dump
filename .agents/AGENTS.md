@@ -52,12 +52,13 @@ For the current task, also read the specific task file in docs/tasks/.
 - TASK-013: Code validation and reserved keywords enforced in utils/validate.js
 - TASK-014: Security headers and CORS middleware applied to all responses
 - TASK-015: Frontend scaffold initialized with TypeScript, routing, types, services, and utilities
+- TASK-016  Frontend create clipboard page
 
 ### In Progress
 None.
 
 ### Not Started
-- TASK-016 through TASK-019
+- TASK-017 through TASK-019
 
 ---
 
