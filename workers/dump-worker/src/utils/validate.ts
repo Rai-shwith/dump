@@ -12,5 +12,22 @@ export function isReservedCode(code: string): boolean {
 }
 
 export function generateCode(): string {
-  return crypto.randomUUID().replace(/-/g, "").substring(0, 8);
+  const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+  const array = new Uint8Array(8);
+  crypto.getRandomValues(array);
+  let code = "";
+  for (let i = 0; i < 8; i++) {
+    code += chars[array[i] % chars.length];
+  }
+  return code;
+}
+
+export function validateCodeString(code: string): { valid: boolean; error?: string } {
+  if (!isValidCode(code)) {
+    return { valid: false, error: "Code contains invalid characters or is too short" };
+  }
+  if (isReservedCode(code)) {
+    return { valid: false, error: "Code is a reserved keyword" };
+  }
+  return { valid: true };
 }

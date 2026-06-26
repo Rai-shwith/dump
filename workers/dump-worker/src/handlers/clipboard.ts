@@ -1,6 +1,6 @@
 import { Env, ClipboardMeta, ClipboardMode, PasswordMode } from "../types";
 import { getMeta, setMeta, setContent, getContent, deleteClipboard, getStarred, setStarred } from "../utils/kv";
-import { isValidCode, isReservedCode, generateCode } from "../utils/validate";
+import { generateCode, validateCodeString } from "../utils/validate";
 import { hashPassword, hashToken } from "../utils/hash";
 import { isExpired, validateExpiresAt, ttlSeconds } from "../utils/expiry";
 
@@ -46,11 +46,9 @@ function validateCreateContentAndCode(content: unknown, code: unknown): { error?
     finalCode = code.toLowerCase();
   }
 
-  if (!isValidCode(finalCode)) {
-    return { error: createError("Code contains invalid characters or is too short") };
-  }
-  if (isReservedCode(finalCode)) {
-    return { error: createError("Code is a reserved keyword") };
+  const codeVal = validateCodeString(finalCode);
+  if (!codeVal.valid) {
+    return { error: createError(codeVal.error as string) };
   }
 
   return { normalizedCode: finalCode };
