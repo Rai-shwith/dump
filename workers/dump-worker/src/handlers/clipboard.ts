@@ -2,6 +2,7 @@ import { Env, ClipboardMeta, ClipboardMode, PasswordMode } from "../types";
 import { getMeta, setMeta, setContent, getContent, deleteClipboard, getStarred, setStarred } from "../utils/kv";
 import { isValidCode, isReservedCode, generateCode } from "../utils/validate";
 import { hashPassword, hashToken } from "../utils/hash";
+import { isExpired, validateExpiresAt, ttlSeconds } from "../utils/expiry";
 
 interface CreateRequestBody {
   code?: unknown;
@@ -84,17 +85,9 @@ function validateCreateModeAndExpiration(
     if (typeof expiresAt !== "string") {
       return { error: createError("Invalid expiresAt date") };
     }
-    const expiresDate = new Date(expiresAt);
-    if (isNaN(expiresDate.getTime())) {
-      return { error: createError("Invalid expiresAt date") };
-    }
-    const now = Date.now();
-    const expiresTime = expiresDate.getTime();
-    if (expiresTime <= now) {
-      return { error: createError("Expiration must be in the future") };
-    }
-    if (expiresTime > now + 365 * 24 * 60 * 60 * 1000) {
-      return { error: createError("Expiration exceeds 1 year") };
+    const val = validateExpiresAt(expiresAt, new Date().toISOString());
+    if (!val.valid) {
+      return { error: createError(val.error as string) };
     }
   }
 
@@ -143,8 +136,9 @@ export async function handleCreate(request: Request, env: Env): Promise<Response
     isStarred: false
   };
 
-  await setMeta(env, normalizedCode, meta, null);
-  await setContent(env, normalizedCode, typeof content === "string" ? content : "", null);
+  const ttl = ttlSeconds(finalExpiresAt) ?? null;
+  await setMeta(env, normalizedCode, meta, ttl);
+  await setContent(env, normalizedCode, typeof content === "string" ? content : "", ttl);
 
   return new Response(
     JSON.stringify({ code: normalizedCode, ownerToken, expiresAt: finalExpiresAt, isOneTimeView: finalOneTime }),
@@ -153,11 +147,8 @@ export async function handleCreate(request: Request, env: Env): Promise<Response
 }
 
 function validateReadExpiration(meta: ClipboardMeta): Response | null {
-  if (meta.expiresAt) {
-    const expiresDate = new Date(meta.expiresAt);
-    if (expiresDate.getTime() <= Date.now()) {
-      return createError("Clipboard not found or expired", 404);
-    }
+  if (isExpired(meta)) {
+    return createError("Clipboard not found or expired", 404);
   }
   return null;
 }
@@ -241,11 +232,8 @@ export async function handleRaw(request: Request, env: Env, codeParam: string): 
     return new Response("Not found", { status: 404, headers: { "Content-Type": "text/plain" } });
   }
 
-  if (meta.expiresAt) {
-    const expiresDate = new Date(meta.expiresAt);
-    if (expiresDate.getTime() <= Date.now()) {
-      return new Response("Not found", { status: 404, headers: { "Content-Type": "text/plain" } });
-    }
+  if (isExpired(meta)) {
+    return new Response("Not found", { status: 404, headers: { "Content-Type": "text/plain" } });
   }
 
   const authErr = await authorizeRead(meta, request, env);
@@ -286,17 +274,9 @@ async function checkAuthorization(meta: ClipboardMeta, req: Request, env: Env): 
 }
 
 function validateExpiration(expiresAt: string, createdAt: string): Response | null {
-  const expiresDate = new Date(expiresAt);
-  if (isNaN(expiresDate.getTime())) {
-    return createError("Invalid expiresAt date");
-  }
-  const expiresTime = expiresDate.getTime();
-  if (expiresTime <= Date.now()) {
-    return createError("Expiration must be in the future");
-  }
-  const createdAtTime = new Date(createdAt).getTime();
-  if (expiresTime > createdAtTime + 365 * 24 * 60 * 60 * 1000) {
-    return createError("Expiration exceeds 1 year from creation");
+  const val = validateExpiresAt(expiresAt, createdAt);
+  if (!val.valid) {
+    return createError(val.error as string);
   }
   return null;
 }
@@ -343,7 +323,7 @@ export async function handleUpdate(request: Request, env: Env, codeParam: string
   const code = codeParam.toLowerCase();
   const meta = await getMeta<ClipboardMeta>(env, code);
   
-  if (!meta || (meta.expiresAt && new Date(meta.expiresAt).getTime() <= Date.now())) {
+  if (!meta || isExpired(meta)) {
     return createError("Clipboard not found or expired", 404);
   }
 
@@ -370,9 +350,10 @@ export async function handleUpdate(request: Request, env: Env, codeParam: string
   if (body.expiresAt !== undefined) meta.expiresAt = (body.expiresAt as string) || null;
   if (body.isOneTimeView !== undefined) meta.isOneTimeView = Boolean(body.isOneTimeView);
 
-  await setMeta(env, code, meta, null);
+  const ttl = ttlSeconds(meta.expiresAt) ?? null;
+  await setMeta(env, code, meta, ttl);
   if (body.content !== undefined) {
-    await setContent(env, code, body.content as string, null);
+    await setContent(env, code, body.content as string, ttl);
   }
 
   return new Response(JSON.stringify({ success: true, expiresAt: meta.expiresAt, isOneTimeView: meta.isOneTimeView }), {
@@ -384,7 +365,7 @@ export async function handleDelete(request: Request, env: Env, codeParam: string
   const code = codeParam.toLowerCase();
 
   const meta = await getMeta<ClipboardMeta>(env, code);
-  if (!meta || (meta.expiresAt && new Date(meta.expiresAt).getTime() <= Date.now())) {
+  if (!meta || isExpired(meta)) {
     return createError("Clipboard not found or expired", 404);
   }
 

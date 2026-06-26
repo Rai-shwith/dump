@@ -46,12 +46,13 @@ For the current task, also read the specific task file in docs/tasks/.
 - TASK-007: SHA-256 password hashing implemented in utils/hash.ts
 - TASK-008: Owner token hashed with SHA-256 before KV storage
 - TASK-009: One-time view deletion hardened, handleRaw implemented
+- TASK-010: Expiry logic centralized in utils/expiry.ts, KV TTL applied on write
 
 ### In Progress
 None.
 
 ### Not Started
-- TASK-010 through TASK-019
+- TASK-011 through TASK-019
 
 ---
 
