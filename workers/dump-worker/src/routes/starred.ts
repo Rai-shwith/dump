@@ -1,8 +1,9 @@
 import { Hono } from "hono";
 import { Env } from "../types";
+import { handleGetStarred, handleStar, handleUnstar } from "../handlers/starred";
 
 export function registerStarredRoutes(app: Hono<{ Bindings: Env }>) {
-  app.get("/api/starred", (c) => c.json({ message: "not implemented" }, 501));
-  app.post("/api/clipboard/:code/star", (c) => c.json({ message: "not implemented" }, 501));
-  app.delete("/api/clipboard/:code/star", (c) => c.json({ message: "not implemented" }, 501));
+  app.get("/api/starred", (c) => handleGetStarred(c.req.raw, c.env));
+  app.post("/api/clipboard/:code/star", (c) => handleStar(c.req.raw, c.env, c.req.param("code")));
+  app.delete("/api/clipboard/:code/star", (c) => handleUnstar(c.req.raw, c.env, c.req.param("code")));
 }
