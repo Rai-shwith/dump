@@ -127,7 +127,6 @@ export default function CreatePage() {
             }}
           >
             <option value="public">Public</option>
-            <option value="reserved">Reserved</option>
             <option value="protected">Protected</option>
           </select>
         </div>

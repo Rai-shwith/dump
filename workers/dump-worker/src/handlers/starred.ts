@@ -21,7 +21,7 @@ async function handleDropOldest(env: Env, newStarred: string[]) {
   }
 }
 
-export async function handleStar(request: Request, env: Env, codeParam: string): Promise<Response> {
+export async function handleStar(_request: Request, env: Env, codeParam: string): Promise<Response> {
   const code = codeParam.toLowerCase();
   const meta = await getMeta<ClipboardMeta>(env, code);
   
@@ -56,7 +56,7 @@ export async function handleStar(request: Request, env: Env, codeParam: string):
   });
 }
 
-export async function handleUnstar(request: Request, env: Env, codeParam: string): Promise<Response> {
+export async function handleUnstar(_request: Request, env: Env, codeParam: string): Promise<Response> {
   const code = codeParam.toLowerCase();
   const meta = await getMeta<ClipboardMeta>(env, code);
 
@@ -81,7 +81,7 @@ export async function handleUnstar(request: Request, env: Env, codeParam: string
   });
 }
 
-export async function handleGetStarred(request: Request, env: Env): Promise<Response> {
+export async function handleGetStarred(_request: Request, env: Env): Promise<Response> {
   const starredCodes = await getStarred(env);
   const result: StarredEntry[] = [];
   const validCodes: string[] = [];

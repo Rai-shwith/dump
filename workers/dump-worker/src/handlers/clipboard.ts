@@ -61,7 +61,7 @@ function validateCreateModeAndExpiration(
   expiresAt: unknown,
   isOneTimeView: unknown
 ): { error?: Response; normalizedMode?: ClipboardMode; normalizedPasswordMode?: PasswordMode | null } {
-  const validModes = ["public", "reserved", "protected"];
+  const validModes = ["public", "protected"];
   const finalMode = (typeof mode === "string" && validModes.includes(mode)) ? mode as ClipboardMode : "public";
 
   if (finalMode === "protected" && (!password || !passwordMode)) {
@@ -75,8 +75,8 @@ function validateCreateModeAndExpiration(
   if (isOneTimeView && expiresAt) {
     return { error: createError("isOneTimeView and expiresAt cannot both be set") };
   }
-  if ((finalMode === "reserved" || finalMode === "protected") && !expiresAt && !isOneTimeView) {
-    return { error: createError("Reserved and protected modes require expiration") };
+  if (finalMode === "protected" && !expiresAt && !isOneTimeView) {
+    return { error: createError("Protected mode requires expiration") };
   }
 
   if (expiresAt) {
@@ -126,7 +126,7 @@ export async function handleCreate(request: Request, env: Env): Promise<Response
     code: normalizedCode,
     mode: modeRes.normalizedMode as ClipboardMode,
     passwordHash,
-    passwordMode: modeRes.normalizedPasswordMode,
+    passwordMode: modeRes.normalizedPasswordMode ?? null,
     ownerTokenHash: await hashToken(ownerToken),
     createdAt: new Date().toISOString(),
     expiresAt: finalExpiresAt,

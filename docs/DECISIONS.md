@@ -38,7 +38,7 @@ clip:<code>:content  → raw string (clipboard text)
 ```json
 {
   "code": "string",
-  "mode": "public | reserved | protected",
+  "mode": "public | protected",
   "passwordHash": "string | null",
   "passwordMode": "view | edit | null",
   "ownerTokenHash": "string",
@@ -91,7 +91,6 @@ Three modes:
 | Mode       | View | Edit | Delete | Code Reserved |
 |------------|------|------|--------|---------------|
 | public     | all  | all  | all    | no            |
-| reserved   | all  | all  | all    | yes           |
 | protected  | *    | *    | *      | yes           |
 
 *protected: depends on passwordMode (view or edit)
@@ -139,16 +138,6 @@ Expired clipboards return 404. The service does not reveal prior existence.
 - If a starred clipboard is deleted (manually or via one-time view), it is removed
   from app:starred by the deletion handler.
 - No per-user starring. No star counts. isStarred boolean in metadata is the source of truth.
-
----
-
-## D-010 — Reserved Codes
-
-- Reserved codes prevent another user from claiming the same URL.
-- They do not protect content (anyone can still edit or delete).
-- Enforced at creation time: if clip:<code>:meta exists, the code is taken.
-- Reserved mode requires mandatory expiration (max 1 year).
-- After expiration, the code becomes available again.
 
 ---
 

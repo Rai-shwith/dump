@@ -3,7 +3,7 @@ export interface Env {
   PASSWORD_PEPPER: string;
 }
 
-export type ClipboardMode = "public" | "reserved" | "protected";
+export type ClipboardMode = "public" | "protected";
 export type PasswordMode = "view" | "edit";
 
 export interface ClipboardMeta {

@@ -64,7 +64,7 @@ Content-Type: application/json
 {
   "code": "string (optional, 4+ chars, a-z 0-9 - _)",
   "content": "string (required, max 256KB)",
-  "mode": "public | reserved | protected",
+  "mode": "public | protected",
   "passwordMode": "view | edit | null",
   "password": "string | null",
   "expiresAt": "ISO8601 UTC string | null",
@@ -76,7 +76,7 @@ Content-Type: application/json
 - If code is omitted, the worker generates a random 8-character code.
 - If mode is protected, password and passwordMode are required.
 - If mode is public and expiresAt is null and isOneTimeView is false, clipboard is permanent.
-- If mode is reserved or protected, expiresAt is required (max 1 year from now).
+- If mode is protected, expiresAt is required (max 1 year from now).
 - isOneTimeView and expiresAt are mutually exclusive. If isOneTimeView is true, expiresAt must be null.
 
 **Response 201:**
@@ -97,7 +97,7 @@ Content-Type: application/json
 | 400 | Code contains invalid characters |
 | 400 | Code is too short |
 | 400 | Code is a reserved keyword |
-| 400 | Reserved and protected modes require expiration |
+| 400 | Protected mode requires expiration |
 | 400 | isOneTimeView and expiresAt cannot both be set |
 | 400 | Expiration exceeds 1 year |
 | 400 | Content exceeds 256KB |
@@ -120,7 +120,7 @@ X-Clipboard-Password: string (optional)
 {
   "code": "string",
   "content": "string",
-  "mode": "public | reserved | protected",
+  "mode": "public | protected",
   "passwordMode": "view | edit | null",
   "expiresAt": "ISO8601 UTC string | null",
   "isOneTimeView": "boolean",
@@ -211,7 +211,7 @@ X-Clipboard-Password: string (optional, required if edit password set and no own
 - Owner token bypasses password requirement.
 - If passwordMode is edit, X-Clipboard-Password is required to update.
 - If passwordMode is view, anyone can update (view password only restricts reading).
-- Cannot change clipboard mode (public/reserved/protected) after creation.
+- Cannot change clipboard mode (public/protected) after creation.
 - Cannot extend expiration beyond 1 year from original creation time.
 - isOneTimeView and expiresAt cannot both be set.
 
@@ -248,7 +248,6 @@ X-Clipboard-Password: string (optional)
 
 **Notes:**
 - Public clipboards: anyone can delete, no token required.
-- Reserved clipboards: anyone can delete, no token required.
 - Protected clipboards: valid owner token or unlocked password required.
 - Deletion also removes code from app:starred if present.
 - Both clip:<code>:meta and clip:<code>:content are deleted.
@@ -375,7 +374,6 @@ Get the global starred clipboard list for the homepage.
 | Mode | Infinite allowed | One-Time View allowed | Max expiration |
 |------|-----------------|-----------------------|----------------|
 | public | yes | yes | unlimited |
-| reserved | no | yes | 1 year |
 | protected | no | yes | 1 year |
 
 ---
