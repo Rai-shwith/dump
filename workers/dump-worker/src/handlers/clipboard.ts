@@ -76,7 +76,7 @@ function validateCreateModeAndExpiration(
   if (isOneTimeView && expiresAt) {
     return { error: createError("isOneTimeView and expiresAt cannot both be set") };
   }
-  if ((finalMode === "reserved" || finalMode === "protected") && !expiresAt) {
+  if ((finalMode === "reserved" || finalMode === "protected") && !expiresAt && !isOneTimeView) {
     return { error: createError("Reserved and protected modes require expiration") };
   }
 
@@ -214,9 +214,7 @@ export async function handleRead(request: Request, env: Env, codeParam: string):
     return createError("Clipboard not found or expired", 404);
   }
 
-  await handleOneTimeView(meta, env, code);
-
-  return new Response(JSON.stringify({
+  const response = new Response(JSON.stringify({
     code: meta.code,
     content,
     mode: meta.mode,
@@ -229,6 +227,43 @@ export async function handleRead(request: Request, env: Env, codeParam: string):
     status: 200,
     headers: { "Content-Type": "application/json" }
   });
+
+  await handleOneTimeView(meta, env, code);
+
+  return response;
+}
+
+export async function handleRaw(request: Request, env: Env, codeParam: string): Promise<Response> {
+  const code = codeParam.toLowerCase();
+
+  const meta = await getMeta<ClipboardMeta>(env, code);
+  if (!meta) {
+    return new Response("Not found", { status: 404, headers: { "Content-Type": "text/plain" } });
+  }
+
+  if (meta.expiresAt) {
+    const expiresDate = new Date(meta.expiresAt);
+    if (expiresDate.getTime() <= Date.now()) {
+      return new Response("Not found", { status: 404, headers: { "Content-Type": "text/plain" } });
+    }
+  }
+
+  const authErr = await authorizeRead(meta, request, env);
+  if (authErr) return authErr;
+
+  const content = await getContent(env, code);
+  if (!content) {
+    return new Response("Not found", { status: 404, headers: { "Content-Type": "text/plain" } });
+  }
+
+  const response = new Response(content, {
+    status: 200,
+    headers: { "Content-Type": "text/plain" }
+  });
+
+  await handleOneTimeView(meta, env, code);
+
+  return response;
 }
 
 async function checkAuthorization(meta: ClipboardMeta, req: Request, env: Env): Promise<Response | null> {
