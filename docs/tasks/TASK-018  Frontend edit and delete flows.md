@@ -81,9 +81,10 @@ Delete and edit flows work correctly for all clipboard modes.
 Auth handled correctly per mode.
 
 ## AI Workflow
+0. At anypoint if any ambiguity or doubt arises. *Stop Coding*. Ask questions, clarify, then proceed. DO NOT ASSUME.
 1. Complete the task requirements.
 2. Create a test file in TESTS/ named after the task (e.g. TESTS/TASK-018.sh) using the Manual Testing Instructions.
-3. Execute the test file. Fix any errors if tests fail.
+3. Execute the test file. Run npm run lint. Fix any errors if tests fail do not create walkarounds to bypass linter.
 4. Report the test results to the user and WAIT for their explicit approval.
 5. Do NOT commit changes and do NOT update AGENTS.md "Completed Tasks" until the user approves.
 6. Once approved, commit the changes including the test script.
