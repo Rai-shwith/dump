@@ -170,9 +170,10 @@ These limits exist to keep AI-generated code auditable and testable.
 - Never add a database. KV is the only storage in V1.
 - Never use `any` as a TypeScript type.
 - Never disable TypeScript strict mode or add @ts-ignore without an explanation comment.
+- Never use workarounds like eslint-disable or eslint-disable-next-line to avoid fixing ESLint errors. You MUST refactor the code to properly resolve the issues.
 - Never create a file that exceeds 400 lines. Split it first.
 - Never append code to a file already over the hard limit without refactoring first.
-- - Never manually edit dependency versions inside package.json.
+- Never manually edit dependency versions inside package.json.
 - Never pre-install large dependency sets "just in case".
 - Never add a package unless it is required by the current task.
 - Never introduce a monorepo workspace setup unless explicitly requested.

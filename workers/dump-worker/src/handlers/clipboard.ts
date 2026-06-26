@@ -3,209 +3,173 @@ import { getMeta, setMeta, setContent, getContent, deleteClipboard, getStarred, 
 import { isValidCode, isReservedCode, generateCode } from "../utils/validate";
 import { hashPassword } from "../utils/hash";
 
-// eslint-disable-next-line max-lines-per-function, @typescript-eslint/no-unused-vars
-export async function handleCreate(request: Request, env: Env, _ctx: unknown): Promise<Response> {
-  // 1. Parse JSON body. Return 400 if body is invalid JSON.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let body: any;
-  try {
-    body = await request.json();
-  } catch {
-    return new Response(JSON.stringify({ error: "Invalid JSON body" }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" }
-    });
-  }
+interface CreateRequestBody {
+  code?: unknown;
+  content?: unknown;
+  mode?: unknown;
+  passwordMode?: unknown;
+  password?: unknown;
+  expiresAt?: unknown;
+  isOneTimeView?: unknown;
+}
 
-  // 2. Extract fields
-  let { code, content, mode, passwordMode, password, expiresAt, isOneTimeView } = body;
+interface UpdateRequestBody {
+  content?: unknown;
+  expiresAt?: unknown;
+  isOneTimeView?: unknown;
+  password?: unknown;
+  passwordMode?: unknown;
+}
 
-  // 3. Validate content
+function createError(message: string, status = 400): Response {
+  return new Response(JSON.stringify({ error: message }), {
+    status,
+    headers: { "Content-Type": "application/json" }
+  });
+}
+
+function validateCreateContentAndCode(content: unknown, code: unknown): { error?: Response; normalizedCode?: string } {
   if (!content || typeof content !== "string" || content.length === 0) {
-    return new Response(JSON.stringify({ error: "Content is required and cannot be empty" }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" }
-    });
+    return { error: createError("Content is required and cannot be empty") };
   }
   if (content.length > 262144) {
-    return new Response(JSON.stringify({ error: "Content exceeds 256KB" }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" }
-    });
+    return { error: createError("Content exceeds 256KB") };
   }
 
-  // 4. Validate and normalize code
+  let finalCode: string;
   if (!code) {
-    code = generateCode();
+    finalCode = generateCode();
   } else if (typeof code !== "string") {
-    return new Response(JSON.stringify({ error: "Invalid code format" }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" }
-    });
+    return { error: createError("Invalid code format") };
+  } else {
+    finalCode = code.toLowerCase();
   }
 
-  code = code.toLowerCase();
-
-  if (!isValidCode(code)) {
-    return new Response(JSON.stringify({ error: "Code contains invalid characters or is too short" }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" }
-    });
+  if (!isValidCode(finalCode)) {
+    return { error: createError("Code contains invalid characters or is too short") };
+  }
+  if (isReservedCode(finalCode)) {
+    return { error: createError("Code is a reserved keyword") };
   }
 
-  if (isReservedCode(code)) {
-    return new Response(JSON.stringify({ error: "Code is a reserved keyword" }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" }
-    });
-  }
+  return { normalizedCode: finalCode };
+}
 
-  // 5. Validate mode
+function validateCreateModeAndExpiration(
+  mode: unknown,
+  passwordMode: unknown,
+  password: unknown,
+  expiresAt: unknown,
+  isOneTimeView: unknown
+): { error?: Response; normalizedMode?: ClipboardMode; normalizedPasswordMode?: PasswordMode | null } {
   const validModes = ["public", "reserved", "protected"];
-  if (!mode || !validModes.includes(mode)) {
-    mode = "public";
+  const finalMode = (typeof mode === "string" && validModes.includes(mode)) ? mode as ClipboardMode : "public";
+
+  if (finalMode === "protected" && (!password || !passwordMode)) {
+    return { error: createError("Password and passwordMode are required for protected mode") };
   }
 
-  if (mode === "protected") {
-    if (!password || !passwordMode) {
-      return new Response(JSON.stringify({ error: "Password and passwordMode are required for protected mode" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" }
-      });
-    }
+  if (passwordMode !== undefined && passwordMode !== null && passwordMode !== "view" && passwordMode !== "edit") {
+    return { error: createError("Invalid passwordMode") };
   }
 
-  if (passwordMode !== undefined && passwordMode !== null) {
-    if (passwordMode !== "view" && passwordMode !== "edit") {
-      return new Response(JSON.stringify({ error: "Invalid passwordMode" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" }
-      });
-    }
-  }
-
-  // 6. Validate expiration
   if (isOneTimeView && expiresAt) {
-    return new Response(JSON.stringify({ error: "isOneTimeView and expiresAt cannot both be set" }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" }
-    });
+    return { error: createError("isOneTimeView and expiresAt cannot both be set") };
   }
-
-  if ((mode === "reserved" || mode === "protected") && !expiresAt) {
-    return new Response(JSON.stringify({ error: "Reserved and protected modes require expiration" }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" }
-    });
+  if ((finalMode === "reserved" || finalMode === "protected") && !expiresAt) {
+    return { error: createError("Reserved and protected modes require expiration") };
   }
 
   if (expiresAt) {
+    if (typeof expiresAt !== "string") {
+      return { error: createError("Invalid expiresAt date") };
+    }
     const expiresDate = new Date(expiresAt);
     if (isNaN(expiresDate.getTime())) {
-      return new Response(JSON.stringify({ error: "Invalid expiresAt date" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" }
-      });
+      return { error: createError("Invalid expiresAt date") };
     }
-
     const now = Date.now();
     const expiresTime = expiresDate.getTime();
-
     if (expiresTime <= now) {
-      return new Response(JSON.stringify({ error: "Expiration must be in the future" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" }
-      });
+      return { error: createError("Expiration must be in the future") };
     }
-
-    const oneYearFromNow = now + 365 * 24 * 60 * 60 * 1000;
-    if (expiresTime > oneYearFromNow) {
-      return new Response(JSON.stringify({ error: "Expiration exceeds 1 year" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" }
-      });
+    if (expiresTime > now + 365 * 24 * 60 * 60 * 1000) {
+      return { error: createError("Expiration exceeds 1 year") };
     }
   }
 
-  // 7. Check code availability
-  const existingMeta = await getMeta(env, code);
-  if (existingMeta) {
-    return new Response(JSON.stringify({ error: "Code already exists" }), {
-      status: 409,
-      headers: { "Content-Type": "application/json" }
-    });
+  return { 
+    normalizedMode: finalMode, 
+    normalizedPasswordMode: (passwordMode as PasswordMode) || null 
+  };
+}
+
+export async function handleCreate(request: Request, env: Env): Promise<Response> {
+  let body: CreateRequestBody;
+  try {
+    body = (await request.json()) as CreateRequestBody;
+  } catch {
+    return createError("Invalid JSON body");
   }
 
-  // 8. Generate owner token
+  const { code, content, mode, passwordMode, password, expiresAt, isOneTimeView } = body;
+
+  const codeRes = validateCreateContentAndCode(content, code);
+  if (codeRes.error) return codeRes.error;
+  const normalizedCode = codeRes.normalizedCode as string;
+
+  const modeRes = validateCreateModeAndExpiration(mode, passwordMode, password, expiresAt, isOneTimeView);
+  if (modeRes.error) return modeRes.error;
+
+  const existingMeta = await getMeta(env, normalizedCode);
+  if (existingMeta) return createError("Code already exists", 409);
+
   const ownerToken = crypto.randomUUID();
+  const passwordStr = typeof password === "string" ? password : "";
+  const passwordHash = passwordStr ? await hashPassword(passwordStr, env.PASSWORD_PEPPER) : null;
 
-  // 9. Handle password
-  const passwordHash = password ? await hashPassword(password, env.PASSWORD_PEPPER) : null;
+  const finalExpiresAt = typeof expiresAt === "string" ? expiresAt : null;
+  const finalOneTime = Boolean(isOneTimeView);
 
-  // 10. Build metadata object
   const meta: ClipboardMeta = {
-    code,
-    mode: mode as ClipboardMode,
+    code: normalizedCode,
+    mode: modeRes.normalizedMode as ClipboardMode,
     passwordHash,
-    passwordMode: passwordMode as PasswordMode | null,
+    passwordMode: modeRes.normalizedPasswordMode,
     ownerTokenHash: ownerToken,
     createdAt: new Date().toISOString(),
-    expiresAt: expiresAt || null,
-    isOneTimeView: Boolean(isOneTimeView),
+    expiresAt: finalExpiresAt,
+    isOneTimeView: finalOneTime,
     isStarred: false
   };
 
-  // 11. Calculate TTL for KV (skip for now)
-  // 12. Write to KV
-  await setMeta(env, code, meta, null);
-  await setContent(env, code, content, null);
+  await setMeta(env, normalizedCode, meta, null);
+  await setContent(env, normalizedCode, typeof content === "string" ? content : "", null);
 
-  // 13. Return 201
   return new Response(
-    JSON.stringify({
-      code,
-      ownerToken,
-      expiresAt: expiresAt || null,
-      isOneTimeView: Boolean(isOneTimeView)
-    }),
-    {
-      status: 201,
-      headers: { "Content-Type": "application/json" }
-    }
+    JSON.stringify({ code: normalizedCode, ownerToken, expiresAt: finalExpiresAt, isOneTimeView: finalOneTime }),
+    { status: 201, headers: { "Content-Type": "application/json" } }
   );
 }
 
-// eslint-disable-next-line max-lines-per-function
-export async function handleRead(request: Request, env: Env, codeParam: string): Promise<Response> {
-  const code = codeParam.toLowerCase();
-
-  const meta = await getMeta<ClipboardMeta>(env, code);
-  if (!meta) {
-    return new Response(JSON.stringify({ error: "Clipboard not found or expired" }), {
-      status: 404,
-      headers: { "Content-Type": "application/json" }
-    });
-  }
-
+function validateReadExpiration(meta: ClipboardMeta): Response | null {
   if (meta.expiresAt) {
     const expiresDate = new Date(meta.expiresAt);
     if (expiresDate.getTime() <= Date.now()) {
-      return new Response(JSON.stringify({ error: "Clipboard not found or expired" }), {
-        status: 404,
-        headers: { "Content-Type": "application/json" }
-      });
+      return createError("Clipboard not found or expired", 404);
     }
   }
+  return null;
+}
 
+async function authorizeRead(meta: ClipboardMeta, request: Request, env: Env): Promise<Response | null> {
   const ownerToken = request.headers.get("X-Owner-Token");
-  const password = request.headers.get("X-Clipboard-Password");
-
-  let isAuthorized = false;
   if (ownerToken && ownerToken === meta.ownerTokenHash) {
-    isAuthorized = true;
+    return null;
   }
 
-  if (!isAuthorized && meta.passwordMode === "view") {
+  if (meta.passwordMode === "view") {
+    const password = request.headers.get("X-Clipboard-Password");
     if (!password) {
       return new Response(JSON.stringify({ locked: true, passwordMode: "view" }), {
         status: 200,
@@ -214,21 +178,13 @@ export async function handleRead(request: Request, env: Env, codeParam: string):
     }
     const hash = await hashPassword(password, env.PASSWORD_PEPPER);
     if (hash !== meta.passwordHash) {
-      return new Response(JSON.stringify({ error: "Invalid password" }), {
-        status: 403,
-        headers: { "Content-Type": "application/json" }
-      });
+      return createError("Invalid password", 403);
     }
   }
+  return null;
+}
 
-  const content = await getContent(env, code);
-  if (!content) {
-    return new Response(JSON.stringify({ error: "Clipboard not found or expired" }), {
-      status: 404,
-      headers: { "Content-Type": "application/json" }
-    });
-  }
-
+async function handleOneTimeView(meta: ClipboardMeta, env: Env, code: string): Promise<void> {
   if (meta.isOneTimeView) {
     await deleteClipboard(env, code);
     const starred = await getStarred(env);
@@ -237,6 +193,28 @@ export async function handleRead(request: Request, env: Env, codeParam: string):
       await setStarred(env, filtered);
     }
   }
+}
+
+export async function handleRead(request: Request, env: Env, codeParam: string): Promise<Response> {
+  const code = codeParam.toLowerCase();
+
+  const meta = await getMeta<ClipboardMeta>(env, code);
+  if (!meta) {
+    return createError("Clipboard not found or expired", 404);
+  }
+
+  const expireErr = validateReadExpiration(meta);
+  if (expireErr) return expireErr;
+
+  const authErr = await authorizeRead(meta, request, env);
+  if (authErr) return authErr;
+
+  const content = await getContent(env, code);
+  if (!content) {
+    return createError("Clipboard not found or expired", 404);
+  }
+
+  await handleOneTimeView(meta, env, code);
 
   return new Response(JSON.stringify({
     code: meta.code,
@@ -262,17 +240,11 @@ async function checkAuthorization(meta: ClipboardMeta, req: Request, env: Env): 
   if (meta.passwordMode === "edit") {
     const pwd = req.headers.get("X-Clipboard-Password");
     if (!pwd) {
-      return new Response(JSON.stringify({ error: "Invalid password or owner token" }), {
-        status: 403,
-        headers: { "Content-Type": "application/json" }
-      });
+      return createError("Invalid password or owner token", 403);
     }
     const hash = await hashPassword(pwd, env.PASSWORD_PEPPER);
     if (hash !== meta.passwordHash) {
-      return new Response(JSON.stringify({ error: "Invalid password or owner token" }), {
-        status: 403,
-        headers: { "Content-Type": "application/json" }
-      });
+      return createError("Invalid password or owner token", 403);
     }
   }
   return null;
@@ -281,27 +253,20 @@ async function checkAuthorization(meta: ClipboardMeta, req: Request, env: Env): 
 function validateExpiration(expiresAt: string, createdAt: string): Response | null {
   const expiresDate = new Date(expiresAt);
   if (isNaN(expiresDate.getTime())) {
-    return new Response(JSON.stringify({ error: "Invalid expiresAt date" }), {
-      status: 400, headers: { "Content-Type": "application/json" }
-    });
+    return createError("Invalid expiresAt date");
   }
   const expiresTime = expiresDate.getTime();
   if (expiresTime <= Date.now()) {
-    return new Response(JSON.stringify({ error: "Expiration must be in the future" }), {
-      status: 400, headers: { "Content-Type": "application/json" }
-    });
+    return createError("Expiration must be in the future");
   }
   const createdAtTime = new Date(createdAt).getTime();
   if (expiresTime > createdAtTime + 365 * 24 * 60 * 60 * 1000) {
-    return new Response(JSON.stringify({ error: "Expiration exceeds 1 year from creation" }), {
-      status: 400, headers: { "Content-Type": "application/json" }
-    });
+    return createError("Expiration exceeds 1 year from creation");
   }
   return null;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function validateUpdateFields(body: any, meta: ClipboardMeta): Response | null {
+function validateUpdateFields(body: UpdateRequestBody, meta: ClipboardMeta): Response | null {
   const { content, expiresAt, isOneTimeView, password, passwordMode } = body;
   const hasContent = content !== undefined;
   const hasExpires = expiresAt !== undefined;
@@ -310,35 +275,30 @@ function validateUpdateFields(body: any, meta: ClipboardMeta): Response | null {
   const hasPwdMode = passwordMode !== undefined;
 
   if (!hasContent && !hasExpires && !hasOneTime && !hasPwd && !hasPwdMode) {
-    return new Response(JSON.stringify({ error: "At least one field must be present" }), {
-      status: 400, headers: { "Content-Type": "application/json" }
-    });
+    return createError("At least one field must be present");
   }
 
   const finalOneTime = hasOneTime ? Boolean(isOneTimeView) : meta.isOneTimeView;
   const finalExpires = hasExpires ? expiresAt : meta.expiresAt;
 
   if (finalOneTime && finalExpires) {
-    return new Response(JSON.stringify({ error: "isOneTimeView and expiresAt cannot both be set" }), {
-      status: 400, headers: { "Content-Type": "application/json" }
-    });
+    return createError("isOneTimeView and expiresAt cannot both be set");
   }
 
   if (hasExpires && expiresAt) {
+    if (typeof expiresAt !== "string") {
+      return createError("Invalid expiresAt date");
+    }
     const err = validateExpiration(expiresAt, meta.createdAt);
     if (err) return err;
   }
 
   if (hasContent && (typeof content !== "string" || content.length > 262144)) {
-    return new Response(JSON.stringify({ error: "Content invalid or exceeds 256KB" }), {
-      status: 400, headers: { "Content-Type": "application/json" }
-    });
+    return createError("Content invalid or exceeds 256KB");
   }
 
   if (hasPwdMode && passwordMode !== "view" && passwordMode !== "edit" && passwordMode !== null) {
-    return new Response(JSON.stringify({ error: "Invalid passwordMode" }), {
-      status: 400, headers: { "Content-Type": "application/json" }
-    });
+    return createError("Invalid passwordMode");
   }
 
   return null;
@@ -349,36 +309,35 @@ export async function handleUpdate(request: Request, env: Env, codeParam: string
   const meta = await getMeta<ClipboardMeta>(env, code);
   
   if (!meta || (meta.expiresAt && new Date(meta.expiresAt).getTime() <= Date.now())) {
-    return new Response(JSON.stringify({ error: "Clipboard not found or expired" }), {
-      status: 404, headers: { "Content-Type": "application/json" }
-    });
+    return createError("Clipboard not found or expired", 404);
   }
 
   const authError = await checkAuthorization(meta, request, env);
   if (authError) return authError;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let body: any;
+  let body: UpdateRequestBody;
   try {
-    body = await request.json();
-    if (!body || typeof body !== "object") throw new Error();
+    const rawBody = await request.json();
+    if (!rawBody || typeof rawBody !== "object") throw new Error();
+    body = rawBody as UpdateRequestBody;
   } catch {
-    return new Response(JSON.stringify({ error: "Invalid fields" }), {
-      status: 400, headers: { "Content-Type": "application/json" }
-    });
+    return createError("Invalid fields");
   }
 
   const valError = validateUpdateFields(body, meta);
   if (valError) return valError;
 
-  if (body.password !== undefined) meta.passwordHash = body.password ? await hashPassword(body.password, env.PASSWORD_PEPPER) : null;
+  if (body.password !== undefined) {
+    const pwd = typeof body.password === "string" ? body.password : "";
+    meta.passwordHash = pwd ? await hashPassword(pwd, env.PASSWORD_PEPPER) : null;
+  }
   if (body.passwordMode !== undefined) meta.passwordMode = body.passwordMode as PasswordMode | null;
-  if (body.expiresAt !== undefined) meta.expiresAt = body.expiresAt || null;
+  if (body.expiresAt !== undefined) meta.expiresAt = (body.expiresAt as string) || null;
   if (body.isOneTimeView !== undefined) meta.isOneTimeView = Boolean(body.isOneTimeView);
 
   await setMeta(env, code, meta, null);
   if (body.content !== undefined) {
-    await setContent(env, code, body.content, null);
+    await setContent(env, code, body.content as string, null);
   }
 
   return new Response(JSON.stringify({ success: true, expiresAt: meta.expiresAt, isOneTimeView: meta.isOneTimeView }), {
@@ -391,9 +350,7 @@ export async function handleDelete(request: Request, env: Env, codeParam: string
 
   const meta = await getMeta<ClipboardMeta>(env, code);
   if (!meta || (meta.expiresAt && new Date(meta.expiresAt).getTime() <= Date.now())) {
-    return new Response(JSON.stringify({ error: "Clipboard not found or expired" }), {
-      status: 404, headers: { "Content-Type": "application/json" }
-    });
+    return createError("Clipboard not found or expired", 404);
   }
 
   if (meta.mode === "protected") {
@@ -411,9 +368,7 @@ export async function handleDelete(request: Request, env: Env, codeParam: string
     }
 
     if (!isAuthorized) {
-      return new Response(JSON.stringify({ error: "Invalid password or owner token" }), {
-        status: 403, headers: { "Content-Type": "application/json" }
-      });
+      return createError("Invalid password or owner token", 403);
     }
   }
 
