@@ -1,0 +1,4 @@
+- if user tries to create a new clipboard with existing code then it should show a delete pop up to delete the previous code
+- when owner creates a clipboard, give a checkbox to 'bypass password for me'
+- when owner opens the password protected code it should show password bypass toast
+- use appropriate browser consoles. create a logger and set --loglevel

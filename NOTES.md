@@ -2,3 +2,7 @@
 - make eslint must have
 - make me aware if environment variables are needs to be added. 
 - if sensitive files needs to be updated like environment variables it should add the new data do not completely rewrite the data. workflow cp .env .env.tem then add the new variables to .env.temp (do not touch .env) then compare the difference in .env.temp and .env if the difference == ai added difference then rename .env to .env.bkp-timestamp and move .env.temp to .env by this ai cannot see what was in the .env earlier. FUTURE SCOPE: create a tool to update .env and add guarddrills to prevent ai seeing the .env directly it can only add vars or update or comment the vars
+- If dealing with react, DO not go for god context, do not reinvent the wheel , Always prefer external well maintained library instead of creating that utility from scratch, use threeJs instead of creating 3d rendering code. 
+- use Configs in a single file and make it configurable, reference that same variable everywhere. 
+- never use || to use the variable eg: process.env.URL ||localhost:5173 (worst thing to do)
+- 

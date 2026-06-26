@@ -55,3 +55,23 @@ export async function deleteClipboard(
     throw new Error(err.error);
   }
 }
+
+export async function starClipboard(code: string): Promise<void> {
+  const res = await fetch(`${API_BASE}/clipboard/${code}/star`, {
+    method: "POST",
+  });
+  if (!res.ok) {
+    const err = await res.json() as { error: string };
+    throw new Error(err.error);
+  }
+}
+
+export async function unstarClipboard(code: string): Promise<void> {
+  const res = await fetch(`${API_BASE}/clipboard/${code}/star`, {
+    method: "DELETE",
+  });
+  if (!res.ok) {
+    const err = await res.json() as { error: string };
+    throw new Error(err.error);
+  }
+}
