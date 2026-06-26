@@ -51,12 +51,13 @@ For the current task, also read the specific task file in docs/tasks/.
 - TASK-012: Raw endpoint verified and finalized
 - TASK-013: Code validation and reserved keywords enforced in utils/validate.js
 - TASK-014: Security headers and CORS middleware applied to all responses
+- TASK-015: Frontend scaffold initialized with TypeScript, routing, types, services, and utilities
 
 ### In Progress
 None.
 
 ### Not Started
-- TASK-015 through TASK-019
+- TASK-016 through TASK-019
 
 ---
 
