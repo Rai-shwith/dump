@@ -16,5 +16,10 @@ Implement a "Bypass password for me" feature for clipboard creators to save and 
 - See D-019 in `DECISIONS.md`.
 
 ## Notes
-- Needs clarification on the exact `localStorage` key schema (e.g. merging into a JSON object for `ownerTokens.<code>` or keeping it separate like `ownerPasswords.<code>`).
-- Needs clarification on the notification library to install (`react-hot-toast` etc).
+- Needs clarification on the exact `localStorage` key schema (e.g. merging into a JSON object for `ownerTokens.<code>` or keeping it separate like `ownerPasswords.<code>`). -> *Resolved: Use a separate key `ownerPasswords.<code>` for simplicity.*
+- Needs clarification on the notification library to install (`react-hot-toast` etc). -> *Resolved: Use `sonner`.*
+
+## User Preferences
+- **Data Loss Warning:** Yes, show a small warning text below the checkbox explaining the local-only nature of the save.
+- **Checkbox Default:** Unchecked by default when protected mode is selected.
+- **Timing:** Will be implemented when we get to TASK-020.
