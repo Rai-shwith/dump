@@ -44,12 +44,13 @@ For the current task, also read the specific task file in docs/tasks/.
 - TASK-005: PUT /api/clipboard/:code implemented with partial updates and auth
 - TASK-006: DELETE /api/clipboard/:code implemented with auth and starred cleanup
 - TASK-007: SHA-256 password hashing implemented in utils/hash.ts
+- TASK-008: Owner token hashed with SHA-256 before KV storage
 
 ### In Progress
 None.
 
 ### Not Started
-- TASK-008 through TASK-019
+- TASK-009 through TASK-019
 
 ---
 

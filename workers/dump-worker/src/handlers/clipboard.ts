@@ -1,7 +1,7 @@
 import { Env, ClipboardMeta, ClipboardMode, PasswordMode } from "../types";
 import { getMeta, setMeta, setContent, getContent, deleteClipboard, getStarred, setStarred } from "../utils/kv";
 import { isValidCode, isReservedCode, generateCode } from "../utils/validate";
-import { hashPassword } from "../utils/hash";
+import { hashPassword, hashToken } from "../utils/hash";
 
 interface CreateRequestBody {
   code?: unknown;
@@ -136,7 +136,7 @@ export async function handleCreate(request: Request, env: Env): Promise<Response
     mode: modeRes.normalizedMode as ClipboardMode,
     passwordHash,
     passwordMode: modeRes.normalizedPasswordMode,
-    ownerTokenHash: ownerToken,
+    ownerTokenHash: await hashToken(ownerToken),
     createdAt: new Date().toISOString(),
     expiresAt: finalExpiresAt,
     isOneTimeView: finalOneTime,
@@ -164,7 +164,7 @@ function validateReadExpiration(meta: ClipboardMeta): Response | null {
 
 async function authorizeRead(meta: ClipboardMeta, request: Request, env: Env): Promise<Response | null> {
   const ownerToken = request.headers.get("X-Owner-Token");
-  if (ownerToken && ownerToken === meta.ownerTokenHash) {
+  if (ownerToken && (await hashToken(ownerToken)) === meta.ownerTokenHash) {
     return null;
   }
 
@@ -233,7 +233,7 @@ export async function handleRead(request: Request, env: Env, codeParam: string):
 
 async function checkAuthorization(meta: ClipboardMeta, req: Request, env: Env): Promise<Response | null> {
   const ownerToken = req.headers.get("X-Owner-Token");
-  if (ownerToken && ownerToken === meta.ownerTokenHash) {
+  if (ownerToken && (await hashToken(ownerToken)) === meta.ownerTokenHash) {
     return null;
   }
   
@@ -358,7 +358,7 @@ export async function handleDelete(request: Request, env: Env, codeParam: string
     const password = request.headers.get("X-Clipboard-Password");
 
     let isAuthorized = false;
-    if (ownerToken && ownerToken === meta.ownerTokenHash) {
+    if (ownerToken && (await hashToken(ownerToken)) === meta.ownerTokenHash) {
       isAuthorized = true;
     } else if (password) {
       const hash = await hashPassword(password, env.PASSWORD_PEPPER);
