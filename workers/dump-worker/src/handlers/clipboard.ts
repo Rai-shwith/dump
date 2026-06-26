@@ -153,7 +153,7 @@ function validateReadExpiration(meta: ClipboardMeta): Response | null {
   return null;
 }
 
-async function authorizeRead(meta: ClipboardMeta, request: Request, env: Env): Promise<Response | null> {
+async function authorizeRead(meta: ClipboardMeta, request: Request, env: Env, isRaw: boolean = false): Promise<Response | null> {
   const ownerToken = request.headers.get("X-Owner-Token");
   if (ownerToken && (await hashToken(ownerToken)) === meta.ownerTokenHash) {
     return null;
@@ -162,6 +162,9 @@ async function authorizeRead(meta: ClipboardMeta, request: Request, env: Env): P
   if (meta.passwordMode === "view") {
     const password = request.headers.get("X-Clipboard-Password");
     if (!password) {
+      if (isRaw) {
+        return createError("Invalid password", 403);
+      }
       return new Response(JSON.stringify({ locked: true, passwordMode: "view" }), {
         status: 200,
         headers: { "Content-Type": "application/json" }
@@ -236,7 +239,7 @@ export async function handleRaw(request: Request, env: Env, codeParam: string): 
     return new Response("Not found", { status: 404, headers: { "Content-Type": "text/plain" } });
   }
 
-  const authErr = await authorizeRead(meta, request, env);
+  const authErr = await authorizeRead(meta, request, env, true);
   if (authErr) return authErr;
 
   const content = await getContent(env, code);
