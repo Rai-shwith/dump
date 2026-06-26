@@ -120,7 +120,7 @@ export default function ViewPage() {
   const handleEditClick = () => {
     if (!data) return;
     setEditContent(data.content);
-    setEditExpiration("1_hour");
+    setEditExpiration("unchanged");
     setEditPassword("");
     setIsEditing(true);
   };
@@ -132,41 +132,49 @@ export default function ViewPage() {
     let expiresAt: string | null = null;
     let isOneTimeView = false;
 
-    if (editExpiration === "infinite") {
-      expiresAt = null;
-    } else if (editExpiration === "one_time") {
-      isOneTimeView = true;
-    } else if (editExpiration === "custom") {
-      if (!editCustomDateTime) {
-        alert("Please provide a custom date and time");
-        return;
+    if (editExpiration !== "unchanged") {
+      if (editExpiration === "infinite") {
+        expiresAt = null;
+      } else if (editExpiration === "one_time") {
+        isOneTimeView = true;
+      } else if (editExpiration === "custom") {
+        if (!editCustomDateTime) {
+          alert("Please provide a custom date and time");
+          return;
+        }
+        expiresAt = toUTCString(editCustomDateTime);
+      } else {
+        let ms = 0;
+        switch (editExpiration) {
+          case "1_min": ms = 60 * 1000; break;
+          case "5_min": ms = 5 * 60 * 1000; break;
+          case "15_min": ms = 15 * 60 * 1000; break;
+          case "1_hour": ms = 3600 * 1000; break;
+          case "1_day": ms = 86400 * 1000; break;
+          case "1_week": ms = 7 * 86400 * 1000; break;
+          case "1_month": ms = 30 * 86400 * 1000; break;
+          case "1_year": ms = 365 * 86400 * 1000; break;
+        }
+        expiresAt = addMilliseconds(ms);
       }
-      expiresAt = toUTCString(editCustomDateTime);
-    } else {
-      let ms = 0;
-      switch (editExpiration) {
-        case "1_min": ms = 60 * 1000; break;
-        case "5_min": ms = 5 * 60 * 1000; break;
-        case "15_min": ms = 15 * 60 * 1000; break;
-        case "1_hour": ms = 3600 * 1000; break;
-        case "1_day": ms = 86400 * 1000; break;
-        case "1_week": ms = 7 * 86400 * 1000; break;
-        case "1_month": ms = 30 * 86400 * 1000; break;
-        case "1_year": ms = 365 * 86400 * 1000; break;
-      }
-      expiresAt = addMilliseconds(ms);
     }
 
     const body: any = {};
     if (editContent !== data.content) {
       body.content = editContent;
     }
-    if (isOneTimeView) {
-      body.isOneTimeView = true;
-    } else if (expiresAt) {
-      body.expiresAt = expiresAt;
-    } else if (editExpiration === "infinite") {
-      body.expiresAt = null;
+    
+    if (editExpiration !== "unchanged") {
+      if (isOneTimeView) {
+        body.isOneTimeView = true;
+        body.expiresAt = null;
+      } else if (expiresAt) {
+        body.expiresAt = expiresAt;
+        body.isOneTimeView = false;
+      } else if (editExpiration === "infinite") {
+        body.expiresAt = null;
+        body.isOneTimeView = false;
+      }
     }
 
     if (Object.keys(body).length === 0) {
@@ -302,6 +310,7 @@ export default function ViewPage() {
             <div style={{ marginTop: "1rem", marginBottom: "1rem" }}>
               <label>Expiration:</label><br />
               <select value={editExpiration} onChange={(e) => setEditExpiration(e.target.value)}>
+                <option value="unchanged">Keep Current Expiration</option>
                 <option value="1_min">1 minute</option>
                 <option value="5_min">5 minutes</option>
                 <option value="15_min">15 minutes</option>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+
 import { createClipboard, starClipboard } from "../services/clipboardApi";
 import { generateCode } from "../utils/codegen";
 import { addMilliseconds, toUTCString } from "../utils/time";
@@ -7,8 +7,6 @@ import { setOwnerToken } from "../utils/tokens";
 import type { ClipboardMode, PasswordMode, CreateClipboardRequest } from "../types";
 
 export default function CreatePage() {
-  const navigate = useNavigate();
-
   const [content, setContent] = useState("");
   const [code, setCode] = useState("");
   const [codePlaceholder, setCodePlaceholder] = useState("");
@@ -19,6 +17,7 @@ export default function CreatePage() {
   const [customDateTime, setCustomDateTime] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isStarred, setIsStarred] = useState(false);
+  const [createdCode, setCreatedCode] = useState<string | null>(null);
 
   useEffect(() => {
     setCodePlaceholder(generateCode(8));
@@ -27,6 +26,30 @@ export default function CreatePage() {
   const handleRegenerateCode = () => {
     setCodePlaceholder(generateCode(8));
   };
+
+  const handleCreateAnother = () => {
+    setCreatedCode(null);
+    setContent("");
+    setCode("");
+    setPassword("");
+    setCustomDateTime("");
+    setIsStarred(false);
+  };
+
+  if (createdCode) {
+    const url = `${window.location.origin}/${createdCode}`;
+    return (
+      <div>
+        <h1>Clipboard Created!</h1>
+        <p>Your clipboard is ready at:</p>
+        <p>
+          <a href={url}>{url}</a>
+        </p>
+        <br />
+        <button type="button" onClick={handleCreateAnother}>Create Another</button>
+      </div>
+    );
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -91,7 +114,7 @@ export default function CreatePage() {
           console.error("Failed to star clipboard", err);
         }
       }
-      navigate(`/${res.code}`);
+      setCreatedCode(res.code);
     } catch (err: any) {
       setError(err.message || "An error occurred");
     }

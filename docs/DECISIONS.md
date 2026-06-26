@@ -282,3 +282,16 @@ A packages/ directory may be introduced later for shared types — not in V1.
 - The raw password will be hidden by default on the view page but can be revealed by the owner (via a "show password" button).
 
 **Reason:** Improves user experience for creators who do not want to re-enter passwords on their own device, while giving them explicit control over whether this bypass credential is saved locally.
+## D-020 — Post-Creation Flow
+
+**Decision:** Do not redirect the creator to the view page immediately after creating a clipboard. Instead, display the generated link on the creation page.
+
+**Reason:** If a clipboard is configured for `One-Time-View`, auto-redirecting the creator to the view page would instantly consume (burn) the clipboard before they can share the link.
+
+---
+
+## D-021 — Expiration Editing Mutual Exclusion
+
+**Decision:** When updating a clipboard's expiration (e.g., changing from a time-based expiration to One-Time-View or vice-versa), the frontend must explicitly send `null` (or `false`) for the opposing property in the PUT request.
+
+**Reason:** The backend validates that `expiresAt` and `isOneTimeView` cannot both be set. Since PUT is a partial update, sending only `isOneTimeView: true` causes a validation error if the clipboard already has a stored `expiresAt`. Explicitly clearing the opposing field resolves the conflict.

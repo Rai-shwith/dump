@@ -193,7 +193,7 @@ Client → POST /api/clipboard
        → generate owner token, hash it
        → write clip:<code>:meta and clip:<code>:content to KV
        → return { code, ownerToken, expiresAt }
-       → Client stores ownerToken in localStorage
+       → Client stores ownerToken in localStorage and displays the link to the creator
 ```
 
 ### Read Clipboard
@@ -217,6 +217,7 @@ Client → GET /api/clipboard/:code
 ```
 Client → PUT /api/clipboard/:code
        → clipboardService.updateClipboard()
+       → (Note: Client must explicitly send null for expiresAt when setting isOneTimeView to true to satisfy validation)
        → read meta → check expiration
        → verify owner token or edit password
        → update meta and/or content in KV
