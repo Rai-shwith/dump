@@ -42,12 +42,14 @@ For the current task, also read the specific task file in docs/tasks/.
 - TASK-003: Create clipboard endpoint implemented with validation, code generation, and KV storage
 - TASK-004: Read clipboard endpoint implemented with password, owner token, expiration and one-time view logic
 - TASK-005: PUT /api/clipboard/:code implemented with partial updates and auth
+- TASK-006: DELETE /api/clipboard/:code implemented with auth and starred cleanup
+- TASK-007: SHA-256 password hashing implemented in utils/hash.ts
 
 ### In Progress
 None.
 
 ### Not Started
-- TASK-006 through TASK-019
+- TASK-008 through TASK-019
 
 ---
 

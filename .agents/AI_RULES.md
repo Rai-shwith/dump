@@ -153,6 +153,8 @@ These limits exist to keep AI-generated code auditable and testable.
 - After completing a task, update AGENTS.md as described at the end of the task file.
 - Run the manual testing checklist before marking a task complete.
 - Never skip the manual testing checklist.
+- Always run `npm run lint` in the relevant package directory (e.g., `workers/dump-worker`) after making code changes.
+- If the linter reports errors for code size or nesting limits (`max-lines`, `max-lines-per-function`, `max-depth`, `max-params`), you MUST restructure your code to fix them before completing the task.
 - Make the suggested commit after each task.
 
 ---

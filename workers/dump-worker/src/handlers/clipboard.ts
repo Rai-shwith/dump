@@ -1,13 +1,16 @@
 import { Env, ClipboardMeta, ClipboardMode, PasswordMode } from "../types";
 import { getMeta, setMeta, setContent, getContent, deleteClipboard, getStarred, setStarred } from "../utils/kv";
 import { isValidCode, isReservedCode, generateCode } from "../utils/validate";
+import { hashPassword } from "../utils/hash";
 
-export async function handleCreate(request: Request, env: Env, ctx: any): Promise<Response> {
+// eslint-disable-next-line max-lines-per-function, @typescript-eslint/no-unused-vars
+export async function handleCreate(request: Request, env: Env, _ctx: unknown): Promise<Response> {
   // 1. Parse JSON body. Return 400 if body is invalid JSON.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let body: any;
   try {
     body = await request.json();
-  } catch (error) {
+  } catch {
     return new Response(JSON.stringify({ error: "Invalid JSON body" }), {
       status: 400,
       headers: { "Content-Type": "application/json" }
@@ -137,7 +140,7 @@ export async function handleCreate(request: Request, env: Env, ctx: any): Promis
   const ownerToken = crypto.randomUUID();
 
   // 9. Handle password
-  const passwordHash = password || null;
+  const passwordHash = password ? await hashPassword(password, env.PASSWORD_PEPPER) : null;
 
   // 10. Build metadata object
   const meta: ClipboardMeta = {
@@ -172,6 +175,7 @@ export async function handleCreate(request: Request, env: Env, ctx: any): Promis
   );
 }
 
+// eslint-disable-next-line max-lines-per-function
 export async function handleRead(request: Request, env: Env, codeParam: string): Promise<Response> {
   const code = codeParam.toLowerCase();
 
@@ -208,7 +212,8 @@ export async function handleRead(request: Request, env: Env, codeParam: string):
         headers: { "Content-Type": "application/json" }
       });
     }
-    if (password !== meta.passwordHash) {
+    const hash = await hashPassword(password, env.PASSWORD_PEPPER);
+    if (hash !== meta.passwordHash) {
       return new Response(JSON.stringify({ error: "Invalid password" }), {
         status: 403,
         headers: { "Content-Type": "application/json" }
@@ -248,7 +253,7 @@ export async function handleRead(request: Request, env: Env, codeParam: string):
   });
 }
 
-function checkAuthorization(meta: ClipboardMeta, req: Request): Response | null {
+async function checkAuthorization(meta: ClipboardMeta, req: Request, env: Env): Promise<Response | null> {
   const ownerToken = req.headers.get("X-Owner-Token");
   if (ownerToken && ownerToken === meta.ownerTokenHash) {
     return null;
@@ -256,7 +261,14 @@ function checkAuthorization(meta: ClipboardMeta, req: Request): Response | null 
   
   if (meta.passwordMode === "edit") {
     const pwd = req.headers.get("X-Clipboard-Password");
-    if (!pwd || pwd !== meta.passwordHash) {
+    if (!pwd) {
+      return new Response(JSON.stringify({ error: "Invalid password or owner token" }), {
+        status: 403,
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+    const hash = await hashPassword(pwd, env.PASSWORD_PEPPER);
+    if (hash !== meta.passwordHash) {
       return new Response(JSON.stringify({ error: "Invalid password or owner token" }), {
         status: 403,
         headers: { "Content-Type": "application/json" }
@@ -288,6 +300,7 @@ function validateExpiration(expiresAt: string, createdAt: string): Response | nu
   return null;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function validateUpdateFields(body: any, meta: ClipboardMeta): Response | null {
   const { content, expiresAt, isOneTimeView, password, passwordMode } = body;
   const hasContent = content !== undefined;
@@ -341,9 +354,10 @@ export async function handleUpdate(request: Request, env: Env, codeParam: string
     });
   }
 
-  const authError = checkAuthorization(meta, request);
+  const authError = await checkAuthorization(meta, request, env);
   if (authError) return authError;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let body: any;
   try {
     body = await request.json();
@@ -357,7 +371,7 @@ export async function handleUpdate(request: Request, env: Env, codeParam: string
   const valError = validateUpdateFields(body, meta);
   if (valError) return valError;
 
-  if (body.password !== undefined) meta.passwordHash = body.password || null;
+  if (body.password !== undefined) meta.passwordHash = body.password ? await hashPassword(body.password, env.PASSWORD_PEPPER) : null;
   if (body.passwordMode !== undefined) meta.passwordMode = body.passwordMode as PasswordMode | null;
   if (body.expiresAt !== undefined) meta.expiresAt = body.expiresAt || null;
   if (body.isOneTimeView !== undefined) meta.isOneTimeView = Boolean(body.isOneTimeView);
@@ -389,8 +403,11 @@ export async function handleDelete(request: Request, env: Env, codeParam: string
     let isAuthorized = false;
     if (ownerToken && ownerToken === meta.ownerTokenHash) {
       isAuthorized = true;
-    } else if (password && password === meta.passwordHash) {
-      isAuthorized = true;
+    } else if (password) {
+      const hash = await hashPassword(password, env.PASSWORD_PEPPER);
+      if (hash === meta.passwordHash) {
+        isAuthorized = true;
+      }
     }
 
     if (!isAuthorized) {
