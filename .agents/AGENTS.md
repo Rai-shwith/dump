@@ -49,12 +49,14 @@ For the current task, also read the specific task file in docs/tasks/.
 - TASK-010: Expiry logic centralized in utils/expiry.ts, KV TTL applied on write
 - TASK-011: Star/unstar/getStarred endpoints implemented with lazy expiry cleanup
 - TASK-012: Raw endpoint verified and finalized
+- TASK-013: Code validation and reserved keywords enforced in utils/validate.js
+- TASK-014: Security headers and CORS middleware applied to all responses
 
 ### In Progress
 None.
 
 ### Not Started
-- TASK-013 through TASK-019
+- TASK-015 through TASK-019
 
 ---
 
