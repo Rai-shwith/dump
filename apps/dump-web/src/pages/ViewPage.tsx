@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { readClipboard, starClipboard, unstarClipboard, deleteClipboard } from "../services/clipboardApi";
-import { getOwnerToken } from "../utils/tokens";
+import { getOwnerToken, getOwnerPassword } from "../utils/tokens";
 import { formatLocalTime, addMilliseconds, toUTCString } from "../utils/time";
 import { API_BASE } from "../constants";
+import { toast } from "sonner";
 import type { ClipboardContent } from "../types";
 
 export default function ViewPage() {
@@ -27,6 +28,9 @@ export default function ViewPage() {
   const [editCustomDateTime, setEditCustomDateTime] = useState("");
   const [editPassword, setEditPassword] = useState("");
 
+  const [showRawPassword, setShowRawPassword] = useState(false);
+  const bypassToastShown = useRef(false);
+
   const fetchData = useCallback(async (password?: string) => {
     if (!code) return;
     setLoading(true);
@@ -43,6 +47,14 @@ export default function ViewPage() {
       } else {
         setLocked(false);
         setData(res);
+        
+        if (res.mode === "protected" && !password && ownerToken) {
+          if (!bypassToastShown.current) {
+            toast.success("Password bypassed");
+            bypassToastShown.current = true;
+          }
+        }
+
         if (res.isOneTimeView) {
           setIsOneTimeWarningShown(true);
         }
@@ -259,6 +271,14 @@ export default function ViewPage() {
       
       <div style={{ marginBottom: "1rem" }}>
         <p>Mode: {data.mode}</p>
+        {data.mode === "protected" && getOwnerPassword(code!) && (
+          <p>
+            Password: {showRawPassword ? getOwnerPassword(code!) : "••••••••"}{" "}
+            <button onClick={() => setShowRawPassword(!showRawPassword)}>
+              {showRawPassword ? "Hide" : "Show"}
+            </button>
+          </p>
+        )}
         <p>Expires at: {formatLocalTime(data.expiresAt)}</p>
         <p>Starred: {data.isStarred ? "Yes" : "No"}</p>
         {isOneTimeWarningShown && (

@@ -57,13 +57,14 @@ For the current task, also read the specific task file in docs/tasks/.
 - TASK-018: Edit and delete flows implemented on view page
 - TASK-018.5: Removed reserved clipboard mode across full stack and documentation
 - TASK-019: Homepage implemented with global starred clipboard list
+- TASK-020: Password Bypass Feature implemented with local storage save and UI updates
 - V1 functional implementation complete. Ready for Lovable UI polish phase.
 
 ### In Progress
 None.
 
 ### Not Started
-- TASK-020: Password Bypass Feature
+None.
 
 ---
 

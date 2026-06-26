@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { createClipboard, starClipboard } from "../services/clipboardApi";
 import { generateCode } from "../utils/codegen";
 import { addMilliseconds, toUTCString } from "../utils/time";
-import { setOwnerToken } from "../utils/tokens";
+import { setOwnerToken, setOwnerPassword } from "../utils/tokens";
 import type { ClipboardMode, PasswordMode, CreateClipboardRequest } from "../types";
 
 export default function CreatePage() {
@@ -18,6 +18,7 @@ export default function CreatePage() {
   const [error, setError] = useState<string | null>(null);
   const [isStarred, setIsStarred] = useState(false);
   const [createdCode, setCreatedCode] = useState<string | null>(null);
+  const [bypassPasswordForMe, setBypassPasswordForMe] = useState(false);
 
   useEffect(() => {
     setCodePlaceholder(generateCode(8));
@@ -34,6 +35,7 @@ export default function CreatePage() {
     setPassword("");
     setCustomDateTime("");
     setIsStarred(false);
+    setBypassPasswordForMe(false);
   };
 
   if (createdCode) {
@@ -106,7 +108,14 @@ export default function CreatePage() {
 
     try {
       const res = await createClipboard(body);
-      setOwnerToken(res.code, res.ownerToken);
+      if (mode === "protected") {
+        if (bypassPasswordForMe) {
+          setOwnerToken(res.code, res.ownerToken);
+          setOwnerPassword(res.code, password);
+        }
+      } else {
+        setOwnerToken(res.code, res.ownerToken);
+      }
       if (mode === "public" && isStarred) {
         try {
           await starClipboard(res.code);
@@ -190,6 +199,17 @@ export default function CreatePage() {
               onChange={(e) => setPassword(e.target.value)} 
               required
             />
+            <br />
+            <label>
+              <input 
+                type="checkbox" 
+                checked={bypassPasswordForMe} 
+                onChange={(e) => setBypassPasswordForMe(e.target.checked)} 
+              />
+              Bypass password for me
+            </label>
+            <br />
+            <small style={{ color: "gray" }}>Saved locally only.</small>
           </div>
         )}
         
