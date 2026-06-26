@@ -88,6 +88,14 @@ Owner token stored in localStorage.
 User redirected to clipboard URL on success.
 Errors displayed on failure.
 
+## AI Workflow
+1. Complete the task requirements.
+2. Create a test file in TESTS/ named after the task (e.g. TESTS/TASK-016.sh) using the Manual Testing Instructions.
+3. Execute the test file. Fix any errors if tests fail.
+4. Report the test results to the user and WAIT for their explicit approval.
+5. Do NOT commit changes and do NOT update AGENTS.md "Completed Tasks" until the user approves.
+6. Once approved, commit the changes including the test script.
+
 ## Commit Suggestion
 feat(frontend): implement create clipboard page
 

@@ -23,6 +23,7 @@ Read this file completely before writing a single line of code.
 - It is acceptable to modify package.json metadata fields (name, private, type, scripts, description, engines).
 - package-lock.json is the source of truth for dependency versions.
 - Prefer installing dependencies incrementally as features are implemented.
+- If there is 'Manual Testing Instructions' are provided then create a appropriate .sh file under TESTS/ Folder and run it to verify the implementation. 
 
 ---
 

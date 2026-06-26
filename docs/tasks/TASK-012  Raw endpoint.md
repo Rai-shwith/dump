@@ -55,6 +55,14 @@ Test 4 — Raw one-time view:
 ## Expected Behavior
 Raw endpoint returns plain text with correct headers and enforces all same rules as JSON read.
 
+## AI Workflow
+1. Complete the task requirements.
+2. Create a test file in TESTS/ named after the task (e.g. TESTS/TASK-012.sh) using the Manual Testing Instructions.
+3. Execute the test file. Fix any errors if tests fail.
+4. Report the test results to the user and WAIT for their explicit approval.
+5. Do NOT commit changes and do NOT update AGENTS.md "Completed Tasks" until the user approves.
+6. Once approved, commit the changes including the test script.
+
 ## Commit Suggestion
 feat(worker): verify and finalize raw clipboard endpoint
 
