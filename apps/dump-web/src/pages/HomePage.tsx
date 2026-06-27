@@ -1,57 +1,35 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { API_BASE } from "../constants";
-import type { StarredEntry } from "../types";
-import { formatLocalTime } from "../utils/time";
+import { AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { CreateForm } from "@/components/CreateForm";
+import { StarredStrip } from "@/components/StarredStrip";
+import { SuccessCard } from "@/components/SuccessCard";
+import type { CreateClipboardResponse } from "@/types";
 
 export default function HomePage() {
-  const [starred, setStarred] = useState<StarredEntry[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetch(`${API_BASE}/starred`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch starred clipboards");
-        return res.json();
-      })
-      .then((data: { starred: StarredEntry[] }) => {
-        setStarred(data.starred);
-      })
-      .catch((err) => {
-        setError(err.message);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
+  const [result, setResult] = useState<CreateClipboardResponse | null>(null);
 
   return (
-    <div>
-      <h1>Dump</h1>
-      <Link to="/new">Create new clipboard</Link>
+    <div className="mx-auto max-w-xl space-y-10">
+      <section>
+        <header className="mb-4">
+          <h1 className="font-mono text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
+            dump
+          </h1>
+          <p className="mt-1 text-sm text-[var(--text-secondary)]">
+            Anonymous clipboards. Share text between devices in seconds.
+          </p>
+        </header>
 
-      <h2>Starred Clipboards</h2>
+        <AnimatePresence mode="wait" initial={false}>
+          {result ? (
+            <SuccessCard key="success" result={result} onCreateAnother={() => setResult(null)} />
+          ) : (
+            <CreateForm key="form" onCreated={setResult} />
+          )}
+        </AnimatePresence>
+      </section>
 
-      {isLoading && <p>Loading...</p>}
-
-      {error && <p>Error: {error}</p>}
-
-      {!isLoading && !error && starred.length === 0 && (
-        <p>No starred clipboards yet</p>
-      )}
-
-      {!isLoading && !error && starred.length > 0 && (
-        <ul>
-          {starred.map((clip) => (
-            <li key={clip.code}>
-              <Link to={`/${clip.code}`}>{clip.code}</Link>
-              <span> - Expires: {formatLocalTime(clip.expiresAt)}</span>
-              {clip.isOneTimeView && <span> (One-time view)</span>}
-            </li>
-          ))}
-        </ul>
-      )}
+      <StarredStrip />
     </div>
   );
 }

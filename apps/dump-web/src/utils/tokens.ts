@@ -1,23 +1,30 @@
+import { APP_CONFIG } from "@/config/app.config";
+
+function safeStorage(): Storage | null {
+  if (typeof window === "undefined") return null;
+  try {
+    return window.localStorage;
+  } catch {
+    return null;
+  }
+}
+
 export function getOwnerToken(code: string): string | null {
-  return localStorage.getItem(`ownerTokens.${code}`);
+  return safeStorage()?.getItem(`${APP_CONFIG.ownerTokenPrefix}.${code}`) ?? null;
 }
 
-export function setOwnerToken(code: string, token: string): void {
-  localStorage.setItem(`ownerTokens.${code}`, token);
+export function saveOwnerToken(code: string, token: string): void {
+  safeStorage()?.setItem(`${APP_CONFIG.ownerTokenPrefix}.${code}`, token);
 }
 
-export function removeOwnerToken(code: string): void {
-  localStorage.removeItem(`ownerTokens.${code}`);
+export function getBypassPassword(code: string): string | null {
+  return safeStorage()?.getItem(`${APP_CONFIG.bypassPasswordPrefix}.${code}`) ?? null;
 }
 
-export function getOwnerPassword(code: string): string | null {
-  return localStorage.getItem(`ownerPasswords.${code}`);
+export function saveBypassPassword(code: string, password: string): void {
+  safeStorage()?.setItem(`${APP_CONFIG.bypassPasswordPrefix}.${code}`, password);
 }
 
-export function setOwnerPassword(code: string, password: string): void {
-  localStorage.setItem(`ownerPasswords.${code}`, password);
-}
-
-export function removeOwnerPassword(code: string): void {
-  localStorage.removeItem(`ownerPasswords.${code}`);
+export function clearBypassPassword(code: string): void {
+  safeStorage()?.removeItem(`${APP_CONFIG.bypassPasswordPrefix}.${code}`);
 }
