@@ -6,3 +6,7 @@ compatibility_date = "2024-01-01"
 binding = "CLIPBOARD_KV"
 id = "712aa3fe5dbb4830a492d0f26281d485"
 preview_id = "c69629bd6f0348b4ae1f4ae8b0b8eda6"
+
+[[routes]]                                                             
+pattern = "dump.ashwithrai.me/api*"                                    
+zone_name = "ashwithrai.me" 

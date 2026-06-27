@@ -10,13 +10,13 @@
       (function () {
         try {
           var t = localStorage.getItem("dump-theme");
-          if (t === "light") {
-            document.documentElement.classList.remove("dark");
+          if (t === "dark") {
+            document.documentElement.classList.remove("light");
           } else {
-            document.documentElement.classList.add("dark");
+            document.documentElement.classList.add("light");
           }
         } catch (e) {
-          document.documentElement.classList.add("dark");
+          document.documentElement.classList.add("light");
         }
       })();
     </script>
