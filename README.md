@@ -64,9 +64,9 @@ dump/
 
 Key decisions are documented in:
 
-- [`/home/runner/work/dump/dump/docs/DECISIONS.md`](/docs/DECISIONS.md)
-- [`/home/runner/work/dump/dump/docs/ARCHITECTURE.md`](/docs/ARCHITECTURE.md)
-- [`/home/runner/work/dump/dump/docs/API.md`](/docs/API.md)
+- [`docs/DECISIONS.md`](/docs/DECISIONS.md)
+- [`docs/ARCHITECTURE.md`](/docs/ARCHITECTURE.md)
+- [`docs/API.md`](/docs/API.md)
 
 Highlights:
 
