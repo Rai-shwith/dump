@@ -29,7 +29,7 @@ export function CreateForm({ onCreated }: Props): React.JSX.Element {
   const [showPw, setShowPw] = useState<boolean>(false);
   const [passwordMode, setPasswordMode] = useState<PasswordMode>("view");
   const [bypass, setBypass] = useState<boolean>(true);
-  const [expiry, setExpiry] = useState<ExpiryPreset>("infinite");
+  const [expiry, setExpiry] = useState<ExpiryPreset>("1h");
   const [customDt, setCustomDt] = useState<string>("");
   const [codeError, setCodeError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState<boolean>(false);

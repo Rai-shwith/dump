@@ -2,18 +2,14 @@ import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
+import { Logo } from "@/components/Logo";
 
 export function Navbar(): React.JSX.Element {
   const { theme, toggle } = useTheme();
   return (
     <header className="fixed inset-x-0 top-0 z-40 h-12 border-b border-[var(--border-color)] bg-[var(--surface)]/70 backdrop-blur-xl">
       <div className="mx-auto flex h-full max-w-3xl items-center justify-between px-4">
-        <Link
-          to="/"
-          className="font-mono text-base font-semibold tracking-tight text-[var(--text-primary)] hover:text-[var(--accent)] transition-colors"
-        >
-          dump
-        </Link>
+        <Logo />
         <button
           type="button"
           aria-label="Toggle theme"
