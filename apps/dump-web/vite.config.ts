@@ -12,5 +12,12 @@ export default defineConfig({
   server: {
     host: "::",
     strictPort: true,
+    proxy: {
+      "^/[^/]+/raw$": {
+        target: "http://127.0.0.1:8787",
+        changeOrigin: true,
+        rewrite: (path) => `/api/clipboard${path}`,
+      },
+    },
   },
 });

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { Copy, Edit3, Share2, Star, Trash2, Eye, EyeOff } from "lucide-react";
+import { Copy, Edit3, Share2, Star, Trash2, Eye, EyeOff, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { deleteClipboard, starClipboard, unstarClipboard } from "@/services/clipboardApi";
 import { getBypassPassword, getOwnerToken } from "@/utils/tokens";
@@ -48,6 +48,10 @@ export function ContentView({ data, onUpdated }: Props): React.JSX.Element {
     } catch {
       toast.error("Couldn't copy link");
     }
+  }
+
+  function openRaw(): void {
+    window.open(`/${data.code}/raw`, "_blank");
   }
 
   async function doDelete(): Promise<void> {
@@ -115,6 +119,7 @@ export function ContentView({ data, onUpdated }: Props): React.JSX.Element {
       <div className="mt-3 hidden md:flex md:gap-2">
         <DesktopAction onClick={copy} icon={<Copy className="h-4 w-4" />} label="Copy" />
         <DesktopAction onClick={share} icon={<Share2 className="h-4 w-4" />} label="Share" />
+        <DesktopAction onClick={openRaw} icon={<FileText className="h-4 w-4" />} label="Raw" />
         {canEdit && !data.isOneTimeView && (
           <DesktopAction
             onClick={() => setEditing((v) => !v)}
@@ -168,6 +173,7 @@ export function ContentView({ data, onUpdated }: Props): React.JSX.Element {
         <div className="mx-auto flex max-w-3xl items-center justify-around">
           <MobileAction onClick={copy} icon={<Copy className="h-5 w-5" />} label="Copy" />
           <MobileAction onClick={share} icon={<Share2 className="h-5 w-5" />} label="Share" />
+          <MobileAction onClick={openRaw} icon={<FileText className="h-5 w-5" />} label="Raw" />
           {canEdit && !data.isOneTimeView && (
             <MobileAction
               onClick={() => setEditing((v) => !v)}
