@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Eye, EyeOff, Loader2, RefreshCw } from "lucide-react";
+import { Eye, EyeOff, Loader2, RefreshCw, Star } from "lucide-react";
 import { toast } from "sonner";
 import { APP_CONFIG } from "@/config/app.config";
-import { createClipboard } from "@/services/clipboardApi";
+import { createClipboard, starClipboard } from "@/services/clipboardApi";
 import { generateCode } from "@/utils/codegen";
 import { saveBypassPassword, saveOwnerToken } from "@/utils/tokens";
 import { presetToISO, toUTC } from "@/utils/time";
@@ -33,6 +33,7 @@ export function CreateForm({ onCreated }: Props): React.JSX.Element {
   const [customDt, setCustomDt] = useState<string>("");
   const [codeError, setCodeError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState<boolean>(false);
+  const [isStarred, setIsStarred] = useState<boolean>(false);
 
   useEffect(() => {
     setCode(generateCode());
@@ -40,6 +41,7 @@ export function CreateForm({ onCreated }: Props): React.JSX.Element {
 
   useEffect(() => {
     if (mode === "protected" && expiry === "infinite") setExpiry("1d");
+    if (mode === "protected" || expiry === "otv") setIsStarred(false);
   }, [mode, expiry]);
 
   function regenCode(): void {
@@ -111,6 +113,14 @@ export function CreateForm({ onCreated }: Props): React.JSX.Element {
       }
       if (mode === "protected" && bypass && password) {
         saveBypassPassword(res.code, password);
+      }
+      if (mode === "public" && isStarred && !isOTV) {
+        try {
+          await starClipboard(res.code);
+          window.dispatchEvent(new Event("refresh-starred"));
+        } catch (err) {
+          toast.error("Clipboard created, but failed to star globally");
+        }
       }
       onCreated(res);
     } catch (err) {
@@ -190,6 +200,21 @@ export function CreateForm({ onCreated }: Props): React.JSX.Element {
             ))}
           </div>
         </div>
+
+        {mode === "public" && expiry !== "otv" && (
+          <button
+            type="button"
+            onClick={() => setIsStarred(!isStarred)}
+            className={`flex w-max items-center gap-2 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors cursor-pointer ${
+              isStarred
+                ? "border-[var(--accent)] bg-[var(--accent)] text-[#0a0a0a]"
+                : "border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+            }`}
+          >
+            <Star className={`h-4 w-4 ${isStarred ? "fill-current" : ""}`} />
+            {isStarred ? "Starred globally" : "Star globally"}
+          </button>
+        )}
 
         {mode === "protected" && (
           <div className="space-y-3 rounded-md border border-[var(--border-color)] bg-[var(--surface)] p-3">
