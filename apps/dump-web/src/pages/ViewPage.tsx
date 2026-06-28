@@ -5,6 +5,8 @@ import { APP_CONFIG } from "@/config/app.config";
 import { ContentView } from "@/components/ContentView";
 import { PasswordGate } from "@/components/PasswordGate";
 import { useClipboard } from "@/hooks/useClipboard";
+import { toast } from "sonner";
+import { getOwnerToken } from "@/utils/tokens";
 
 export default function ViewPage() {
   const { code: raw } = useParams<{ code: string }>();
@@ -23,6 +25,14 @@ export default function ViewPage() {
 
 function ViewInner({ code }: { code: string }) {
   const { state, unlock, setData } = useClipboard(code);
+
+  const isProtectedOk = state.status === "ok" && state.data.mode === "protected";
+
+  useEffect(() => {
+    if (isProtectedOk && getOwnerToken(code)) {
+      toast.success("Password bypassed using saved token");
+    }
+  }, [isProtectedOk, code]);
 
   return (
     <AnimatePresence mode="wait">

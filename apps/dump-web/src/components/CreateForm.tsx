@@ -106,7 +106,9 @@ export function CreateForm({ onCreated }: Props): React.JSX.Element {
     setSubmitting(true);
     try {
       const res = await createClipboard(payload);
-      saveOwnerToken(res.code, res.ownerToken);
+      if (mode === "public" || bypass) {
+        saveOwnerToken(res.code, res.ownerToken);
+      }
       if (mode === "protected" && bypass && password) {
         saveBypassPassword(res.code, password);
       }

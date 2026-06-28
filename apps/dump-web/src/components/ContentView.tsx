@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { Copy, Edit3, Share2, Star, Trash2 } from "lucide-react";
+import { Copy, Edit3, Share2, Star, Trash2, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { deleteClipboard, starClipboard, unstarClipboard } from "@/services/clipboardApi";
 import { getBypassPassword, getOwnerToken } from "@/utils/tokens";
@@ -22,9 +22,11 @@ export function ContentView({ data, onUpdated }: Props): React.JSX.Element {
   const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [isStarred, setIsStarred] = useState<boolean>(data.isStarred);
+  const [showSavedPw, setShowSavedPw] = useState(false);
 
   const ownerToken = getOwnerToken(data.code);
   const isOwner = !!ownerToken;
+  const savedPassword = getBypassPassword(data.code);
   const canEdit = isOwner || data.mode === "public";
   const canDelete = isOwner || data.mode === "public";
   const canStar = data.mode === "public" && !data.isOneTimeView;
@@ -88,6 +90,19 @@ export function ContentView({ data, onUpdated }: Props): React.JSX.Element {
           <span className="rounded-full border border-[var(--accent)]/40 bg-[var(--accent)]/10 px-2 py-0.5 font-medium text-[var(--accent)]">
             🔑 You own this
           </span>
+        )}
+        {isOwner && savedPassword && (
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border-color)] bg-[var(--surface-raised)] px-2 py-0.5 font-mono font-medium text-[var(--text-secondary)]">
+            <span>Pw: {showSavedPw ? savedPassword : "••••"}</span>
+            <button
+              type="button"
+              onClick={() => setShowSavedPw(!showSavedPw)}
+              className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] cursor-pointer"
+              aria-label={showSavedPw ? "Hide password" : "Show password"}
+            >
+              {showSavedPw ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
+            </button>
+          </div>
         )}
       </div>
 

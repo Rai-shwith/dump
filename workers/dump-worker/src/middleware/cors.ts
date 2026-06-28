@@ -1,6 +1,6 @@
 export const ALLOWED_ORIGINS = [
   "https://dump.ashwithrai.me",
-  "http://localhost:8080",
+  "http://localhost:5173",
 ];
 
 export function addCorsHeaders(response: Response, requestOrigin: string | null): Response {
