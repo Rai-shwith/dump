@@ -14,7 +14,7 @@ export function DeleteConfirm({ onConfirm, onCancel, busy }: Props): React.JSX.E
       animate={{ opacity: 1, height: "auto" }}
       exit={{ opacity: 0, height: 0 }}
       transition={{ duration: 0.2 }}
-      className="mt-3 overflow-hidden rounded-lg border border-[var(--danger)]/40 bg-[var(--danger)]/10 p-4"
+      className="mb-4 overflow-hidden rounded-lg border border-[var(--danger)]/40 bg-[var(--danger)]/10 p-4"
     >
       <p className="text-sm text-[var(--text-primary)]">Are you sure? This cannot be undone.</p>
       <div className="mt-3 flex gap-2">

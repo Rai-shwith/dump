@@ -110,13 +110,7 @@ export function ContentView({ data, onUpdated }: Props): React.JSX.Element {
         )}
       </div>
 
-      <div className="rounded-xl border border-[var(--border-color)] bg-[var(--surface-raised)] p-4">
-        <pre className="whitespace-pre-wrap break-words font-mono text-sm text-[var(--text-primary)]">
-          {data.content}
-        </pre>
-      </div>
-
-      <div className="mt-3 hidden md:flex md:gap-2">
+      <div className="mb-3 hidden md:flex md:gap-2">
         <DesktopAction onClick={copy} icon={<Copy className="h-4 w-4" />} label="Copy" />
         <DesktopAction onClick={share} icon={<Share2 className="h-4 w-4" />} label="Share" />
         <DesktopAction onClick={openRaw} icon={<FileText className="h-4 w-4" />} label="Raw" />
@@ -167,6 +161,12 @@ export function ContentView({ data, onUpdated }: Props): React.JSX.Element {
           />
         )}
       </AnimatePresence>
+
+      <div className="rounded-xl border border-[var(--border-color)] bg-[var(--surface-raised)] p-4">
+        <pre className="whitespace-pre-wrap break-words font-mono text-sm text-[var(--text-primary)]">
+          {data.content}
+        </pre>
+      </div>
 
       {/* Mobile sticky action bar */}
       <div className="fixed inset-x-0 bottom-0 z-30 border-t border-[var(--border-color)] bg-[var(--surface)]/90 px-4 py-2 backdrop-blur md:hidden">

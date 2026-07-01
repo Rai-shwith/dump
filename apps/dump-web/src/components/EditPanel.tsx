@@ -70,7 +70,7 @@ export function EditPanel({ data, onSaved, onCancel }: Props): React.JSX.Element
       animate={{ opacity: 1, height: "auto" }}
       exit={{ opacity: 0, height: 0 }}
       transition={{ duration: 0.2 }}
-      className="mt-4 overflow-hidden rounded-lg border border-[var(--border-color)] bg-[var(--surface-raised)] p-4"
+      className="mb-4 overflow-hidden rounded-lg border border-[var(--border-color)] bg-[var(--surface-raised)] p-4"
     >
       <h3 className="mb-3 text-sm font-semibold text-[var(--text-primary)]">Edit clipboard</h3>
       <div className="space-y-3">
