@@ -1,2 +1,5 @@
 User-agent: *
-Disallow: /
+Allow: /
+Disallow: /*/raw
+
+Sitemap: https://dump.ashwithrai.me/sitemap.xml

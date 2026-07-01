@@ -60,6 +60,7 @@ For the current task, also read the specific task file in docs/tasks/.
 - TASK-020: Password Bypass Feature implemented with local storage save and UI updates
 - TASK-021: UI Polish - Star globally inline button in create form and responsive grid for starred strip
 - TASK-022: Frontend Docs Section implemented with minimalist layout, responsive features grid, and FAQ accordion
+- TASK-023: SEO Optimization implemented with static meta tags, react-helmet-async for dynamic tags, and robots/sitemap
 - V1 functional implementation complete. Ready for Lovable UI polish phase.
 
 ### In Progress
@@ -189,6 +190,7 @@ TASK-019  Frontend homepage starred list
 TASK-020  Password Bypass Feature
 TASK-021  UI Polish (inline star & responsive strip)
 TASK-022  Frontend Docs Section
+TASK-023  SEO Optimization
 ```
 
 ---

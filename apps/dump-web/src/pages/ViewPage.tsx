@@ -1,6 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import { APP_CONFIG } from "@/config/app.config";
 import { ContentView } from "@/components/ContentView";
 import { PasswordGate } from "@/components/PasswordGate";
@@ -12,15 +13,19 @@ export default function ViewPage() {
   const { code: raw } = useParams<{ code: string }>();
   const code = (raw ?? "").toLowerCase();
 
-  useEffect(() => {
-    document.title = `dump · ${code}`;
-  }, [code]);
-
   if (!code || (APP_CONFIG.reservedKeywords as readonly string[]).includes(code)) {
     return <NotFoundInline />;
   }
 
-  return <ViewInner code={code} />;
+  return (
+    <>
+      <Helmet>
+        <title>dump · {code}</title>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
+      <ViewInner code={code} />
+    </>
+  );
 }
 
 function ViewInner({ code }: { code: string }) {

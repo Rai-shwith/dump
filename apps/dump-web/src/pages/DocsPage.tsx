@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import {
   Accordion,
   AccordionContent,
@@ -9,6 +10,10 @@ import { Terminal } from "lucide-react";
 export default function DocsPage() {
   return (
     <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <Helmet>
+        <title>Docs | Dump - Online Clipboard</title>
+        <meta name="description" content="Learn how to use Dump, the free and secure online clipboard. Explore features, FAQ, and developer APIs." />
+      </Helmet>
       <section className="space-y-4">
         <h1 className="text-4xl font-bold tracking-tight">docs</h1>
         <p className="text-lg text-[var(--text-secondary)]">

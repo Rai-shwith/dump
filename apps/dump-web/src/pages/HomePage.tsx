@@ -1,5 +1,6 @@
 import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { CreateForm } from "@/components/CreateForm";
 import { StarredStrip } from "@/components/StarredStrip";
 import { SuccessCard } from "@/components/SuccessCard";
@@ -10,6 +11,10 @@ export default function HomePage() {
 
   return (
     <div className="mx-auto max-w-xl space-y-10">
+      <Helmet>
+        <title>Dump | Free Online Clipboard & Secure Copy Paste</title>
+        <meta name="description" content="Create an anonymous online clipboard to share text between devices. Dump is a free, secure, and fast copy-paste tool." />
+      </Helmet>
       <section>
         <header className="mb-4">
           <h1 className="font-mono text-2xl font-semibold tracking-tight text-[var(--text-primary)]">

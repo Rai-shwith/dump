@@ -1,8 +1,13 @@
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 export default function NotFound() {
   return (
     <div className="grid min-h-[70vh] place-items-center px-4">
+      <Helmet>
+        <title>404 Not Found | Dump</title>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       <div className="text-center">
         <h1 className="font-mono text-7xl font-bold text-[var(--text-primary)]">404</h1>
         <p className="mt-3 text-sm text-[var(--text-secondary)]">
