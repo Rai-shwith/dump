@@ -164,8 +164,8 @@ Intended for scripts and automation.
 Respects password protection and expiration.
 One-time view deletion applies here too.
 
-**Production Rewriting:**
-To support clean URLs (e.g., `curl https://dump.ashwithrai.me/<code>/raw`), the frontend static hosting (Cloudflare Pages) defines an internal rewrite rule in its `_redirects` file mapping `/:code/raw` directly to `/api/clipboard/:code/raw` with a `200` status. This avoids exposing the raw API path or returning HTML wrapper content.
+**Production Redirection:**
+To support clean URLs (e.g., `curl https://dump.ashwithrai.me/<code>/raw`), the frontend static hosting (Cloudflare Pages) defines a redirect rule in its `_redirects` file mapping `/:code/raw` directly to `/api/clipboard/:code/raw` with a `307` status. Because the Worker is a separate routing target from Pages, a `307` redirect instructs clients (like `curl -sL`) to request the Worker endpoint directly, returning raw text rather than falling back to HTML.
 
 ---
 
