@@ -292,6 +292,9 @@ Worker allows requests from:
 - https://dump.ashwithrai.me (production)
 - http://localhost:5173 (local development)
 
+**Development and Codespaces Support:**
+If the Worker runs with `ENVIRONMENT` set to `development`, CORS headers dynamically allow request origins matching localhost (any port), 127.0.0.1, or `*.github.dev` (GitHub Codespaces) and `*.gitpod.io`.
+
 All other origins are rejected.
 Allowed origins defined in constants/index.ts.
 

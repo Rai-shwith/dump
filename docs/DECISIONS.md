@@ -164,6 +164,9 @@ Intended for scripts and automation.
 Respects password protection and expiration.
 One-time view deletion applies here too.
 
+**Production Rewriting:**
+To support clean URLs (e.g., `curl https://dump.ashwithrai.me/<code>/raw`), the frontend static hosting (Cloudflare Pages) defines an internal rewrite rule in its `_redirects` file mapping `/:code/raw` directly to `/api/clipboard/:code/raw` with a `200` status. This avoids exposing the raw API path or returning HTML wrapper content.
+
 ---
 
 ## D-013 — Security Headers
@@ -295,3 +298,12 @@ A packages/ directory may be introduced later for shared types — not in V1.
 **Decision:** When updating a clipboard's expiration (e.g., changing from a time-based expiration to One-Time-View or vice-versa), the frontend must explicitly send `null` (or `false`) for the opposing property in the PUT request.
 
 **Reason:** The backend validates that `expiresAt` and `isOneTimeView` cannot both be set. Since PUT is a partial update, sending only `isOneTimeView: true` causes a validation error if the clipboard already has a stored `expiresAt`. Explicitly clearing the opposing field resolves the conflict.
+
+---
+
+## D-022 — Dynamic CORS for Development Environments
+
+**Decision:** During development, the Worker dynamically allows request origins matching localhost, 127.0.0.1, or `*.github.dev` (for GitHub Codespaces) and `*.gitpod.io` when the `ENVIRONMENT` binding is set to `development`.
+
+**Reason:** In cloud-based IDEs like GitHub Codespaces, port forwarding generates dynamic URLs for the frontend application. Echoing the request origin conditionally in development resolves CORS issues without utilizing unsafe global wildcards (`*`), which would otherwise break authentication and custom headers like `X-Owner-Token`.
+
