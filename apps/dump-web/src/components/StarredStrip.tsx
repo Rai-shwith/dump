@@ -32,7 +32,9 @@ export function StarredStrip(): React.JSX.Element {
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         {items === null && Array.from({ length: 3 }).map((_, i) => <SkeletonCard key={i} />)}
         {items?.length === 0 && (
-          <p className="text-sm text-[var(--text-muted)] col-span-full">No starred clipboards yet.</p>
+          <p className="text-sm text-[var(--text-muted)] col-span-full">
+            No starred clipboards yet.
+          </p>
         )}
         {items?.map((s) => (
           <motion.div key={s.code} whileHover={{ y: -4, scale: 1.02 }}>

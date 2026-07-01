@@ -3,10 +3,24 @@ export const ALLOWED_ORIGINS = [
   "http://localhost:5173",
 ];
 
-export function addCorsHeaders(response: Response, requestOrigin: string | null): Response {
+export function addCorsHeaders(
+  response: Response,
+  requestOrigin: string | null,
+  environment?: string
+): Response {
   const newResponse = new Response(response.body, response);
   
-  if (requestOrigin && ALLOWED_ORIGINS.includes(requestOrigin)) {
+  const isAllowed = requestOrigin && (
+    ALLOWED_ORIGINS.includes(requestOrigin) ||
+    (environment === "development" && (
+      requestOrigin.startsWith("http://localhost:") ||
+      requestOrigin.startsWith("http://127.0.0.1:") ||
+      requestOrigin.endsWith(".github.dev") ||
+      requestOrigin.endsWith(".gitpod.io")
+    ))
+  );
+
+  if (requestOrigin && isAllowed) {
     newResponse.headers.set("Access-Control-Allow-Origin", requestOrigin);
     newResponse.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
     newResponse.headers.set("Access-Control-Allow-Headers", "Content-Type, X-Owner-Token, X-Clipboard-Password");
@@ -27,7 +41,11 @@ export function addSecurityHeaders(response: Response): Response {
   return newResponse;
 }
 
-export function applyMiddleware(response: Response, requestOrigin: string | null): Response {
-  const corsResponse = addCorsHeaders(response, requestOrigin);
+export function applyMiddleware(
+  response: Response,
+  requestOrigin: string | null,
+  environment?: string
+): Response {
+  const corsResponse = addCorsHeaders(response, requestOrigin, environment);
   return addSecurityHeaders(corsResponse);
 }

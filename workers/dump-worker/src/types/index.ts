@@ -1,6 +1,7 @@
 export interface Env {
   CLIPBOARD_KV: KVNamespace;
   PASSWORD_PEPPER: string;
+  ENVIRONMENT?: string;
 }
 
 export type ClipboardMode = "public" | "protected";

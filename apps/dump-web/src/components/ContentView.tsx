@@ -212,7 +212,8 @@ interface ActionProps {
 }
 
 function DesktopAction({ onClick, icon, label, danger, active }: ActionProps): React.JSX.Element {
-  let colorClass = "border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--accent)] hover:text-[var(--accent)]";
+  let colorClass =
+    "border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--accent)] hover:text-[var(--accent)]";
   if (danger) {
     colorClass = "border-[var(--danger)]/40 text-[var(--danger)] hover:bg-[var(--danger)]/10";
   } else if (active) {

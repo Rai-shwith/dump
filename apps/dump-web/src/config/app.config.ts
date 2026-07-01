@@ -1,5 +1,11 @@
+const getApiBaseUrl = (): string => {
+  const url = import.meta.env.VITE_API_BASE_URL ?? "https://dump.ashwithrai.me/api";
+  const cleaned = url.endsWith("/") ? url.slice(0, -1) : url;
+  return cleaned.endsWith("/api") ? cleaned : `${cleaned}/api`;
+};
+
 export const APP_CONFIG = {
-  apiBaseUrl: import.meta.env.VITE_API_BASE_URL ?? "https://dump.ashwithrai.me/api",
+  apiBaseUrl: getApiBaseUrl(),
   themeStorageKey: "dump-theme",
   ownerTokenPrefix: "ownerTokens",
   bypassPasswordPrefix: "bypassPasswords",

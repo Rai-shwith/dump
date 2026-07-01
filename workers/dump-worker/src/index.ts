@@ -8,11 +8,11 @@ const app = new Hono<{ Bindings: Env }>();
 
 app.use("*", async (c, next) => {
   if (c.req.method === "OPTIONS") {
-    c.res = applyMiddleware(new Response(null, { status: 200 }), c.req.header("Origin") || null);
+    c.res = applyMiddleware(new Response(null, { status: 200 }), c.req.header("Origin") || null, c.env.ENVIRONMENT);
     return;
   }
   await next();
-  c.res = applyMiddleware(c.res, c.req.header("Origin") || null);
+  c.res = applyMiddleware(c.res, c.req.header("Origin") || null, c.env.ENVIRONMENT);
 });
 
 registerClipboardRoutes(app);
