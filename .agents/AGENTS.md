@@ -59,6 +59,7 @@ For the current task, also read the specific task file in docs/tasks/.
 - TASK-019: Homepage implemented with global starred clipboard list
 - TASK-020: Password Bypass Feature implemented with local storage save and UI updates
 - TASK-021: UI Polish - Star globally inline button in create form and responsive grid for starred strip
+- TASK-022: Frontend Docs Section implemented with minimalist layout, responsive features grid, and FAQ accordion
 - V1 functional implementation complete. Ready for Lovable UI polish phase.
 
 ### In Progress
@@ -186,6 +187,8 @@ TASK-018  Frontend edit and delete flows
 TASK-018.5 Remove Reserved Mode
 TASK-019  Frontend homepage starred list
 TASK-020  Password Bypass Feature
+TASK-021  UI Polish (inline star & responsive strip)
+TASK-022  Frontend Docs Section
 ```
 
 ---
