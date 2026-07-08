@@ -7,7 +7,7 @@ AI agents must read this file to understand how the system is structured before 
 
 ## Overview
 
-Dump is a serverless online clipboard service.
+DUMP (backronym: Distributed Utility for Message Passing) is a serverless online clipboard service.
 It consists of a React frontend deployed on Cloudflare Pages and a Cloudflare Worker API backed by Cloudflare KV storage.
 
 ---

@@ -21,9 +21,7 @@
 **Open Dump:** [https://dump.ashwithrai.me](https://dump.ashwithrai.me)
 
 ## ✨ What is Dump?
-
-Dump is a **serverless online clipboard** for sharing text through short links.
-It is anonymous, fast, and designed for secure temporary sharing.
+DUMP (backronym: Distributed Utility for Message Passing) is a **serverless online clipboard** for sharing text through short links.
 
 ## 🚀 Core Features
 

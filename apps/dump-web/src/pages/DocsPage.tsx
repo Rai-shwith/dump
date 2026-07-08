@@ -21,6 +21,15 @@ export default function DocsPage() {
         </p>
       </section>
 
+      <section className="space-y-4 rounded-xl border border-[var(--border-color)] bg-[var(--surface-raised)]/30 p-6">
+        <h2 className="font-mono text-lg font-semibold text-[var(--text-primary)]">
+          What is DUMP?
+        </h2>
+        <p className="text-sm leading-relaxed text-[var(--text-secondary)]">
+          DUMP (backronym: <strong>Distributed Utility for Message Passing</strong>) is a minimalist, anonymous, and serverless online clipboard. It allows you to share text, code snippets, or configuration payloads between devices instantly and securely using custom, readable URLs.
+        </p>
+      </section>
+
       <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <div className="rounded-xl border border-[var(--border-color)] bg-[var(--surface)] p-6 shadow-sm">
           <h3 className="mb-2 font-semibold">Quick Share ⚡</h3>
