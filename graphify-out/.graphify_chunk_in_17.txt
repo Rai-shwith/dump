@@ -1,0 +1,22 @@
+/home/ashwith/Desktop/dump/PROJECT-QUALITY-REPORT/00-EXECUTIVE-SUMMARY.md
+/home/ashwith/Desktop/dump/PROJECT-QUALITY-REPORT/01-GOD-FILES-AND-COMPLEXITY.md
+/home/ashwith/Desktop/dump/PROJECT-QUALITY-REPORT/02-COUPLING-AND-DEPENDENCIES.md
+/home/ashwith/Desktop/dump/PROJECT-QUALITY-REPORT/general-tips.md
+/home/ashwith/Desktop/dump/apps/dump-web/AGENTS.md
+/home/ashwith/Desktop/dump/apps/dump-web/index.html
+/home/ashwith/Desktop/dump/apps/dump-web/public/robots.txt
+/home/ashwith/Desktop/dump/docs/API.md
+/home/ashwith/Desktop/dump/docs/ARCHITECTURE.md
+/home/ashwith/Desktop/dump/docs/DECISIONS.md
+/home/ashwith/Desktop/dump/docs/LOVABLE_PROMPT.md
+/home/ashwith/Desktop/dump/docs/tasks/TASK-001  Worker init and routing scaffold.md
+/home/ashwith/Desktop/dump/docs/tasks/TASK-002  KV schema and helper utilities.md
+/home/ashwith/Desktop/dump/docs/tasks/TASK-003  Create clipboard endpoint.md
+/home/ashwith/Desktop/dump/docs/tasks/TASK-004  Read clipboard endpoint.md
+/home/ashwith/Desktop/dump/docs/tasks/TASK-005  Update clipboard endpoint.md
+/home/ashwith/Desktop/dump/docs/tasks/TASK-006  Delete clipboard endpoint.md
+/home/ashwith/Desktop/dump/docs/tasks/TASK-007  Password protection logic.md
+/home/ashwith/Desktop/dump/docs/tasks/TASK-008  Owner token generation and verification.md
+/home/ashwith/Desktop/dump/docs/tasks/TASK-009  One-time view logic.md
+/home/ashwith/Desktop/dump/docs/tasks/TASK-010  Expiry enforcement.md
+/home/ashwith/Desktop/dump/docs/tasks/TASK-011  Starred global list.md
