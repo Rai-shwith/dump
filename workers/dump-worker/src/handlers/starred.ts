@@ -29,8 +29,8 @@ export async function handleStar(_request: Request, env: Env, codeParam: string)
     return createError("Clipboard not found or expired", 404);
   }
 
-  if (meta.mode !== "public") {
-    return createError("Only public clipboards can be starred", 400);
+  if (meta.isOneTimeView) {
+    return createError("One-time view clipboards cannot be starred", 400);
   }
 
   if (meta.isStarred) {

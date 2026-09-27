@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { updateClipboard } from "@/services/clipboardApi";
 import { getBypassPassword, getOwnerToken } from "@/utils/tokens";
@@ -11,23 +11,34 @@ import {
   toLocalDatetimeInput,
   toUTC,
 } from "@/utils/time";
-import type { ClipboardData, ExpiryPreset, PasswordMode, UpdateClipboardPayload } from "@/types";
+import type { ClipboardData, ExpiryPreset, UpdateClipboardPayload } from "@/types";
 import { ExpirySelector } from "./ExpirySelector";
+import { EditPasswordSection } from "./EditPasswordSection";
 
 interface Props {
   data: ClipboardData;
+  editPassword?: string;
   onSaved: (updated: ClipboardData) => void;
   onCancel: () => void;
 }
 
-export function EditPanel({ data, onSaved, onCancel }: Props): React.JSX.Element {
+export function EditPanel({
+  data,
+  editPassword: editPasswordProp,
+  onSaved,
+  onCancel,
+}: Props): React.JSX.Element {
   const [content, setContent] = useState<string>(data.content);
   const [expiry, setExpiry] = useState<ExpiryPreset>(() => detectExpiryPreset(data));
   const [expiryChanged, setExpiryChanged] = useState<boolean>(false);
   const [customDt, setCustomDt] = useState<string>(() => toLocalDatetimeInput(data.expiresAt));
-  const [password, setPassword] = useState<string>("");
-  const [showPw, setShowPw] = useState<boolean>(false);
-  const [passwordMode, setPasswordMode] = useState<PasswordMode>(data.passwordMode ?? "view");
+
+  const [requireViewPw, setRequireViewPw] = useState<boolean>(Boolean(data.hasViewPassword));
+  const [viewPassword, setViewPassword] = useState<string>("");
+
+  const [requireEditPw, setRequireEditPw] = useState<boolean>(Boolean(data.hasEditPassword));
+  const [editPassword, setEditPassword] = useState<string>("");
+
   const [saving, setSaving] = useState<boolean>(false);
 
   function handleExpiryChange(newPreset: ExpiryPreset): void {
@@ -40,52 +51,77 @@ export function EditPanel({ data, onSaved, onCancel }: Props): React.JSX.Element
     setExpiryChanged(true);
   }
 
-  async function save(): Promise<void> {
-    const token = getOwnerToken(data.code) ?? undefined;
-    const bypass = getBypassPassword(data.code) ?? undefined;
-
-    const isOTV = expiryChanged ? expiry === "otv" : data.isOneTimeView;
-    let expiresAt: string | null = data.expiresAt;
-
-    if (expiryChanged) {
-      if (isOTV) {
-        expiresAt = null;
-      } else if (expiry === "infinite") {
-        expiresAt = null;
-      } else if (expiry === "custom") {
-        if (!customDt) {
-          toast.error("Pick a custom date and time");
-          return;
-        }
-        expiresAt = toUTC(customDt);
-      } else {
-        expiresAt = presetToISO(expiry);
-      }
+  function validatePasswords(): boolean {
+    if (data.mode !== "protected") return true;
+    if (!requireViewPw && !requireEditPw) {
+      toast.error("Protected clipboards require at least one password (view or edit)");
+      return false;
     }
+    if (requireViewPw && !data.hasViewPassword && !viewPassword.trim()) {
+      toast.error("Please enter a view password");
+      return false;
+    }
+    if (requireEditPw && !data.hasEditPassword && !editPassword.trim()) {
+      toast.error("Please enter an edit password");
+      return false;
+    }
+    return true;
+  }
 
-    const payload: UpdateClipboardPayload = {
-      content,
-    };
+  function resolveExpiry(): string | null | undefined {
+    if (!expiryChanged) return data.expiresAt;
+    if (expiry === "otv" || expiry === "infinite") return null;
+    if (expiry === "custom") {
+      if (!customDt) {
+        toast.error("Pick a custom date and time");
+        return undefined;
+      }
+      return toUTC(customDt);
+    }
+    return presetToISO(expiry);
+  }
+
+  async function save(): Promise<void> {
+    if (!validatePasswords()) return;
+
+    const token = getOwnerToken(data.code) ?? undefined;
+    const effectiveAuth = (editPasswordProp || getBypassPassword(data.code)) ?? undefined;
+    const isOTV = expiryChanged ? expiry === "otv" : data.isOneTimeView;
+    const expiresAt = resolveExpiry();
+    if (expiresAt === undefined) return;
+
+    const payload: UpdateClipboardPayload = { content };
     if (expiryChanged) {
       payload.expiresAt = expiresAt;
       payload.isOneTimeView = isOTV;
       payload.expiryPreset = expiry;
     }
-    if (data.mode === "protected" && password) {
-      payload.password = password;
-      payload.passwordMode = passwordMode;
+
+    if (data.mode === "protected") {
+      if (!requireViewPw && data.hasViewPassword) {
+        payload.viewPassword = null;
+      } else if (requireViewPw && viewPassword.trim()) {
+        payload.viewPassword = viewPassword.trim();
+      }
+
+      if (!requireEditPw && data.hasEditPassword) {
+        payload.editPassword = null;
+      } else if (requireEditPw && editPassword.trim()) {
+        payload.editPassword = editPassword.trim();
+      }
     }
 
     setSaving(true);
     try {
-      await updateClipboard(data.code, payload, token, bypass);
+      const res = await updateClipboard(data.code, payload, token, effectiveAuth);
       toast.success("Changes saved!");
       onSaved({
         ...data,
         content,
         expiresAt,
         isOneTimeView: isOTV,
-        passwordMode,
+        hasViewPassword: res.hasViewPassword ?? requireViewPw,
+        hasEditPassword: res.hasEditPassword ?? requireEditPw,
         expiryPreset: expiryChanged ? expiry : data.expiryPreset,
       });
     } catch (err) {
@@ -128,45 +164,22 @@ export function EditPanel({ data, onSaved, onCancel }: Props): React.JSX.Element
             }
           />
         </div>
+
         {data.mode === "protected" && (
-          <div className="space-y-2">
-            <label className="block text-xs font-medium text-[var(--text-secondary)]">
-              Change password (optional)
-            </label>
-            <div className="relative">
-              <input
-                type={showPw ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 pr-10 text-sm text-[var(--text-primary)] focus:border-[var(--accent)] focus:outline-none"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPw((s) => !s)}
-                className="absolute inset-y-0 right-2 grid place-items-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] cursor-pointer"
-                aria-label="Toggle password"
-              >
-                {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-              </button>
-            </div>
-            <div className="grid grid-cols-2 gap-1 rounded-md border border-[var(--border-color)] bg-[var(--surface)] p-1">
-              {(["view", "edit"] as const).map((pm) => (
-                <button
-                  key={pm}
-                  type="button"
-                  onClick={() => setPasswordMode(pm)}
-                  className={`rounded px-3 py-1.5 text-xs font-medium transition-colors cursor-pointer ${
-                    passwordMode === pm
-                      ? "bg-[var(--accent)] text-[#0a0a0a]"
-                      : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-                  }`}
-                >
-                  {pm === "view" ? "View password" : "Edit password"}
-                </button>
-              ))}
-            </div>
-          </div>
+          <EditPasswordSection
+            hasExistingViewPw={Boolean(data.hasViewPassword)}
+            requireViewPw={requireViewPw}
+            setRequireViewPw={setRequireViewPw}
+            viewPassword={viewPassword}
+            setViewPassword={setViewPassword}
+            hasExistingEditPw={Boolean(data.hasEditPassword)}
+            requireEditPw={requireEditPw}
+            setRequireEditPw={setRequireEditPw}
+            editPassword={editPassword}
+            setEditPassword={setEditPassword}
+          />
         )}
+
         <div className="flex gap-2 pt-2">
           <button
             type="button"

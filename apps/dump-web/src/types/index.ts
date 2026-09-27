@@ -3,14 +3,26 @@ export type PasswordMode = "view" | "edit" | null;
 export type Theme = "dark" | "light";
 
 export type ExpiryPreset =
-  "1m" | "5m" | "15m" | "1h" | "1d" | "1w" | "1mo" | "1y" | "infinite" | "otv" | "custom";
+  | "1m"
+  | "5m"
+  | "15m"
+  | "1h"
+  | "1d"
+  | "1w"
+  | "1mo"
+  | "1y"
+  | "infinite"
+  | "otv"
+  | "custom";
 
 export interface CreateClipboardPayload {
   code?: string;
   content: string;
   mode: ClipboardMode;
-  passwordMode: PasswordMode;
-  password: string | null;
+  viewPassword?: string | null;
+  editPassword?: string | null;
+  passwordMode?: PasswordMode;
+  password?: string | null;
   expiresAt: string | null;
   isOneTimeView: boolean;
   expiryPreset?: ExpiryPreset | null;
@@ -27,7 +39,9 @@ export interface ClipboardData {
   code: string;
   content: string;
   mode: ClipboardMode;
-  passwordMode: PasswordMode;
+  hasViewPassword?: boolean;
+  hasEditPassword?: boolean;
+  passwordMode?: PasswordMode;
   expiresAt: string | null;
   isOneTimeView: boolean;
   isStarred: boolean;
@@ -37,7 +51,10 @@ export interface ClipboardData {
 
 export interface LockedResponse {
   locked: true;
-  passwordMode: "view";
+  requiresViewPassword?: boolean;
+  passwordMode?: "view";
+  hasViewPassword?: boolean;
+  hasEditPassword?: boolean;
 }
 
 export interface StarredClipboard {
@@ -55,6 +72,8 @@ export interface UpdateClipboardPayload {
   content?: string | null;
   expiresAt?: string | null;
   isOneTimeView?: boolean | null;
+  viewPassword?: string | null;
+  editPassword?: string | null;
   password?: string | null;
   passwordMode?: PasswordMode;
   expiryPreset?: ExpiryPreset | null;
@@ -64,4 +83,6 @@ export interface UpdateClipboardResponse {
   success: boolean;
   expiresAt: string | null;
   isOneTimeView: boolean;
+  hasViewPassword?: boolean;
+  hasEditPassword?: boolean;
 }

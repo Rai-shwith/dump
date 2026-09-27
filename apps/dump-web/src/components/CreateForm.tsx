@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Eye, EyeOff, Loader2, RefreshCw, Star } from "lucide-react";
+import { Loader2, RefreshCw, Star } from "lucide-react";
 import { toast } from "sonner";
 import { APP_CONFIG } from "@/config/app.config";
 import { createClipboard, starClipboard } from "@/services/clipboardApi";
@@ -13,9 +13,9 @@ import type {
   CreateClipboardPayload,
   CreateClipboardResponse,
   ExpiryPreset,
-  PasswordMode,
 } from "@/types";
 import { ExpirySelector } from "./ExpirySelector";
+import { ProtectedPasswordInputs } from "./ProtectedPasswordInputs";
 
 interface Props {
   onCreated: (res: CreateClipboardResponse) => void;
@@ -25,10 +25,11 @@ export function CreateForm({ onCreated }: Props): React.JSX.Element {
   const [code, setCode] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [mode, setMode] = useState<ClipboardMode>("public");
-  const [password, setPassword] = useState<string>("");
-  const [showPw, setShowPw] = useState<boolean>(false);
-  const [passwordMode, setPasswordMode] = useState<PasswordMode>("view");
-  const [bypass, setBypass] = useState<boolean>(true);
+  const [requireViewPw, setRequireViewPw] = useState<boolean>(true);
+  const [viewPassword, setViewPassword] = useState<string>("");
+  const [requireEditPw, setRequireEditPw] = useState<boolean>(false);
+  const [editPassword, setEditPassword] = useState<string>("");
+  const [bypass, setBypass] = useState<boolean>(false);
   const [expiry, setExpiry] = useState<ExpiryPreset>("1h");
   const [customDt, setCustomDt] = useState<string>("");
   const [codeError, setCodeError] = useState<string | null>(null);
@@ -41,7 +42,7 @@ export function CreateForm({ onCreated }: Props): React.JSX.Element {
 
   useEffect(() => {
     if (mode === "protected" && expiry === "infinite") setExpiry("1d");
-    if (mode === "protected" || expiry === "otv") setIsStarred(false);
+    if (expiry === "otv") setIsStarred(false);
   }, [mode, expiry]);
 
   function regenCode(): void {
@@ -55,41 +56,57 @@ export function CreateForm({ onCreated }: Props): React.JSX.Element {
     setCodeError(lower ? validateCode(lower) : null);
   }
 
-  async function submit(e: React.FormEvent): Promise<void> {
-    e.preventDefault();
+  function validateForm(): boolean {
     const err = validateCode(code);
     if (err) {
       setCodeError(err);
-      return;
+      return false;
     }
     if (!content.trim()) {
       toast.error("Content is required");
-      return;
+      return false;
     }
-    if (mode === "protected" && !password) {
-      toast.error("Password is required for protected clipboards");
-      return;
-    }
-    const byteLen = new Blob([content]).size;
-    if (byteLen > APP_CONFIG.contentMaxBytes) {
-      toast.error("Content exceeds 256KB");
-      return;
-    }
-
-    const isOTV = expiry === "otv";
-    let expiresAt: string | null = null;
-    if (!isOTV) {
-      if (expiry === "infinite") expiresAt = null;
-      else if (expiry === "custom") {
-        if (!customDt) {
-          toast.error("Pick a custom date and time");
-          return;
-        }
-        expiresAt = toUTC(customDt);
-      } else {
-        expiresAt = presetToISO(expiry);
+    if (mode === "protected") {
+      if (!requireViewPw && !requireEditPw) {
+        toast.error("Please enable at least one password (view or edit)");
+        return false;
+      }
+      if (requireViewPw && !viewPassword.trim()) {
+        toast.error("View password is required");
+        return false;
+      }
+      if (requireEditPw && !editPassword.trim()) {
+        toast.error("Edit password is required");
+        return false;
       }
     }
+    if (new Blob([content]).size > APP_CONFIG.contentMaxBytes) {
+      toast.error("Content exceeds 256KB");
+      return false;
+    }
+    return true;
+  }
+
+  function resolveExpiresAt(): string | null | undefined {
+    if (expiry === "otv" || expiry === "infinite") return null;
+    if (expiry === "custom") {
+      if (!customDt) {
+        toast.error("Pick a custom date and time");
+        return undefined;
+      }
+      return toUTC(customDt);
+    }
+    return presetToISO(expiry);
+  }
+
+  async function submit(e: React.FormEvent): Promise<void> {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    const isOTV = expiry === "otv";
+    const expiresAt = resolveExpiresAt();
+    if (expiresAt === undefined) return;
+
     if (mode === "protected" && !isOTV && !expiresAt) {
       toast.error("Protected clipboards require an expiration");
       return;
@@ -99,8 +116,8 @@ export function CreateForm({ onCreated }: Props): React.JSX.Element {
       code,
       content,
       mode,
-      passwordMode: mode === "protected" ? passwordMode : null,
-      password: mode === "protected" ? password : null,
+      viewPassword: mode === "protected" && requireViewPw ? viewPassword : null,
+      editPassword: mode === "protected" && requireEditPw ? editPassword : null,
       expiresAt,
       isOneTimeView: isOTV,
       expiryPreset: expiry,
@@ -112,14 +129,15 @@ export function CreateForm({ onCreated }: Props): React.JSX.Element {
       if (mode === "public" || bypass) {
         saveOwnerToken(res.code, res.ownerToken);
       }
-      if (mode === "protected" && bypass && password) {
-        saveBypassPassword(res.code, password);
+      if (mode === "protected" && bypass) {
+        const pwToSave = (requireViewPw ? viewPassword : "") || (requireEditPw ? editPassword : "");
+        if (pwToSave) saveBypassPassword(res.code, pwToSave);
       }
-      if (mode === "public" && isStarred && !isOTV) {
+      if (isStarred && !isOTV) {
         try {
           await starClipboard(res.code);
           window.dispatchEvent(new Event("refresh-starred"));
-        } catch (err) {
+        } catch {
           toast.error("Clipboard created, but failed to star globally");
         }
       }
@@ -149,6 +167,8 @@ export function CreateForm({ onCreated }: Props): React.JSX.Element {
             <input
               value={code}
               onChange={(e) => handleCodeChange(e.target.value)}
+              onFocus={(e) => e.target.select()}
+              onClick={(e) => (e.target as HTMLInputElement).select()}
               spellCheck={false}
               autoCapitalize="off"
               autoComplete="off"
@@ -202,7 +222,7 @@ export function CreateForm({ onCreated }: Props): React.JSX.Element {
           </div>
         </div>
 
-        {mode === "public" && expiry !== "otv" && (
+        {expiry !== "otv" && (
           <button
             type="button"
             onClick={() => setIsStarred(!isStarred)}
@@ -218,59 +238,18 @@ export function CreateForm({ onCreated }: Props): React.JSX.Element {
         )}
 
         {mode === "protected" && (
-          <div className="space-y-3 rounded-md border border-[var(--border-color)] bg-[var(--surface)] p-3">
-            <div>
-              <label className="mb-1 block text-xs font-medium text-[var(--text-secondary)]">
-                Password
-              </label>
-              <div className="relative">
-                <input
-                  type={showPw ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] px-3 py-2 pr-10 text-sm text-[var(--text-primary)] focus:border-[var(--accent)] focus:outline-none"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPw((s) => !s)}
-                  className="absolute inset-y-0 right-2 grid place-items-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] cursor-pointer"
-                  aria-label="Toggle password visibility"
-                >
-                  {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-            </div>
-            <div>
-              <label className="mb-1 block text-xs font-medium text-[var(--text-secondary)]">
-                Password protects
-              </label>
-              <div className="grid grid-cols-2 gap-1 rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] p-1">
-                {(["view", "edit"] as const).map((pm) => (
-                  <button
-                    key={pm}
-                    type="button"
-                    onClick={() => setPasswordMode(pm)}
-                    className={`rounded px-3 py-1.5 text-xs font-medium transition-colors cursor-pointer ${
-                      passwordMode === pm
-                        ? "bg-[var(--accent)] text-[#0a0a0a]"
-                        : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-                    }`}
-                  >
-                    {pm === "view" ? "View password" : "Edit password"}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <label className="flex items-center gap-2 text-xs text-[var(--text-secondary)]">
-              <input
-                type="checkbox"
-                checked={bypass}
-                onChange={(e) => setBypass(e.target.checked)}
-                className="h-4 w-4 accent-[var(--accent)]"
-              />
-              Remember password on this device
-            </label>
-          </div>
+          <ProtectedPasswordInputs
+            requireViewPw={requireViewPw}
+            setRequireViewPw={setRequireViewPw}
+            viewPassword={viewPassword}
+            setViewPassword={setViewPassword}
+            requireEditPw={requireEditPw}
+            setRequireEditPw={setRequireEditPw}
+            editPassword={editPassword}
+            setEditPassword={setEditPassword}
+            bypass={bypass}
+            setBypass={setBypass}
+          />
         )}
 
         <div>

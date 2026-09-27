@@ -1,15 +1,22 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { Copy, Edit3, Share2, Star, Trash2, Eye, EyeOff, FileText } from "lucide-react";
 import { toast } from "sonner";
-import { deleteClipboard, starClipboard, unstarClipboard } from "@/services/clipboardApi";
+import {
+  deleteClipboard,
+  starClipboard,
+  unstarClipboard,
+  verifyEditPassword,
+} from "@/services/clipboardApi";
 import { getBypassPassword, getOwnerToken } from "@/utils/tokens";
 import { formatExpiry } from "@/utils/time";
 import type { ClipboardData } from "@/types";
 import { EditPanel } from "./EditPanel";
 import { DeleteConfirm } from "./DeleteConfirm";
 import { OtvBanner } from "./OtvBanner";
+import { EditPasswordModal } from "./EditPasswordModal";
+import { DesktopAction, MobileAction } from "./ContentActionButtons";
 
 interface Props {
   data: ClipboardData;
@@ -21,15 +28,41 @@ export function ContentView({ data, onUpdated }: Props): React.JSX.Element {
   const [editing, setEditing] = useState(false);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [verifying, setVerifying] = useState(false);
   const [isStarred, setIsStarred] = useState<boolean>(data.isStarred);
   const [showSavedPw, setShowSavedPw] = useState(false);
+
+  const [cachedEditPassword, setCachedEditPassword] = useState<string>("");
+  const [showUnlockModal, setShowUnlockModal] = useState<boolean>(false);
+  const [unlockAction, setUnlockAction] = useState<"edit" | "delete">("edit");
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const ownerToken = getOwnerToken(data.code);
   const isOwner = !!ownerToken;
   const savedPassword = getBypassPassword(data.code);
-  const canEdit = isOwner || data.mode === "public";
-  const canDelete = isOwner || data.mode === "public";
-  const canStar = data.mode === "public" && !data.isOneTimeView;
+  const canEdit = !data.isOneTimeView;
+  const canDelete = true;
+  const canStar = !data.isOneTimeView;
+
+  function handleEditClick(): void {
+    if (!isOwner && data.hasEditPassword && !cachedEditPassword) {
+      setUnlockAction("edit");
+      setDeleteError(null);
+      setShowUnlockModal(true);
+      return;
+    }
+    setEditing((v) => !v);
+  }
+
+  function handleDeleteClick(): void {
+    if (!isOwner && data.hasEditPassword && !cachedEditPassword) {
+      setUnlockAction("delete");
+      setDeleteError(null);
+      setShowUnlockModal(true);
+      return;
+    }
+    setConfirmingDelete(true);
+  }
 
   async function copy(): Promise<void> {
     try {
@@ -54,16 +87,47 @@ export function ContentView({ data, onUpdated }: Props): React.JSX.Element {
     window.open(`/${data.code}/raw`, "_blank");
   }
 
-  async function doDelete(): Promise<void> {
+  async function doDelete(passwordOverride?: string): Promise<void> {
     setDeleting(true);
+    setDeleteError(null);
     try {
-      const bypass = getBypassPassword(data.code) ?? undefined;
-      await deleteClipboard(data.code, ownerToken ?? undefined, bypass);
+      const effectivePassword =
+        passwordOverride || cachedEditPassword || getBypassPassword(data.code) || undefined;
+      await deleteClipboard(data.code, ownerToken ?? undefined, effectivePassword);
       toast.success("Clipboard deleted.");
       navigate("/");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to delete");
+      const msg = err instanceof Error ? err.message : "Failed to delete";
+      if (showUnlockModal) {
+        setDeleteError(msg);
+      } else {
+        toast.error(msg);
+      }
       setDeleting(false);
+    }
+  }
+
+  async function handleUnlockSubmit(pwd: string): Promise<void> {
+    if (unlockAction === "edit") {
+      setVerifying(true);
+      setDeleteError(null);
+      try {
+        const valid = await verifyEditPassword(data.code, pwd);
+        if (!valid) {
+          setDeleteError("Incorrect edit password");
+          setVerifying(false);
+          return;
+        }
+        setCachedEditPassword(pwd);
+        setShowUnlockModal(false);
+        setEditing(true);
+      } catch {
+        setDeleteError("Incorrect edit password");
+      } finally {
+        setVerifying(false);
+      }
+    } else {
+      await doDelete(pwd);
     }
   }
 
@@ -114,16 +178,16 @@ export function ContentView({ data, onUpdated }: Props): React.JSX.Element {
         <DesktopAction onClick={copy} icon={<Copy className="h-4 w-4" />} label="Copy" />
         <DesktopAction onClick={share} icon={<Share2 className="h-4 w-4" />} label="Share" />
         <DesktopAction onClick={openRaw} icon={<FileText className="h-4 w-4" />} label="Raw" />
-        {canEdit && !data.isOneTimeView && (
+        {canEdit && (
           <DesktopAction
-            onClick={() => setEditing((v) => !v)}
+            onClick={handleEditClick}
             icon={<Edit3 className="h-4 w-4" />}
             label="Edit"
           />
         )}
         {canDelete && (
           <DesktopAction
-            onClick={() => setConfirmingDelete(true)}
+            onClick={handleDeleteClick}
             icon={<Trash2 className="h-4 w-4" />}
             label="Delete"
             danger
@@ -143,8 +207,23 @@ export function ContentView({ data, onUpdated }: Props): React.JSX.Element {
         {confirmingDelete && (
           <DeleteConfirm
             busy={deleting}
-            onConfirm={doDelete}
+            onConfirm={() => doDelete()}
             onCancel={() => setConfirmingDelete(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showUnlockModal && (
+          <EditPasswordModal
+            action={unlockAction}
+            busy={deleting || verifying}
+            error={deleteError}
+            onSubmit={handleUnlockSubmit}
+            onCancel={() => {
+              setShowUnlockModal(false);
+              setDeleteError(null);
+            }}
           />
         )}
       </AnimatePresence>
@@ -153,6 +232,7 @@ export function ContentView({ data, onUpdated }: Props): React.JSX.Element {
         {editing && (
           <EditPanel
             data={data}
+            editPassword={cachedEditPassword}
             onSaved={(next) => {
               setEditing(false);
               onUpdated(next);
@@ -174,16 +254,16 @@ export function ContentView({ data, onUpdated }: Props): React.JSX.Element {
           <MobileAction onClick={copy} icon={<Copy className="h-5 w-5" />} label="Copy" />
           <MobileAction onClick={share} icon={<Share2 className="h-5 w-5" />} label="Share" />
           <MobileAction onClick={openRaw} icon={<FileText className="h-5 w-5" />} label="Raw" />
-          {canEdit && !data.isOneTimeView && (
+          {canEdit && (
             <MobileAction
-              onClick={() => setEditing((v) => !v)}
+              onClick={handleEditClick}
               icon={<Edit3 className="h-5 w-5" />}
               label="Edit"
             />
           )}
           {canDelete && (
             <MobileAction
-              onClick={() => setConfirmingDelete(true)}
+              onClick={handleDeleteClick}
               icon={<Trash2 className="h-5 w-5" />}
               label="Delete"
               danger
@@ -200,54 +280,5 @@ export function ContentView({ data, onUpdated }: Props): React.JSX.Element {
         </div>
       </div>
     </div>
-  );
-}
-
-interface ActionProps {
-  onClick: () => void;
-  icon: React.ReactNode;
-  label: string;
-  danger?: boolean;
-  active?: boolean;
-}
-
-function DesktopAction({ onClick, icon, label, danger, active }: ActionProps): React.JSX.Element {
-  let colorClass =
-    "border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--accent)] hover:text-[var(--accent)]";
-  if (danger) {
-    colorClass = "border-[var(--danger)]/40 text-[var(--danger)] hover:bg-[var(--danger)]/10";
-  } else if (active) {
-    colorClass = "border-[var(--accent)] bg-[var(--accent)] text-[#0a0a0a]";
-  }
-
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors cursor-pointer ${colorClass}`}
-    >
-      {icon} {label}
-    </button>
-  );
-}
-
-function MobileAction({ onClick, icon, label, danger, active }: ActionProps): React.JSX.Element {
-  let colorClass = "text-[var(--text-secondary)] hover:text-[var(--text-primary)]";
-  if (danger) {
-    colorClass = "text-[var(--danger)]";
-  } else if (active) {
-    colorClass = "bg-[var(--accent)] text-[#0a0a0a] rounded-md";
-  }
-
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-label={label}
-      className={`grid place-items-center gap-0.5 px-3 py-1 text-[10px] font-medium cursor-pointer ${colorClass}`}
-    >
-      {icon}
-      <span>{label}</span>
-    </button>
   );
 }

@@ -1,11 +1,12 @@
 import { Hono } from "hono";
 import { Env } from "../types";
-import { handleCreate, handleRead, handleRaw, handleUpdate, handleDelete } from "../handlers/clipboard";
+import { handleCreate, handleRead, handleRaw, handleUpdate, handleDelete, handleVerify } from "../handlers/clipboard";
 
 export function registerClipboardRoutes(app: Hono<{ Bindings: Env }>) {
   app.post("/api/clipboard", (c) => handleCreate(c.req.raw, c.env));
   app.on(["GET", "HEAD"], "/api/clipboard/:code", (c) => handleRead(c.req.raw, c.env, c.req.param("code")));
   app.on(["GET", "HEAD"], "/api/clipboard/:code/raw", (c) => handleRaw(c.req.raw, c.env, c.req.param("code")));
+  app.post("/api/clipboard/:code/verify", (c) => handleVerify(c.req.raw, c.env, c.req.param("code")));
   app.put("/api/clipboard/:code", (c) => handleUpdate(c.req.raw, c.env, c.req.param("code")));
   app.delete("/api/clipboard/:code", (c) => handleDelete(c.req.raw, c.env, c.req.param("code")));
 }

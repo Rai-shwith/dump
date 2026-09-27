@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Lock } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 
 interface Props {
   onUnlock: (password: string, remember: boolean) => Promise<boolean>;
@@ -8,7 +9,7 @@ interface Props {
 
 export function PasswordGate({ onUnlock }: Props): React.JSX.Element {
   const [password, setPassword] = useState("");
-  const [remember, setRemember] = useState(true);
+  const [remember, setRemember] = useState(false);
   const [shake, setShake] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -51,21 +52,26 @@ export function PasswordGate({ onUnlock }: Props): React.JSX.Element {
 
         <input
           type="password"
+          name="dump-noautofill-gate-pwd"
+          autoComplete="new-password"
+          data-lpignore="true"
+          data-1p-ignore="true"
+          data-bwignore="true"
+          data-form-type="other"
+          spellCheck={false}
+          autoCorrect="off"
+          autoCapitalize="off"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           autoFocus
+          placeholder="Enter password…"
           className="mt-4 w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--text-primary)] focus:border-[var(--accent)] focus:outline-none"
         />
 
-        <label className="mt-3 flex items-center gap-2 text-xs text-[var(--text-secondary)]">
-          <input
-            type="checkbox"
-            checked={remember}
-            onChange={(e) => setRemember(e.target.checked)}
-            className="h-4 w-4 accent-[var(--accent)]"
-          />
-          Remember on this device
-        </label>
+        <div className="mt-3 flex items-center justify-between rounded-lg border border-[var(--border-color)]/60 bg-[var(--surface)] px-3 py-2">
+          <span className="text-xs text-[var(--text-secondary)]">Remember on this device</span>
+          <Switch checked={remember} onCheckedChange={setRemember} />
+        </div>
 
         {error && <p className="mt-2 text-xs text-[var(--danger)]">{error}</p>}
 

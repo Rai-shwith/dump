@@ -10,10 +10,19 @@ import type {
   UpdateClipboardResponse,
 } from "@/types";
 
-function buildHeaders(token?: string, password?: string): HeadersInit {
+interface RequestAuthOptions {
+  token?: string;
+  password?: string;
+  viewPassword?: string;
+  editPassword?: string;
+}
+
+function buildHeaders(auth: RequestAuthOptions = {}): HeadersInit {
   const headers: Record<string, string> = { "Content-Type": "application/json" };
-  if (token) headers["X-Owner-Token"] = token;
-  if (password) headers["X-Clipboard-Password"] = password;
+  if (auth.token) headers["X-Owner-Token"] = auth.token;
+  if (auth.password) headers["X-Clipboard-Password"] = auth.password;
+  if (auth.viewPassword) headers["X-Clipboard-View-Password"] = auth.viewPassword;
+  if (auth.editPassword) headers["X-Clipboard-Edit-Password"] = auth.editPassword;
   return headers;
 }
 
@@ -37,12 +46,15 @@ export class ApiError extends Error {
 
 async function request<T>(
   path: string,
-  init: RequestInit & { token?: string; password?: string } = {},
+  init: RequestInit & RequestAuthOptions = {},
 ): Promise<{ status: number; data: T }> {
-  const { token, password, headers, ...rest } = init;
+  const { token, password, viewPassword, editPassword, headers, ...rest } = init;
   const res = await fetch(`${APP_CONFIG.apiBaseUrl}${path}`, {
     ...rest,
-    headers: { ...buildHeaders(token, password), ...(headers ?? {}) },
+    headers: {
+      ...buildHeaders({ token, password, viewPassword, editPassword }),
+      ...(headers ?? {}),
+    },
   });
   if (!res.ok) {
     throw new ApiError(await parseError(res), res.status);
@@ -70,6 +82,7 @@ export async function readClipboard(
     method: "GET",
     token,
     password,
+    viewPassword: password,
   });
   return data;
 }
@@ -85,6 +98,7 @@ export async function updateClipboard(
     body: JSON.stringify(payload),
     token,
     password,
+    editPassword: password,
   });
   return data;
 }
@@ -94,7 +108,25 @@ export async function deleteClipboard(
   token?: string,
   password?: string,
 ): Promise<void> {
-  await request<void>(`/clipboard/${code}`, { method: "DELETE", token, password });
+  await request<void>(`/clipboard/${code}`, {
+    method: "DELETE",
+    token,
+    password,
+    editPassword: password,
+  });
+}
+
+export async function verifyEditPassword(code: string, password: string): Promise<boolean> {
+  try {
+    await request<{ valid: boolean }>(`/clipboard/${code}/verify`, {
+      method: "POST",
+      editPassword: password,
+      password,
+    });
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export async function starClipboard(code: string): Promise<void> {

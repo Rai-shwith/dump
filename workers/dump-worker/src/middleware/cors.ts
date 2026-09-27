@@ -23,7 +23,7 @@ export function addCorsHeaders(
   if (requestOrigin && isAllowed) {
     newResponse.headers.set("Access-Control-Allow-Origin", requestOrigin);
     newResponse.headers.set("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, OPTIONS");
-    newResponse.headers.set("Access-Control-Allow-Headers", "Content-Type, X-Owner-Token, X-Clipboard-Password");
+    newResponse.headers.set("Access-Control-Allow-Headers", "Content-Type, X-Owner-Token, X-Clipboard-Password, X-Clipboard-View-Password, X-Clipboard-Edit-Password");
     newResponse.headers.set("Vary", "Origin");
   }
   

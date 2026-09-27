@@ -10,14 +10,16 @@ export type PasswordMode = "view" | "edit";
 export interface ClipboardMeta {
   code: string;
   mode: ClipboardMode;
-  passwordHash: string | null;
-  passwordMode: PasswordMode | null;
+  viewPasswordHash: string | null;
+  editPasswordHash: string | null;
   ownerTokenHash: string;
   createdAt: string;
   expiresAt: string | null;
   isOneTimeView: boolean;
   isStarred: boolean;
   expiryPreset?: string | null;
+  passwordHash?: string | null;
+  passwordMode?: PasswordMode | null;
 }
 
 export interface StarredEntry {

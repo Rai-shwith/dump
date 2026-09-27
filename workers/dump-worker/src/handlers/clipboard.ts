@@ -1,9 +1,10 @@
-import { Env, ClipboardMeta, ClipboardMode, PasswordMode } from "../types";
+import { Env, ClipboardMeta, ClipboardMode } from "../types";
 import { getMeta, setMeta, setContent, getContent, deleteClipboard, getStarred, setStarred } from "../utils/kv";
 import { hashPassword, hashToken } from "../utils/hash";
 import { isExpired, ttlSeconds } from "../utils/expiry";
 import {
   createError,
+  getPasswordHashes,
   validateCreateContentAndCode,
   validateCreateModeAndExpiration,
   validateReadExpiration,
@@ -23,21 +24,40 @@ export async function handleCreate(request: Request, env: Env): Promise<Response
     return createError("Invalid JSON body");
   }
 
-  const { code, content, mode, passwordMode, password, expiresAt, isOneTimeView, expiryPreset } = body;
+  const {
+    code,
+    content,
+    mode,
+    viewPassword,
+    editPassword,
+    passwordMode,
+    password,
+    expiresAt,
+    isOneTimeView,
+    expiryPreset
+  } = body;
 
   const codeRes = validateCreateContentAndCode(content, code);
   if (codeRes.error) return codeRes.error;
   const normalizedCode = codeRes.normalizedCode as string;
 
-  const modeRes = validateCreateModeAndExpiration(mode, passwordMode, password, expiresAt, isOneTimeView);
+  const modeRes = validateCreateModeAndExpiration({
+    mode,
+    viewPassword,
+    editPassword,
+    passwordMode,
+    password,
+    expiresAt,
+    isOneTimeView
+  });
   if (modeRes.error) return modeRes.error;
 
   const existingMeta = await getMeta(env, normalizedCode);
   if (existingMeta) return createError("Code already exists", 409);
 
   const ownerToken = crypto.randomUUID();
-  const passwordStr = typeof password === "string" ? password : "";
-  const passwordHash = passwordStr ? await hashPassword(passwordStr, env.PASSWORD_PEPPER) : null;
+  const viewPasswordHash = modeRes.viewPassword ? await hashPassword(modeRes.viewPassword, env.PASSWORD_PEPPER) : null;
+  const editPasswordHash = modeRes.editPassword ? await hashPassword(modeRes.editPassword, env.PASSWORD_PEPPER) : null;
 
   const finalExpiresAt = typeof expiresAt === "string" ? expiresAt : null;
   const finalOneTime = Boolean(isOneTimeView);
@@ -45,8 +65,8 @@ export async function handleCreate(request: Request, env: Env): Promise<Response
   const meta: ClipboardMeta = {
     code: normalizedCode,
     mode: modeRes.normalizedMode as ClipboardMode,
-    passwordHash,
-    passwordMode: modeRes.normalizedPasswordMode ?? null,
+    viewPasswordHash,
+    editPasswordHash,
     ownerTokenHash: await hashToken(ownerToken),
     createdAt: new Date().toISOString(),
     expiresAt: finalExpiresAt,
@@ -91,11 +111,15 @@ export async function handleRead(request: Request, env: Env, codeParam: string):
     return createError("Clipboard not found or expired", 404);
   }
 
+  const { viewPasswordHash, editPasswordHash } = getPasswordHashes(meta);
+
   const response = new Response(JSON.stringify({
     code: meta.code,
     content,
     mode: meta.mode,
-    passwordMode: meta.passwordMode,
+    hasViewPassword: Boolean(viewPasswordHash),
+    hasEditPassword: Boolean(editPasswordHash),
+    passwordMode: meta.passwordMode ?? null,
     expiresAt: meta.expiresAt,
     isOneTimeView: meta.isOneTimeView,
     isStarred: meta.isStarred,
@@ -164,11 +188,21 @@ export async function handleUpdate(request: Request, env: Env, codeParam: string
   const valError = validateUpdateFields(body, meta);
   if (valError) return valError;
 
-  if (body.password !== undefined) {
-    const pwd = typeof body.password === "string" ? body.password : "";
-    meta.passwordHash = pwd ? await hashPassword(pwd, env.PASSWORD_PEPPER) : null;
+  if (body.viewPassword !== undefined) {
+    const v = typeof body.viewPassword === "string" ? body.viewPassword : "";
+    meta.viewPasswordHash = v ? await hashPassword(v, env.PASSWORD_PEPPER) : null;
   }
-  if (body.passwordMode !== undefined) meta.passwordMode = body.passwordMode as PasswordMode | null;
+  if (body.editPassword !== undefined) {
+    const e = typeof body.editPassword === "string" ? body.editPassword : "";
+    meta.editPasswordHash = e ? await hashPassword(e, env.PASSWORD_PEPPER) : null;
+  }
+  if (body.password !== undefined && body.viewPassword === undefined && body.editPassword === undefined) {
+    const pwd = typeof body.password === "string" ? body.password : "";
+    const hash = pwd ? await hashPassword(pwd, env.PASSWORD_PEPPER) : null;
+    if (body.passwordMode === "view") meta.viewPasswordHash = hash;
+    else if (body.passwordMode === "edit") meta.editPasswordHash = hash;
+  }
+
   if (body.expiresAt !== undefined) meta.expiresAt = (body.expiresAt as string) || null;
   if (body.isOneTimeView !== undefined) meta.isOneTimeView = Boolean(body.isOneTimeView);
   if (body.expiryPreset !== undefined) meta.expiryPreset = (body.expiryPreset as string) || null;
@@ -179,7 +213,15 @@ export async function handleUpdate(request: Request, env: Env, codeParam: string
     await setContent(env, code, body.content as string, ttl);
   }
 
-  return new Response(JSON.stringify({ success: true, expiresAt: meta.expiresAt, isOneTimeView: meta.isOneTimeView }), {
+  const { viewPasswordHash, editPasswordHash } = getPasswordHashes(meta);
+
+  return new Response(JSON.stringify({
+    success: true,
+    expiresAt: meta.expiresAt,
+    isOneTimeView: meta.isOneTimeView,
+    hasViewPassword: Boolean(viewPasswordHash),
+    hasEditPassword: Boolean(editPasswordHash)
+  }), {
     status: 200, headers: { "Content-Type": "application/json" }
   });
 }
@@ -192,16 +234,19 @@ export async function handleDelete(request: Request, env: Env, codeParam: string
     return createError("Clipboard not found or expired", 404);
   }
 
-  if (meta.mode === "protected") {
+  const { editPasswordHash } = getPasswordHashes(meta);
+  if (editPasswordHash) {
     const ownerToken = request.headers.get("X-Owner-Token");
-    const password = request.headers.get("X-Clipboard-Password");
+    const password =
+      request.headers.get("X-Clipboard-Edit-Password") ||
+      request.headers.get("X-Clipboard-Password");
 
     let isAuthorized = false;
     if (ownerToken && (await hashToken(ownerToken)) === meta.ownerTokenHash) {
       isAuthorized = true;
     } else if (password) {
       const hash = await hashPassword(password, env.PASSWORD_PEPPER);
-      if (hash === meta.passwordHash) {
+      if (hash === editPasswordHash) {
         isAuthorized = true;
       }
     }
@@ -221,5 +266,22 @@ export async function handleDelete(request: Request, env: Env, codeParam: string
 
   return new Response(JSON.stringify({ success: true }), {
     status: 200, headers: { "Content-Type": "application/json" }
+  });
+}
+
+export async function handleVerify(request: Request, env: Env, codeParam: string): Promise<Response> {
+  const code = codeParam.toLowerCase();
+  const meta = await getMeta<ClipboardMeta>(env, code);
+
+  if (!meta || isExpired(meta)) {
+    return createError("Clipboard not found or expired", 404);
+  }
+
+  const authError = await checkAuthorization(meta, request, env);
+  if (authError) return authError;
+
+  return new Response(JSON.stringify({ valid: true }), {
+    status: 200,
+    headers: { "Content-Type": "application/json" }
   });
 }
