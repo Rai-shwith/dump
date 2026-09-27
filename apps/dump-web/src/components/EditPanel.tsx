@@ -4,7 +4,13 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { updateClipboard } from "@/services/clipboardApi";
 import { getBypassPassword, getOwnerToken } from "@/utils/tokens";
-import { presetToISO, toUTC } from "@/utils/time";
+import {
+  detectExpiryPreset,
+  formatExpiry,
+  presetToISO,
+  toLocalDatetimeInput,
+  toUTC,
+} from "@/utils/time";
 import type { ClipboardData, ExpiryPreset, PasswordMode, UpdateClipboardPayload } from "@/types";
 import { ExpirySelector } from "./ExpirySelector";
 
@@ -16,22 +22,37 @@ interface Props {
 
 export function EditPanel({ data, onSaved, onCancel }: Props): React.JSX.Element {
   const [content, setContent] = useState<string>(data.content);
-  const [expiry, setExpiry] = useState<ExpiryPreset>(data.isOneTimeView ? "otv" : "1d");
-  const [customDt, setCustomDt] = useState<string>("");
+  const [expiry, setExpiry] = useState<ExpiryPreset>(() => detectExpiryPreset(data));
+  const [expiryChanged, setExpiryChanged] = useState<boolean>(false);
+  const [customDt, setCustomDt] = useState<string>(() => toLocalDatetimeInput(data.expiresAt));
   const [password, setPassword] = useState<string>("");
   const [showPw, setShowPw] = useState<boolean>(false);
   const [passwordMode, setPasswordMode] = useState<PasswordMode>(data.passwordMode ?? "view");
   const [saving, setSaving] = useState<boolean>(false);
 
+  function handleExpiryChange(newPreset: ExpiryPreset): void {
+    setExpiry(newPreset);
+    setExpiryChanged(true);
+  }
+
+  function handleCustomChange(newDt: string): void {
+    setCustomDt(newDt);
+    setExpiryChanged(true);
+  }
+
   async function save(): Promise<void> {
     const token = getOwnerToken(data.code) ?? undefined;
     const bypass = getBypassPassword(data.code) ?? undefined;
 
-    const isOTV = expiry === "otv";
-    let expiresAt: string | null = null;
-    if (!isOTV) {
-      if (expiry === "infinite") expiresAt = null;
-      else if (expiry === "custom") {
+    const isOTV = expiryChanged ? expiry === "otv" : data.isOneTimeView;
+    let expiresAt: string | null = data.expiresAt;
+
+    if (expiryChanged) {
+      if (isOTV) {
+        expiresAt = null;
+      } else if (expiry === "infinite") {
+        expiresAt = null;
+      } else if (expiry === "custom") {
         if (!customDt) {
           toast.error("Pick a custom date and time");
           return;
@@ -44,9 +65,12 @@ export function EditPanel({ data, onSaved, onCancel }: Props): React.JSX.Element
 
     const payload: UpdateClipboardPayload = {
       content,
-      expiresAt,
-      isOneTimeView: isOTV,
     };
+    if (expiryChanged) {
+      payload.expiresAt = expiresAt;
+      payload.isOneTimeView = isOTV;
+      payload.expiryPreset = expiry;
+    }
     if (data.mode === "protected" && password) {
       payload.password = password;
       payload.passwordMode = passwordMode;
@@ -56,7 +80,14 @@ export function EditPanel({ data, onSaved, onCancel }: Props): React.JSX.Element
     try {
       await updateClipboard(data.code, payload, token, bypass);
       toast.success("Changes saved!");
-      onSaved({ ...data, content, expiresAt, isOneTimeView: isOTV, passwordMode });
+      onSaved({
+        ...data,
+        content,
+        expiresAt,
+        isOneTimeView: isOTV,
+        passwordMode,
+        expiryPreset: expiryChanged ? expiry : data.expiryPreset,
+      });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to save");
     } finally {
@@ -70,7 +101,7 @@ export function EditPanel({ data, onSaved, onCancel }: Props): React.JSX.Element
       animate={{ opacity: 1, height: "auto" }}
       exit={{ opacity: 0, height: 0 }}
       transition={{ duration: 0.2 }}
-      className="mb-4 overflow-hidden rounded-lg border border-[var(--border-color)] bg-[var(--surface-raised)] p-4"
+      className="mb-4 rounded-lg border border-[var(--border-color)] bg-[var(--surface-raised)] p-4"
     >
       <h3 className="mb-3 text-sm font-semibold text-[var(--text-primary)]">Edit clipboard</h3>
       <div className="space-y-3">
@@ -82,14 +113,19 @@ export function EditPanel({ data, onSaved, onCancel }: Props): React.JSX.Element
         />
         <div>
           <label className="mb-1 block text-xs font-medium text-[var(--text-secondary)]">
-            New expiry
+            Expiration
           </label>
           <ExpirySelector
             value={expiry}
-            onChange={setExpiry}
+            onChange={handleExpiryChange}
             mode={data.mode}
             customDatetime={customDt}
-            onCustomChange={setCustomDt}
+            onCustomChange={handleCustomChange}
+            subtitle={
+              expiryChanged
+                ? "New expiry will be set on save"
+                : `Current: ${formatExpiry(data.expiresAt, data.isOneTimeView)} (original)`
+            }
           />
         </div>
         {data.mode === "protected" && (

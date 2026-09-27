@@ -1,11 +1,11 @@
 # Graph Report - dump  (2026-09-27)
 
 ## Corpus Check
-- 479 files · ~229,831 words
+- 479 files · ~229,670 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 5805 nodes · 6103 edges · 766 communities (532 shown, 234 thin omitted)
+- 5804 nodes · 6102 edges · 768 communities (535 shown, 233 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
@@ -613,7 +613,6 @@
 - Common Errors
 - Client SDK Configuration
 - Request Object
-- Response Behavior
 - Performance Tips
 - Tail Workers Gotchas & Debugging
 - Best Practices
@@ -631,6 +630,7 @@
 - Workers Integration
 - BOLA Detection
 - Cron Triggers Gotchas
+- Debugging
 - API Behavior
 - Security
 - Key Concepts
@@ -657,7 +657,6 @@
 - Local Development
 - Gotchas
 - Delete Tunnel
-- Get Tunnel Info
 - Gotchas & Debugging
 - Troubleshooting
 - Hyperdrive (Database Accelerator)
@@ -730,6 +729,8 @@
 - TASK-022
 - TASK-023
 - Dump
+- Startup Methods
+- ASSETS Binding
 - @radix-ui/react-aspect-ratio
 
 ## God Nodes (most connected - your core abstractions)
@@ -765,7 +766,7 @@
 - **WAF Components** — _agents_skills_cloudflare_references_waf_readme_managed_rulesets, _agents_skills_cloudflare_references_waf_readme_custom_rules, _agents_skills_cloudflare_references_waf_readme_rate_limiting [EXTRACTED 1.00]
 - **One-Time View Flow** — docs_api_one_time_view, docs_decisions_one_time_view, docs_tasks_task_009__one_time_view_logic_handleraw [INFERRED 0.85]
 
-## Communities (766 total, 234 thin omitted)
+## Communities (768 total, 233 thin omitted)
 
 ### Community 0 - "Apps Dump"
 Cohesion: 0.16
@@ -825,7 +826,7 @@ Nodes (14): @cloudflare/workers-types, compilerOptions, lib, module, moduleResol
 
 ### Community 14 - "React Apps"
 Cohesion: 0.15
-Nodes (13): dependencies, class-variance-authority, clsx, @radix-ui/react-dropdown-menu, @radix-ui/react-scroll-area, @radix-ui/react-toggle, react-day-picker, class-variance-authority (+5 more)
+Nodes (13): dependencies, class-variance-authority, cmdk, @radix-ui/react-dropdown-menu, @radix-ui/react-scroll-area, @radix-ui/react-toggle, react-day-picker, class-variance-authority (+5 more)
 
 ### Community 15 - "Apps Dump"
 Cohesion: 0.20
@@ -868,8 +869,8 @@ Cohesion: 0.33
 Nodes (5): ToggleGroup, ToggleGroupContext, ToggleGroupItem, Toggle, toggleVariants
 
 ### Community 26 - "Alert Apps"
-Cohesion: 0.27
-Nodes (6): Props, StarredStrip(), Props, SuccessCard(), useStarred(), CreateClipboardResponse
+Cohesion: 0.22
+Nodes (8): allowConcurrency Option, Breaking Gates (DANGER), Concurrency Model (CRITICAL), DO Storage Gotchas & Troubleshooting, Input Gates, Limits, Output Gates, Write Coalescing
 
 ### Community 27 - "Workers Dump"
 Cohesion: 0.04
@@ -960,8 +961,8 @@ Cohesion: 0.10
 Nodes (18): Authentication Model, Base URL, Code Validation Rules Summary, DELETE /api/clipboard/:code, DELETE /api/clipboard/:code/star, Endpoints, Error Response Format, Expiration Rules Summary (+10 more)
 
 ### Community 181 - "Agents Skills"
-Cohesion: 0.11
-Nodes (18): "Alarm Not Deleted with deleteAll()", allowConcurrency Option, "Async in transactionSync", Breaking Gates (DANGER), Common Errors, Concurrency Model (CRITICAL), "Direct SQL Transaction Statements", DO Storage Gotchas & Troubleshooting (+10 more)
+Cohesion: 0.20
+Nodes (10): "Alarm Not Deleted with deleteAll()", "Async in transactionSync", Common Errors, "Direct SQL Transaction Statements", "Durable Object Overloaded", "High Billing from Storage Operations", "Race Condition in Concurrent Calls", "Silent Data Corruption with Large IDs" (+2 more)
 
 ### Community 183 - "Agents Skills"
 Cohesion: 0.11
@@ -972,7 +973,7 @@ Cohesion: 0.14
 Nodes (14): 7502: Model not found, 7504: Input validation failed, "AI inference doesn't work locally", API Responses, Common Errors, Critical: @cloudflare/ai is DEPRECATED, Development, Embedding response shape varies (+6 more)
 
 ### Community 188 - "Agents Skills"
-Cohesion: 0.11
+Cohesion: 0.12
 Nodes (17): Anti-Patterns, Binding Access Patterns, Binding Patterns and Best Practices, D1: Relational Queries, Durable Objects: Coordination, KV: CDN-Backed Reads, Lazy Access, Parallel Access (+9 more)
 
 ### Community 189 - "Agents Skills"
@@ -992,8 +993,8 @@ Cohesion: 0.11
 Nodes (17): After (Progressive), api.md (287 lines), Before (Monolithic), configuration.md (307 lines), File Summary, Files Created, gotchas.md (317 lines), Key Improvements Applied (+9 more)
 
 ### Community 201 - "Agents Skills"
-Cohesion: 0.24
-Nodes (13): ContentView(), PasswordGate(), Props, ClipboardState, useClipboard(), ViewInner(), readClipboard(), clearBypassPassword() (+5 more)
+Cohesion: 0.28
+Nodes (11): ContentView(), PasswordGate(), Props, useClipboard(), ViewInner(), clearBypassPassword(), getBypassPassword(), getOwnerToken() (+3 more)
 
 ### Community 202 - "Agents Skills"
 Cohesion: 0.12
@@ -1016,8 +1017,8 @@ Cohesion: 0.12
 Nodes (17): Basic Patterns, Common Patterns, Connection Pooling, Destination Allowlist (Prevent SSRF), Error Handling Patterns, Fallback, MQTT, Multi-Protocol Gateway (+9 more)
 
 ### Community 214 - "Agents Skills"
-Cohesion: 0.19
-Nodes (9): App(), SearchBar(), SearchBarProps, Toaster(), ToasterProps, queryClient, NotFound(), ViewPage() (+1 more)
+Cohesion: 0.15
+Nodes (12): App(), Props, SearchBar(), Props, SuccessCard(), Toaster(), ToasterProps, queryClient (+4 more)
 
 ### Community 215 - "Agents Skills"
 Cohesion: 0.12
@@ -1044,8 +1045,8 @@ Cohesion: 0.20
 Nodes (10): Backend Worker (Smart Placement Enabled), Cloudflare Pages/Assets Warning, Dashboard Configuration, Frontend + Backend Split Configuration, Frontend Worker (No Smart Placement), Local Development, Placement Mode Values, Smart Placement Configuration (+2 more)
 
 ### Community 245 - "Workers Dump"
-Cohesion: 0.38
-Nodes (5): CreateForm(), APP_CONFIG, createClipboard(), generateCode(), validateCode()
+Cohesion: 0.23
+Nodes (10): CreateForm(), DESCRIPTIONS, DURATIONS, ExpirySelector(), Props, APP_CONFIG, ClipboardMode, ExpiryPreset (+2 more)
 
 ### Community 247 - "Executive Summary"
 Cohesion: 0.40
@@ -1132,8 +1133,8 @@ Cohesion: 0.13
 Nodes (14): Anti-Patterns to Flag, Architecture, Code Patterns, Configuration, FIRST: Fetch Latest References, Observability, Principles, Reference Documentation (+6 more)
 
 ### Community 269 - "clipboardApi.ts"
-Cohesion: 0.24
-Nodes (11): ApiError, buildHeaders(), getStarred(), parseError(), request(), CreateClipboardPayload, GetStarredResponse, LockedResponse (+3 more)
+Cohesion: 0.22
+Nodes (12): ClipboardState, ApiError, buildHeaders(), createClipboard(), parseError(), readClipboard(), request(), CreateClipboardPayload (+4 more)
 
 ### Community 270 - "Configuration & Setup"
 Cohesion: 0.15
@@ -1320,8 +1321,8 @@ Cohesion: 0.15
 Nodes (13): Async Task Processing, Buffering API Calls, Dead Letter Queue Pattern, Delayed Job Processing, Event-Driven Workflows, Fan-out Pattern, Idempotency Pattern, Integration: D1 Batch Writes (+5 more)
 
 ### Community 316 - "R2 Gotchas & Troubleshooting"
-Cohesion: 0.11
-Nodes (19): Checksum Limits, Common Errors, Conditional Operations, ETag Format, "Invalid credentials" / S3 SDK, Key Validation, Limits, "List compatibility error" (+11 more)
+Cohesion: 0.15
+Nodes (13): Checksum Limits, Conditional Operations, ETag Format, Key Validation, Limits, List Truncation, Local Development Limits, Multipart Requirements (+5 more)
 
 ### Community 317 - "REST API"
 Cohesion: 0.15
@@ -1456,7 +1457,7 @@ Cohesion: 0.17
 Nodes (12): Account-Scoped (cross-domain), Cloudflare GraphQL Analytics API, Core Concepts, Dataset Naming Convention, In This Reference, Key Datasets by Product, Overview, Query Structure (+4 more)
 
 ### Community 350 - "API Reference"
-Cohesion: 0.18
+Cohesion: 0.17
 Nodes (11): API Reference, Direct Creator Upload, Draw/Watermark, Error Codes, Other Operations, REST API, Transform Images, Transform Options (+3 more)
 
 ### Community 351 - "Cloudflare Network Interconnect (CNI)"
@@ -1501,7 +1502,7 @@ Nodes (12): Best Practices, Dynamic Reconfiguration, Event System, getPlatformPr
 
 ### Community 361 - "HomePage.tsx"
 Cohesion: 0.21
-Nodes (14): EditPanel(), DESCRIPTIONS, DURATIONS, ExpirySelector(), Props, updateClipboard(), ClipboardMode, ExpiryPreset (+6 more)
+Nodes (12): EditPanel(), StarredStrip(), useStarred(), getStarred(), updateClipboard(), PasswordMode, UpdateClipboardPayload, detectExpiryPreset() (+4 more)
 
 ### Community 362 - "Dump — Serverless Online Clipboard"
 Cohesion: 0.17
@@ -1524,8 +1525,8 @@ Cohesion: 0.18
 Nodes (11): Access Locations, Available Data, Bot Analytics, Bot Management API, Common Patterns, JA4 Signals (Enterprise), Logpush Fields, Testing with Miniflare (+3 more)
 
 ### Community 367 - "api.md"
-Cohesion: 0.18
-Nodes (10): Container Class API, External state check, Internal state check, Routing, Scheduling, start() - Basic start (8s timeout), startAndWaitForPorts() - Recommended (20s timeout), Startup Methods (+2 more)
+Cohesion: 0.17
+Nodes (7): Container Class API, External state check, Internal state check, Lifecycle Hooks, Routing, Scheduling, State Inspection
 
 ### Community 368 - "Cron Triggers Configuration"
 Cohesion: 0.18
@@ -1600,8 +1601,8 @@ Cohesion: 0.18
 Nodes (11): API Reference, Auth, Basic Access, Binding API, Error Handling, Multiple Secrets & Patterns, Responses, REST API (+3 more)
 
 ### Community 386 - "API Reference"
-Cohesion: 0.18
-Nodes (10): 404 Handling, Advanced Usage, API Reference, ASSETS Binding, Conditional Serving, Error Handling, Error Responses, Method Signatures (+2 more)
+Cohesion: 0.15
+Nodes (12): 404 Handling, Advanced Usage, API Reference, Compression, Conditional Serving, Content-Type Inference, Default Headers, Error Handling (+4 more)
 
 ### Community 387 - "Tail Workers API Reference"
 Cohesion: 0.18
@@ -1620,7 +1621,7 @@ Cohesion: 0.18
 Nodes (11): Authentication Methods (priority order), Basic Configuration, Cloudflare Terraform Provider, Core Principles, Import Existing Resources, In This Reference, Provider Setup, Provider Version (+3 more)
 
 ### Community 391 - "Tunnel Networking"
-Cohesion: 0.12
+Cohesion: 0.11
 Nodes (17): Bandwidth and Rate Limits, Common Connectivity Errors, Connection Diagnostics, Connectivity Requirements, Corporate Network Considerations, Firewall Rules, Full (Recommended), IP Ranges (+9 more)
 
 ### Community 392 - "Cloudflare Tunnel"
@@ -1668,7 +1669,7 @@ Cohesion: 0.18
 Nodes (11): Best Practices, Data Pipeline, ✅ DO, ❌ DON'T, Human-in-the-Loop Approval, Image Processing Pipeline, Introspection API, Setup (+3 more)
 
 ### Community 404 - "Wrangler Configuration"
-Cohesion: 0.17
+Cohesion: 0.18
 Nodes (11): Advanced, Auto-Provisioning (Beta), Bindings, Config Format, Environments, Field Inheritance, Placement, Routing (+3 more)
 
 ### Community 405 - "AI Gateway Troubleshooting"
@@ -1740,7 +1741,7 @@ Cohesion: 0.20
 Nodes (10): Dimensions, Firewall Dimensions (firewallEventsAdaptive), GraphQL Analytics API Reference, HTTP Request Dimensions (httpRequestsAdaptiveGroups), Pagination & Sorting, Query Root, See Also, Settings Node (+2 more)
 
 ### Community 422 - "Cloudflare Images Skill Reference"
-Cohesion: 0.29
+Cohesion: 0.20
 Nodes (7): Cloudflare Images Skill Reference, Core Methods, In This Reference, Key Features, Quick Decision Tree, Reading Order, See Also
 
 ### Community 423 - "KV API Reference"
@@ -1866,6 +1867,10 @@ Nodes (7): Async Behavior, Cookie Methods, System Properties (Triggers), TypeScr
 ### Community 454 - "Zaraz Configuration"
 Cohesion: 0.20
 Nodes (10): Click Trigger, Consent Management, Dashboard Setup, History Change (SPA), Limits, Privacy Features, Testing, Tool Configuration (+2 more)
+
+### Community 455 - "App.tsx"
+Cohesion: 0.33
+Nodes (6): Common Errors, "Invalid credentials" / S3 SDK, "List compatibility error", "Multipart upload failed", "Object not found", "Stream upload failed" / Silent Truncation
 
 ### Community 456 - "TASK-018.5 — Remove Reserved Mode"
 Cohesion: 0.20
@@ -2124,7 +2129,7 @@ Cohesion: 0.25
 Nodes (8): Allowlist Trusted IPs, Cache Strategy for DDoS Mitigation, DDoS Protection Patterns, Defense in Depth, Dynamic Response to Attacks, Multi-rule Tiered Protection (Enterprise Advanced), Progressive Enhancement, Route-specific Sensitivity
 
 ### Community 521 - "DO Storage Configuration"
-Cohesion: 0.25
+Cohesion: 0.29
 Nodes (7): CPU Limits, DO Storage Configuration, Initialization, KV-backed (Legacy), Location Control, SQLite-backed (Recommended), TypeScript Setup
 
 ### Community 522 - "Email Workers API Reference"
@@ -2479,10 +2484,6 @@ Nodes (5): Angular UI Kit, Client SDK Configuration, Core SDK Configuration, Rea
 Cohesion: 0.40
 Nodes (5): Cloudflare Properties (`request.cf`), Header Operations, HTTP Properties, Request Object, URL Operations
 
-### Community 628 - "Response Behavior"
-Cohesion: 0.40
-Nodes (5): Compression, Content-Type Inference, Default Headers, ETag Generation, Response Behavior
-
 ### Community 629 - "Performance Tips"
 Cohesion: 0.40
 Nodes (5): 1. Use Hashed Filenames, 2. Minimize Worker Invocations, 3. Leverage Browser Cache, 4. Use .assetsignore, Performance Tips
@@ -2524,7 +2525,7 @@ Cohesion: 0.40
 Nodes (5): Architecture, Best Practices, Limits & Security, Routing, Tags
 
 ### Community 646 - "configuration.md"
-Cohesion: 0.16
+Cohesion: 0.17
 Nodes (6): Debug Mode, From Ngrok, From VPN, Limits, Migration Strategies, Tunnel Gotchas
 
 ### Community 648 - "Orchestration Patterns"
@@ -2695,22 +2696,30 @@ Nodes (4): Native Binding (Recommended), REST API, SDK Approach Decision Tree, V
 Cohesion: 0.40
 Nodes (5): Best Practices, Configuration, Operations, Performance, Security
 
+### Community 764 - "Startup Methods"
+Cohesion: 0.50
+Nodes (4): start() - Basic start (8s timeout), startAndWaitForPorts() - Recommended (20s timeout), Startup Methods, waitForPort() - Wait for specific port
+
+### Community 766 - "ASSETS Binding"
+Cohesion: 0.67
+Nodes (3): ASSETS Binding, Method Signatures, Type Definition
+
 ## Knowledge Gaps
-- **4258 isolated node(s):** `TASK-005.sh script`, `TASK-006.sh script`, `TASK-007.sh script`, `TASK-008.sh script`, `TASK-009.sh script` (+4253 more)
+- **4257 isolated node(s):** `TASK-005.sh script`, `TASK-006.sh script`, `TASK-007.sh script`, `TASK-008.sh script`, `TASK-009.sh script` (+4252 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **234 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **233 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `R2 Patterns & Best Practices` connect `R2 Patterns & Best Practices` to `README.md`?**
-  _High betweenness centrality (0.003) - this node is a cross-community bridge._
 - **Why does `cn()` connect `Apps Dump` to `form.tsx`, `Badge Apps`, `Apps Dump`, `Apps Dump`, `Apps Dump`, `carousel.tsx`, `Apps Dump`, `Menubar Apps`, `Apps Dump`, `Apps Dump`, `Table Apps`, `accordion.tsx`, `Drawer Apps`, `Apps Dump`, `Card Apps`, `Apps Dump`, `Toggle Apps`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
-- **Why does `dependencies` connect `React Apps` to `Apps Dump`, `Apps Dump`, `Get Tunnel Info`, `Date Fns`, `Embla Carousel`, `Fontsource Geist`, `Fontsource Geist`, `Framer Motion`, `Hookform Resolvers`, `Input Otp`, `Lucide React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `React Dom`, `React Helmet`, `React Hook`, `React Resizable`, `React Router`, `Recharts Apps`, `Sonner Apps`, `Tailwind Merge`, `Tailwindcss Apps`, `Tanstack React`, `Vaul Apps`, `Zod Apps`, `@radix-ui/react-aspect-ratio`?**
+- **Why does `R2 Patterns & Best Practices` connect `R2 Patterns & Best Practices` to `Response Behavior`?**
+  _High betweenness centrality (0.003) - this node is a cross-community bridge._
+- **Why does `dependencies` connect `React Apps` to `Apps Dump`, `Apps Dump`, `Debugging`, `Date Fns`, `Embla Carousel`, `Fontsource Geist`, `Fontsource Geist`, `Framer Motion`, `Hookform Resolvers`, `Input Otp`, `Lucide React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `React Dom`, `React Helmet`, `React Hook`, `React Resizable`, `React Router`, `Recharts Apps`, `Sonner Apps`, `Tailwind Merge`, `Tailwindcss Apps`, `Tanstack React`, `Vaul Apps`, `Zod Apps`, `@radix-ui/react-aspect-ratio`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
 - **What connects `TASK-005.sh script`, `TASK-006.sh script`, `TASK-007.sh script` to the rest of the system?**
-  _4265 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _4264 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Workers Dump` be split into smaller, more focused modules?**
   _Cohesion score 0.09537223340040242 - nodes in this community are weakly interconnected._
 - **Should `Apps Dump` be split into smaller, more focused modules?**

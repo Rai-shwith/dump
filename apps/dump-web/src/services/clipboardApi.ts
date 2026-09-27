@@ -109,3 +109,14 @@ export async function getStarred(): Promise<StarredClipboard[]> {
   const { data } = await request<GetStarredResponse>("/starred", { method: "GET" });
   return data.starred;
 }
+
+export async function checkClipboardExists(code: string): Promise<boolean> {
+  try {
+    const res = await fetch(`${APP_CONFIG.apiBaseUrl}/clipboard/${encodeURIComponent(code)}`, {
+      method: "HEAD",
+    });
+    return res.status === 200;
+  } catch {
+    return false;
+  }
+}

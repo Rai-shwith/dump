@@ -1435,7 +1435,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "apps_dump_web_package_dependencies_clsx",
-      "community": 14,
+      "community": 658,
       "norm_label": "clsx"
     },
     {
@@ -1445,7 +1445,7 @@
       "source_location": "L46",
       "_origin": "ast",
       "id": "clsx",
-      "community": 14,
+      "community": 658,
       "norm_label": "clsx"
     },
     {
@@ -1455,7 +1455,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "apps_dump_web_package_dependencies_cmdk",
-      "community": 689,
+      "community": 14,
       "norm_label": "cmdk"
     },
     {
@@ -1465,7 +1465,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "cmdk",
-      "community": 689,
+      "community": 14,
       "norm_label": "cmdk"
     },
     {
@@ -2285,7 +2285,7 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "apps_dump_web_src_components_createform_props",
-      "community": 26,
+      "community": 214,
       "norm_label": "props"
     },
     {
@@ -2365,7 +2365,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_dump_web_src_components_expiryselector",
-      "community": 361,
+      "community": 245,
       "norm_label": "expiryselector.tsx"
     },
     {
@@ -2375,7 +2375,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "apps_dump_web_src_components_expiryselector_durations",
-      "community": 361,
+      "community": 245,
       "norm_label": "durations"
     },
     {
@@ -2385,7 +2385,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "apps_dump_web_src_components_expiryselector_descriptions",
-      "community": 361,
+      "community": 245,
       "norm_label": "descriptions"
     },
     {
@@ -2395,7 +2395,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "apps_dump_web_src_components_expiryselector_props",
-      "community": 361,
+      "community": 245,
       "norm_label": "props"
     },
     {
@@ -2405,7 +2405,7 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "apps_dump_web_src_components_expiryselector_expiryselector",
-      "community": 361,
+      "community": 245,
       "norm_label": "expiryselector()"
     },
     {
@@ -2519,20 +2519,10 @@
       "norm_label": "searchbar.tsx"
     },
     {
-      "label": "SearchBarProps",
-      "file_type": "code",
-      "source_file": "apps/dump-web/src/components/SearchBar.tsx",
-      "source_location": "L8",
-      "_origin": "ast",
-      "id": "apps_dump_web_src_components_searchbar_searchbarprops",
-      "community": 214,
-      "norm_label": "searchbarprops"
-    },
-    {
       "label": "SearchBar()",
       "file_type": "code",
       "source_file": "apps/dump-web/src/components/SearchBar.tsx",
-      "source_location": "L12",
+      "source_location": "L8",
       "_origin": "ast",
       "id": "apps_dump_web_src_components_searchbar_searchbar",
       "community": 214,
@@ -2545,7 +2535,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_dump_web_src_components_starredstrip",
-      "community": 26,
+      "community": 361,
       "norm_label": "starredstrip.tsx"
     },
     {
@@ -2555,7 +2545,7 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "apps_dump_web_src_components_starredstrip_starredstrip",
-      "community": 26,
+      "community": 361,
       "norm_label": "starredstrip()"
     },
     {
@@ -2565,7 +2555,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "apps_dump_web_src_components_starredstrip_skeletoncard",
-      "community": 26,
+      "community": 361,
       "norm_label": "skeletoncard()"
     },
     {
@@ -2575,7 +2565,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_dump_web_src_components_successcard",
-      "community": 26,
+      "community": 214,
       "norm_label": "successcard.tsx"
     },
     {
@@ -2585,7 +2575,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "apps_dump_web_src_components_successcard_props",
-      "community": 26,
+      "community": 214,
       "norm_label": "props"
     },
     {
@@ -2595,7 +2585,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "apps_dump_web_src_components_successcard_successcard",
-      "community": 26,
+      "community": 214,
       "norm_label": "successcard()"
     },
     {
@@ -5355,7 +5345,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_dump_web_src_hooks_useclipboard",
-      "community": 201,
+      "community": 269,
       "norm_label": "useclipboard.ts"
     },
     {
@@ -5365,7 +5355,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "apps_dump_web_src_hooks_useclipboard_clipboardstate",
-      "community": 201,
+      "community": 269,
       "norm_label": "clipboardstate"
     },
     {
@@ -5385,7 +5375,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_dump_web_src_hooks_usestarred",
-      "community": 269,
+      "community": 361,
       "norm_label": "usestarred.ts"
     },
     {
@@ -5395,7 +5385,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "apps_dump_web_src_hooks_usestarred_usestarred",
-      "community": 26,
+      "community": 361,
       "norm_label": "usestarred()"
     },
     {
@@ -5485,7 +5475,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_dump_web_src_pages_homepage",
-      "community": 26,
+      "community": 214,
       "norm_label": "homepage.tsx"
     },
     {
@@ -5495,7 +5485,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "apps_dump_web_src_pages_homepage_homepage",
-      "community": 26,
+      "community": 214,
       "norm_label": "homepage()"
     },
     {
@@ -5512,7 +5502,7 @@
       "label": "NotFound()",
       "file_type": "code",
       "source_file": "apps/dump-web/src/pages/NotFound.tsx",
-      "source_location": "L6",
+      "source_location": "L5",
       "_origin": "ast",
       "id": "apps_dump_web_src_pages_notfound_notfound",
       "community": 214,
@@ -5532,7 +5522,7 @@
       "label": "ViewPage()",
       "file_type": "code",
       "source_file": "apps/dump-web/src/pages/ViewPage.tsx",
-      "source_location": "L14",
+      "source_location": "L13",
       "_origin": "ast",
       "id": "apps_dump_web_src_pages_viewpage_viewpage",
       "community": 214,
@@ -5542,7 +5532,7 @@
       "label": "ViewInner()",
       "file_type": "code",
       "source_file": "apps/dump-web/src/pages/ViewPage.tsx",
-      "source_location": "L59",
+      "source_location": "L47",
       "_origin": "ast",
       "id": "apps_dump_web_src_pages_viewpage_viewinner",
       "community": 201,
@@ -5552,7 +5542,7 @@
       "label": "NotFoundInline()",
       "file_type": "code",
       "source_file": "apps/dump-web/src/pages/ViewPage.tsx",
-      "source_location": "L124",
+      "source_location": "L112",
       "_origin": "ast",
       "id": "apps_dump_web_src_pages_viewpage_notfoundinline",
       "community": 201,
@@ -5625,7 +5615,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "apps_dump_web_src_services_clipboardapi_createclipboard",
-      "community": 245,
+      "community": 269,
       "norm_label": "createclipboard()"
     },
     {
@@ -5635,7 +5625,7 @@
       "source_location": "L64",
       "_origin": "ast",
       "id": "apps_dump_web_src_services_clipboardapi_readclipboard",
-      "community": 201,
+      "community": 269,
       "norm_label": "readclipboard()"
     },
     {
@@ -5685,7 +5675,7 @@
       "source_location": "L108",
       "_origin": "ast",
       "id": "apps_dump_web_src_services_clipboardapi_getstarred",
-      "community": 269,
+      "community": 361,
       "norm_label": "getstarred()"
     },
     {
@@ -5715,7 +5705,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "apps_dump_web_src_types_index_clipboardmode",
-      "community": 361,
+      "community": 245,
       "norm_label": "clipboardmode"
     },
     {
@@ -5745,7 +5735,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "apps_dump_web_src_types_index_expirypreset",
-      "community": 361,
+      "community": 245,
       "norm_label": "expirypreset"
     },
     {
@@ -5765,7 +5755,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "apps_dump_web_src_types_index_createclipboardresponse",
-      "community": 26,
+      "community": 214,
       "norm_label": "createclipboardresponse"
     },
     {
@@ -5815,7 +5805,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "apps_dump_web_src_types_index_updateclipboardpayload",
-      "community": 269,
+      "community": 361,
       "norm_label": "updateclipboardpayload"
     },
     {
@@ -13385,7 +13375,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_bindings_patterns",
-      "community": 188,
+      "community": 654,
       "norm_label": "patterns.md"
     },
     {
@@ -16075,7 +16065,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_containers_api_startup_methods",
-      "community": 367,
+      "community": 764,
       "norm_label": "startup methods"
     },
     {
@@ -16085,7 +16075,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_containers_api_start_basic_start_8s_timeout",
-      "community": 367,
+      "community": 764,
       "norm_label": "start() - basic start (8s timeout)"
     },
     {
@@ -16095,7 +16085,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_containers_api_startandwaitforports_recommended_20s_timeout",
-      "community": 367,
+      "community": 764,
       "norm_label": "startandwaitforports() - recommended (20s timeout)"
     },
     {
@@ -16105,7 +16095,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_containers_api_waitforport_wait_for_specific_port",
-      "community": 367,
+      "community": 764,
       "norm_label": "waitforport() - wait for specific port"
     },
     {
@@ -16165,7 +16155,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_containers_api_lifecycle_hooks",
-      "community": 455,
+      "community": 367,
       "norm_label": "lifecycle hooks"
     },
     {
@@ -16175,7 +16165,7 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_containers_api_onstart",
-      "community": 455,
+      "community": 367,
       "norm_label": "onstart()"
     },
     {
@@ -16185,7 +16175,7 @@
       "source_location": "L119",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_containers_api_onstop",
-      "community": 455,
+      "community": 367,
       "norm_label": "onstop()"
     },
     {
@@ -16195,7 +16185,7 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_containers_api_onerror",
-      "community": 455,
+      "community": 367,
       "norm_label": "onerror()"
     },
     {
@@ -16205,7 +16195,7 @@
       "source_location": "L139",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_containers_api_onactivityexpired",
-      "community": 455,
+      "community": 367,
       "norm_label": "onactivityexpired()"
     },
     {
@@ -18655,7 +18645,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_do_storage_configuration",
-      "community": 521,
+      "community": 265,
       "norm_label": "configuration.md"
     },
     {
@@ -18735,7 +18725,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_do_storage_gotchas",
-      "community": 181,
+      "community": 26,
       "norm_label": "gotchas.md"
     },
     {
@@ -18745,7 +18735,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_do_storage_gotchas_do_storage_gotchas_troubleshooting",
-      "community": 181,
+      "community": 26,
       "norm_label": "do storage gotchas & troubleshooting"
     },
     {
@@ -18755,7 +18745,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_do_storage_gotchas_concurrency_model_critical",
-      "community": 181,
+      "community": 26,
       "norm_label": "concurrency model (critical)"
     },
     {
@@ -18765,7 +18755,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_do_storage_gotchas_input_gates",
-      "community": 181,
+      "community": 26,
       "norm_label": "input gates"
     },
     {
@@ -18775,7 +18765,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_do_storage_gotchas_output_gates",
-      "community": 181,
+      "community": 26,
       "norm_label": "output gates"
     },
     {
@@ -18785,7 +18775,7 @@
       "source_location": "L31",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_do_storage_gotchas_write_coalescing",
-      "community": 181,
+      "community": 26,
       "norm_label": "write coalescing"
     },
     {
@@ -18795,7 +18785,7 @@
       "source_location": "L41",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_do_storage_gotchas_breaking_gates_danger",
-      "community": 181,
+      "community": 26,
       "norm_label": "breaking gates (danger)"
     },
     {
@@ -18805,7 +18795,7 @@
       "source_location": "L68",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_do_storage_gotchas_allowconcurrency_option",
-      "community": 181,
+      "community": 26,
       "norm_label": "allowconcurrency option"
     },
     {
@@ -18915,7 +18905,7 @@
       "source_location": "L135",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_do_storage_gotchas_limits",
-      "community": 181,
+      "community": 26,
       "norm_label": "limits"
     },
     {
@@ -19135,7 +19125,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_durable_objects_readme",
-      "community": 265,
+      "community": 398,
       "norm_label": "readme.md"
     },
     {
@@ -19345,7 +19335,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_durable_objects_api",
-      "community": 265,
+      "community": 398,
       "norm_label": "api.md"
     },
     {
@@ -19475,7 +19465,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_durable_objects_configuration",
-      "community": 265,
+      "community": 398,
       "norm_label": "configuration.md"
     },
     {
@@ -19585,7 +19575,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_durable_objects_gotchas",
-      "community": 265,
+      "community": 398,
       "norm_label": "gotchas.md"
     },
     {
@@ -19785,7 +19775,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_durable_objects_patterns",
-      "community": 265,
+      "community": 398,
       "norm_label": "patterns.md"
     },
     {
@@ -23765,7 +23755,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_images_readme",
-      "community": 658,
+      "community": 422,
       "norm_label": "readme.md"
     },
     {
@@ -23845,7 +23835,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_images_api",
-      "community": 658,
+      "community": 350,
       "norm_label": "api.md"
     },
     {
@@ -24125,7 +24115,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_images_gotchas",
-      "community": 658,
+      "community": 422,
       "norm_label": "gotchas.md"
     },
     {
@@ -24275,7 +24265,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_images_patterns",
-      "community": 658,
+      "community": 422,
       "norm_label": "patterns.md"
     },
     {
@@ -30695,7 +30685,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_r2_readme",
-      "community": 398,
+      "community": 628,
       "norm_label": "readme.md"
     },
     {
@@ -30795,7 +30785,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_r2_api",
-      "community": 398,
+      "community": 628,
       "norm_label": "api.md"
     },
     {
@@ -30905,7 +30895,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_r2_configuration",
-      "community": 398,
+      "community": 628,
       "norm_label": "configuration.md"
     },
     {
@@ -31015,7 +31005,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_r2_gotchas",
-      "community": 398,
+      "community": 628,
       "norm_label": "gotchas.md"
     },
     {
@@ -31155,7 +31145,7 @@
       "source_location": "L165",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_r2_gotchas_common_errors",
-      "community": 316,
+      "community": 455,
       "norm_label": "common errors"
     },
     {
@@ -31165,7 +31155,7 @@
       "source_location": "L167",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_r2_gotchas_stream_upload_failed_silent_truncation",
-      "community": 316,
+      "community": 455,
       "norm_label": "\"stream upload failed\" / silent truncation"
     },
     {
@@ -31175,7 +31165,7 @@
       "source_location": "L172",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_r2_gotchas_invalid_credentials_s3_sdk",
-      "community": 316,
+      "community": 455,
       "norm_label": "\"invalid credentials\" / s3 sdk"
     },
     {
@@ -31185,7 +31175,7 @@
       "source_location": "L177",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_r2_gotchas_object_not_found",
-      "community": 316,
+      "community": 455,
       "norm_label": "\"object not found\""
     },
     {
@@ -31195,7 +31185,7 @@
       "source_location": "L182",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_r2_gotchas_list_compatibility_error",
-      "community": 316,
+      "community": 455,
       "norm_label": "\"list compatibility error\""
     },
     {
@@ -31205,7 +31195,7 @@
       "source_location": "L187",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_r2_gotchas_multipart_upload_failed",
-      "community": 316,
+      "community": 455,
       "norm_label": "\"multipart upload failed\""
     },
     {
@@ -31215,7 +31205,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_r2_patterns",
-      "community": 398,
+      "community": 628,
       "norm_label": "patterns.md"
     },
     {
@@ -36235,7 +36225,7 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_static_assets_api_assets_binding",
-      "community": 386,
+      "community": 766,
       "norm_label": "assets binding"
     },
     {
@@ -36245,7 +36235,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_static_assets_api_type_definition",
-      "community": 386,
+      "community": 766,
       "norm_label": "type definition"
     },
     {
@@ -36255,7 +36245,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_static_assets_api_method_signatures",
-      "community": 386,
+      "community": 766,
       "norm_label": "method signatures"
     },
     {
@@ -36305,7 +36295,7 @@
       "source_location": "L79",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_static_assets_api_response_behavior",
-      "community": 628,
+      "community": 386,
       "norm_label": "response behavior"
     },
     {
@@ -36315,7 +36305,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_static_assets_api_content_type_inference",
-      "community": 628,
+      "community": 386,
       "norm_label": "content-type inference"
     },
     {
@@ -36325,7 +36315,7 @@
       "source_location": "L96",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_static_assets_api_default_headers",
-      "community": 628,
+      "community": 386,
       "norm_label": "default headers"
     },
     {
@@ -36335,7 +36325,7 @@
       "source_location": "L112",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_static_assets_api_compression",
-      "community": 628,
+      "community": 386,
       "norm_label": "compression"
     },
     {
@@ -36345,7 +36335,7 @@
       "source_location": "L120",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_static_assets_api_etag_generation",
-      "community": 628,
+      "community": 386,
       "norm_label": "etag generation"
     },
     {
@@ -39855,7 +39845,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_tunnel_networking",
-      "community": 646,
+      "community": 391,
       "norm_label": "networking.md"
     },
     {
@@ -49125,7 +49115,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_wrangler_readme",
-      "community": 404,
+      "community": 689,
       "norm_label": "readme.md"
     },
     {
@@ -49295,7 +49285,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_wrangler_api",
-      "community": 404,
+      "community": 689,
       "norm_label": "api.md"
     },
     {
@@ -49425,7 +49415,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_wrangler_configuration",
-      "community": 404,
+      "community": 689,
       "norm_label": "configuration.md"
     },
     {
@@ -49545,7 +49535,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_wrangler_gotchas",
-      "community": 404,
+      "community": 689,
       "norm_label": "gotchas.md"
     },
     {
@@ -49805,7 +49795,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_wrangler_patterns",
-      "community": 404,
+      "community": 689,
       "norm_label": "patterns.md"
     },
     {
@@ -56567,7 +56557,7 @@
       "rationale": "React + Vite + TypeScript frontend, Hono + Cloudflare Workers backend, Cloudflare KV storage.",
       "community": 78,
       "norm_label": "dump architecture",
-      "id": "agents_agents_agents_agents_agents_agents_agents_agents_agents_dump"
+      "id": "agents_agents_agents_agents_agents_agents_agents_agents_dump"
     },
     {
       "label": "Architecture Rules",
@@ -61072,7 +61062,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/dump-web/src/pages/ViewPage.tsx",
-      "source_location": "L7",
+      "source_location": "L6",
       "weight": 1.0,
       "source": "apps_dump_web_src_pages_viewpage",
       "target": "apps_dump_web_src_components_contentview",
@@ -61127,7 +61117,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/dump-web/src/pages/ViewPage.tsx",
-      "source_location": "L7",
+      "source_location": "L6",
       "weight": 1.0,
       "source": "apps_dump_web_src_pages_viewpage",
       "target": "apps_dump_web_src_components_contentview_contentview",
@@ -61947,7 +61937,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/dump-web/src/pages/ViewPage.tsx",
-      "source_location": "L8",
+      "source_location": "L7",
       "weight": 1.0,
       "source": "apps_dump_web_src_pages_viewpage",
       "target": "apps_dump_web_src_components_passwordgate",
@@ -61958,7 +61948,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/dump-web/src/pages/ViewPage.tsx",
-      "source_location": "L8",
+      "source_location": "L7",
       "weight": 1.0,
       "source": "apps_dump_web_src_pages_viewpage",
       "target": "apps_dump_web_src_components_passwordgate_passwordgate",
@@ -61968,20 +61958,10 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps/dump-web/src/components/SearchBar.tsx",
-      "source_location": "L12",
-      "weight": 1.0,
-      "source": "apps_dump_web_src_components_searchbar",
-      "target": "apps_dump_web_src_components_searchbar_searchbar",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "apps/dump-web/src/components/SearchBar.tsx",
       "source_location": "L8",
       "weight": 1.0,
       "source": "apps_dump_web_src_components_searchbar",
-      "target": "apps_dump_web_src_components_searchbar_searchbarprops",
+      "target": "apps_dump_web_src_components_searchbar_searchbar",
       "confidence_score": 1.0
     },
     {
@@ -62044,7 +62024,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/dump-web/src/pages/NotFound.tsx",
-      "source_location": "L4",
+      "source_location": "L3",
       "weight": 1.0,
       "source": "apps_dump_web_src_pages_notfound",
       "target": "apps_dump_web_src_components_searchbar",
@@ -62055,7 +62035,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/dump-web/src/pages/ViewPage.tsx",
-      "source_location": "L9",
+      "source_location": "L8",
       "weight": 1.0,
       "source": "apps_dump_web_src_pages_viewpage",
       "target": "apps_dump_web_src_components_searchbar",
@@ -62077,7 +62057,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/dump-web/src/pages/NotFound.tsx",
-      "source_location": "L4",
+      "source_location": "L3",
       "weight": 1.0,
       "source": "apps_dump_web_src_pages_notfound",
       "target": "apps_dump_web_src_components_searchbar_searchbar",
@@ -62088,7 +62068,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/dump-web/src/pages/ViewPage.tsx",
-      "source_location": "L9",
+      "source_location": "L8",
       "weight": 1.0,
       "source": "apps_dump_web_src_pages_viewpage",
       "target": "apps_dump_web_src_components_searchbar_searchbar",
@@ -66125,7 +66105,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/dump-web/src/pages/ViewPage.tsx",
-      "source_location": "L6",
+      "source_location": "L5",
       "weight": 1.0,
       "source": "apps_dump_web_src_pages_viewpage",
       "target": "apps_dump_web_src_config_app_config",
@@ -66191,7 +66171,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/dump-web/src/pages/ViewPage.tsx",
-      "source_location": "L6",
+      "source_location": "L5",
       "weight": 1.0,
       "source": "apps_dump_web_src_pages_viewpage",
       "target": "apps_dump_web_src_config_app_config_app_config",
@@ -66386,7 +66366,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/dump-web/src/pages/ViewPage.tsx",
-      "source_location": "L10",
+      "source_location": "L9",
       "weight": 1.0,
       "source": "apps_dump_web_src_pages_viewpage",
       "target": "apps_dump_web_src_hooks_useclipboard",
@@ -66453,7 +66433,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/dump-web/src/pages/ViewPage.tsx",
-      "source_location": "L10",
+      "source_location": "L9",
       "weight": 1.0,
       "source": "apps_dump_web_src_pages_viewpage",
       "target": "apps_dump_web_src_hooks_useclipboard_useclipboard",
@@ -66465,7 +66445,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/dump-web/src/pages/ViewPage.tsx",
-      "source_location": "L60",
+      "source_location": "L48",
       "weight": 1.0,
       "source": "apps_dump_web_src_pages_viewpage_viewinner",
       "target": "apps_dump_web_src_hooks_useclipboard_useclipboard"
@@ -66688,7 +66668,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps/dump-web/src/pages/NotFound.tsx",
-      "source_location": "L6",
+      "source_location": "L5",
       "weight": 1.0,
       "source": "apps_dump_web_src_pages_notfound",
       "target": "apps_dump_web_src_pages_notfound_notfound",
@@ -66698,7 +66678,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps/dump-web/src/pages/ViewPage.tsx",
-      "source_location": "L124",
+      "source_location": "L112",
       "weight": 1.0,
       "source": "apps_dump_web_src_pages_viewpage",
       "target": "apps_dump_web_src_pages_viewpage_notfoundinline",
@@ -66708,7 +66688,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps/dump-web/src/pages/ViewPage.tsx",
-      "source_location": "L59",
+      "source_location": "L47",
       "weight": 1.0,
       "source": "apps_dump_web_src_pages_viewpage",
       "target": "apps_dump_web_src_pages_viewpage_viewinner",
@@ -66718,7 +66698,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "apps/dump-web/src/pages/ViewPage.tsx",
-      "source_location": "L14",
+      "source_location": "L13",
       "weight": 1.0,
       "source": "apps_dump_web_src_pages_viewpage",
       "target": "apps_dump_web_src_pages_viewpage_viewpage",
@@ -66729,7 +66709,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/dump-web/src/pages/ViewPage.tsx",
-      "source_location": "L12",
+      "source_location": "L11",
       "weight": 1.0,
       "source": "apps_dump_web_src_pages_viewpage",
       "target": "apps_dump_web_src_utils_tokens",
@@ -66740,7 +66720,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "apps/dump-web/src/pages/ViewPage.tsx",
-      "source_location": "L12",
+      "source_location": "L11",
       "weight": 1.0,
       "source": "apps_dump_web_src_pages_viewpage",
       "target": "apps_dump_web_src_utils_tokens_getownertoken",
@@ -66752,7 +66732,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "apps/dump-web/src/pages/ViewPage.tsx",
-      "source_location": "L65",
+      "source_location": "L53",
       "weight": 1.0,
       "source": "apps_dump_web_src_pages_viewpage_viewinner",
       "target": "apps_dump_web_src_utils_tokens_getownertoken"

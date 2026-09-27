@@ -103,6 +103,7 @@ export function CreateForm({ onCreated }: Props): React.JSX.Element {
       password: mode === "protected" ? password : null,
       expiresAt,
       isOneTimeView: isOTV,
+      expiryPreset: expiry,
     };
 
     setSubmitting(true);

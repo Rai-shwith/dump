@@ -17,6 +17,7 @@ export interface ClipboardMeta {
   expiresAt: string | null;
   isOneTimeView: boolean;
   isStarred: boolean;
+  expiryPreset?: string | null;
 }
 
 export interface StarredEntry {

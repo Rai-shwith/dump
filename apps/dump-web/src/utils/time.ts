@@ -1,3 +1,5 @@
+import type { ExpiryPreset } from "@/types";
+
 export function toUTC(localDatetime: string): string {
   return new Date(localDatetime).toISOString();
 }
@@ -32,4 +34,42 @@ export function presetToISO(preset: string): string | null {
   };
   if (preset in map) return new Date(now + map[preset]).toISOString();
   return null;
+}
+
+export function toLocalDatetimeInput(isoString: string | null): string {
+  if (!isoString) return "";
+  const date = new Date(isoString);
+  if (isNaN(date.getTime())) return "";
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const y = date.getFullYear();
+  const m = pad(date.getMonth() + 1);
+  const d = pad(date.getDate());
+  const h = pad(date.getHours());
+  const min = pad(date.getMinutes());
+  return `${y}-${m}-${d}T${h}:${min}`;
+}
+
+export function detectExpiryPreset(data: {
+  expiryPreset?: ExpiryPreset | null;
+  isOneTimeView: boolean;
+  expiresAt: string | null;
+  createdAt?: string;
+}): ExpiryPreset {
+  if (data.expiryPreset) return data.expiryPreset;
+  if (data.isOneTimeView) return "otv";
+  if (!data.expiresAt) return "infinite";
+
+  if (data.createdAt) {
+    const diff = new Date(data.expiresAt).getTime() - new Date(data.createdAt).getTime();
+    const within = (target: number, tolerance = 30_000) => Math.abs(diff - target) <= tolerance;
+    if (within(60_000)) return "1m";
+    if (within(5 * 60_000)) return "5m";
+    if (within(15 * 60_000)) return "15m";
+    if (within(60 * 60_000)) return "1h";
+    if (within(24 * 60 * 60_000, 60_000)) return "1d";
+    if (within(7 * 24 * 60 * 60_000, 60_000)) return "1w";
+    if (within(30 * 24 * 60 * 60_000, 120_000)) return "1mo";
+    if (within(365 * 24 * 60 * 60_000, 120_000)) return "1y";
+  }
+  return "custom";
 }

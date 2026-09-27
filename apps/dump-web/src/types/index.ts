@@ -2,6 +2,9 @@ export type ClipboardMode = "public" | "protected";
 export type PasswordMode = "view" | "edit" | null;
 export type Theme = "dark" | "light";
 
+export type ExpiryPreset =
+  "1m" | "5m" | "15m" | "1h" | "1d" | "1w" | "1mo" | "1y" | "infinite" | "otv" | "custom";
+
 export interface CreateClipboardPayload {
   code?: string;
   content: string;
@@ -10,6 +13,7 @@ export interface CreateClipboardPayload {
   password: string | null;
   expiresAt: string | null;
   isOneTimeView: boolean;
+  expiryPreset?: ExpiryPreset | null;
 }
 
 export interface CreateClipboardResponse {
@@ -28,6 +32,7 @@ export interface ClipboardData {
   isOneTimeView: boolean;
   isStarred: boolean;
   createdAt: string;
+  expiryPreset?: ExpiryPreset | null;
 }
 
 export interface LockedResponse {
@@ -52,6 +57,7 @@ export interface UpdateClipboardPayload {
   isOneTimeView?: boolean | null;
   password?: string | null;
   passwordMode?: PasswordMode;
+  expiryPreset?: ExpiryPreset | null;
 }
 
 export interface UpdateClipboardResponse {
@@ -59,6 +65,3 @@ export interface UpdateClipboardResponse {
   expiresAt: string | null;
   isOneTimeView: boolean;
 }
-
-export type ExpiryPreset =
-  "1m" | "5m" | "15m" | "1h" | "1d" | "1w" | "1mo" | "1y" | "infinite" | "otv" | "custom";

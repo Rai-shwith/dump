@@ -21,7 +21,7 @@ export default function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
-        
+
         <footer className="mt-12 text-center text-sm text-[var(--text-muted)]">
           Made with <Heart className="inline h-3.5 w-3.5 text-red-500 fill-red-500 mx-0.5" /> by{" "}
           <a

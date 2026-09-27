@@ -1,99 +1,19 @@
 import { Env, ClipboardMeta, ClipboardMode, PasswordMode } from "../types";
 import { getMeta, setMeta, setContent, getContent, deleteClipboard, getStarred, setStarred } from "../utils/kv";
-import { generateCode, validateCodeString } from "../utils/validate";
 import { hashPassword, hashToken } from "../utils/hash";
-import { isExpired, validateExpiresAt, ttlSeconds } from "../utils/expiry";
-
-interface CreateRequestBody {
-  code?: unknown;
-  content?: unknown;
-  mode?: unknown;
-  passwordMode?: unknown;
-  password?: unknown;
-  expiresAt?: unknown;
-  isOneTimeView?: unknown;
-}
-
-interface UpdateRequestBody {
-  content?: unknown;
-  expiresAt?: unknown;
-  isOneTimeView?: unknown;
-  password?: unknown;
-  passwordMode?: unknown;
-}
-
-function createError(message: string, status = 400): Response {
-  return new Response(JSON.stringify({ error: message }), {
-    status,
-    headers: { "Content-Type": "application/json" }
-  });
-}
-
-function validateCreateContentAndCode(content: unknown, code: unknown): { error?: Response; normalizedCode?: string } {
-  if (!content || typeof content !== "string" || content.length === 0) {
-    return { error: createError("Content is required and cannot be empty") };
-  }
-  if (content.length > 262144) {
-    return { error: createError("Content exceeds 256KB") };
-  }
-
-  let finalCode: string;
-  if (!code) {
-    finalCode = generateCode();
-  } else if (typeof code !== "string") {
-    return { error: createError("Invalid code format") };
-  } else {
-    finalCode = code.toLowerCase();
-  }
-
-  const codeVal = validateCodeString(finalCode);
-  if (!codeVal.valid) {
-    return { error: createError(codeVal.error as string) };
-  }
-
-  return { normalizedCode: finalCode };
-}
-
-function validateCreateModeAndExpiration(
-  mode: unknown,
-  passwordMode: unknown,
-  password: unknown,
-  expiresAt: unknown,
-  isOneTimeView: unknown
-): { error?: Response; normalizedMode?: ClipboardMode; normalizedPasswordMode?: PasswordMode | null } {
-  const validModes = ["public", "protected"];
-  const finalMode = (typeof mode === "string" && validModes.includes(mode)) ? mode as ClipboardMode : "public";
-
-  if (finalMode === "protected" && (!password || !passwordMode)) {
-    return { error: createError("Password and passwordMode are required for protected mode") };
-  }
-
-  if (passwordMode !== undefined && passwordMode !== null && passwordMode !== "view" && passwordMode !== "edit") {
-    return { error: createError("Invalid passwordMode") };
-  }
-
-  if (isOneTimeView && expiresAt) {
-    return { error: createError("isOneTimeView and expiresAt cannot both be set") };
-  }
-  if (finalMode === "protected" && !expiresAt && !isOneTimeView) {
-    return { error: createError("Protected mode requires expiration") };
-  }
-
-  if (expiresAt) {
-    if (typeof expiresAt !== "string") {
-      return { error: createError("Invalid expiresAt date") };
-    }
-    const val = validateExpiresAt(expiresAt, new Date().toISOString());
-    if (!val.valid) {
-      return { error: createError(val.error as string) };
-    }
-  }
-
-  return { 
-    normalizedMode: finalMode, 
-    normalizedPasswordMode: (passwordMode as PasswordMode) || null 
-  };
-}
+import { isExpired, ttlSeconds } from "../utils/expiry";
+import {
+  createError,
+  validateCreateContentAndCode,
+  validateCreateModeAndExpiration,
+  validateReadExpiration,
+  authorizeRead,
+  handleOneTimeView,
+  checkAuthorization,
+  validateUpdateFields,
+  CreateRequestBody,
+  UpdateRequestBody
+} from "../services/clipboardService";
 
 export async function handleCreate(request: Request, env: Env): Promise<Response> {
   let body: CreateRequestBody;
@@ -103,7 +23,7 @@ export async function handleCreate(request: Request, env: Env): Promise<Response
     return createError("Invalid JSON body");
   }
 
-  const { code, content, mode, passwordMode, password, expiresAt, isOneTimeView } = body;
+  const { code, content, mode, passwordMode, password, expiresAt, isOneTimeView, expiryPreset } = body;
 
   const codeRes = validateCreateContentAndCode(content, code);
   if (codeRes.error) return codeRes.error;
@@ -131,7 +51,8 @@ export async function handleCreate(request: Request, env: Env): Promise<Response
     createdAt: new Date().toISOString(),
     expiresAt: finalExpiresAt,
     isOneTimeView: finalOneTime,
-    isStarred: false
+    isStarred: false,
+    expiryPreset: typeof expiryPreset === "string" ? expiryPreset : null
   };
 
   const ttl = ttlSeconds(finalExpiresAt) ?? null;
@@ -144,49 +65,6 @@ export async function handleCreate(request: Request, env: Env): Promise<Response
   );
 }
 
-function validateReadExpiration(meta: ClipboardMeta): Response | null {
-  if (isExpired(meta)) {
-    return createError("Clipboard not found or expired", 404);
-  }
-  return null;
-}
-
-async function authorizeRead(meta: ClipboardMeta, request: Request, env: Env, isRaw: boolean = false): Promise<Response | null> {
-  const ownerToken = request.headers.get("X-Owner-Token");
-  if (ownerToken && (await hashToken(ownerToken)) === meta.ownerTokenHash) {
-    return null;
-  }
-
-  if (meta.passwordMode === "view") {
-    const password = request.headers.get("X-Clipboard-Password");
-    if (!password) {
-      if (isRaw) {
-        return createError("Invalid password", 403);
-      }
-      return new Response(JSON.stringify({ locked: true, passwordMode: "view" }), {
-        status: 200,
-        headers: { "Content-Type": "application/json" }
-      });
-    }
-    const hash = await hashPassword(password, env.PASSWORD_PEPPER);
-    if (hash !== meta.passwordHash) {
-      return createError("Invalid password", 403);
-    }
-  }
-  return null;
-}
-
-async function handleOneTimeView(meta: ClipboardMeta, env: Env, code: string): Promise<void> {
-  if (meta.isOneTimeView) {
-    await deleteClipboard(env, code);
-    const starred = await getStarred(env);
-    if (starred.includes(code)) {
-      const filtered = starred.filter(c => c !== code);
-      await setStarred(env, filtered);
-    }
-  }
-}
-
 export async function handleRead(request: Request, env: Env, codeParam: string): Promise<Response> {
   const code = codeParam.toLowerCase();
 
@@ -197,6 +75,13 @@ export async function handleRead(request: Request, env: Env, codeParam: string):
 
   const expireErr = validateReadExpiration(meta);
   if (expireErr) return expireErr;
+
+  if (request.method === "HEAD") {
+    return new Response(null, {
+      status: 200,
+      headers: { "Content-Type": "application/json" }
+    });
+  }
 
   const authErr = await authorizeRead(meta, request, env);
   if (authErr) return authErr;
@@ -214,6 +99,7 @@ export async function handleRead(request: Request, env: Env, codeParam: string):
     expiresAt: meta.expiresAt,
     isOneTimeView: meta.isOneTimeView,
     isStarred: meta.isStarred,
+    expiryPreset: meta.expiryPreset ?? null,
     createdAt: meta.createdAt
   }), {
     status: 200,
@@ -229,12 +115,12 @@ export async function handleRaw(request: Request, env: Env, codeParam: string): 
   const code = codeParam.toLowerCase();
 
   const meta = await getMeta<ClipboardMeta>(env, code);
-  if (!meta) {
+  if (!meta || isExpired(meta)) {
     return new Response("Not found", { status: 404, headers: { "Content-Type": "text/plain" } });
   }
 
-  if (isExpired(meta)) {
-    return new Response("Not found", { status: 404, headers: { "Content-Type": "text/plain" } });
+  if (request.method === "HEAD") {
+    return new Response(null, { status: 200, headers: { "Content-Type": "text/plain" } });
   }
 
   const authErr = await authorizeRead(meta, request, env, true);
@@ -253,71 +139,6 @@ export async function handleRaw(request: Request, env: Env, codeParam: string): 
   await handleOneTimeView(meta, env, code);
 
   return response;
-}
-
-async function checkAuthorization(meta: ClipboardMeta, req: Request, env: Env): Promise<Response | null> {
-  const ownerToken = req.headers.get("X-Owner-Token");
-  if (ownerToken && (await hashToken(ownerToken)) === meta.ownerTokenHash) {
-    return null;
-  }
-  
-  if (meta.passwordMode === "edit") {
-    const pwd = req.headers.get("X-Clipboard-Password");
-    if (!pwd) {
-      return createError("Invalid password or owner token", 403);
-    }
-    const hash = await hashPassword(pwd, env.PASSWORD_PEPPER);
-    if (hash !== meta.passwordHash) {
-      return createError("Invalid password or owner token", 403);
-    }
-  }
-  return null;
-}
-
-function validateExpiration(expiresAt: string, createdAt: string): Response | null {
-  const val = validateExpiresAt(expiresAt, createdAt);
-  if (!val.valid) {
-    return createError(val.error as string);
-  }
-  return null;
-}
-
-function validateUpdateFields(body: UpdateRequestBody, meta: ClipboardMeta): Response | null {
-  const { content, expiresAt, isOneTimeView, password, passwordMode } = body;
-  const hasContent = content !== undefined;
-  const hasExpires = expiresAt !== undefined;
-  const hasOneTime = isOneTimeView !== undefined;
-  const hasPwd = password !== undefined;
-  const hasPwdMode = passwordMode !== undefined;
-
-  if (!hasContent && !hasExpires && !hasOneTime && !hasPwd && !hasPwdMode) {
-    return createError("At least one field must be present");
-  }
-
-  const finalOneTime = hasOneTime ? Boolean(isOneTimeView) : meta.isOneTimeView;
-  const finalExpires = hasExpires ? expiresAt : meta.expiresAt;
-
-  if (finalOneTime && finalExpires) {
-    return createError("isOneTimeView and expiresAt cannot both be set");
-  }
-
-  if (hasExpires && expiresAt) {
-    if (typeof expiresAt !== "string") {
-      return createError("Invalid expiresAt date");
-    }
-    const err = validateExpiration(expiresAt, meta.createdAt);
-    if (err) return err;
-  }
-
-  if (hasContent && (typeof content !== "string" || content.length > 262144)) {
-    return createError("Content invalid or exceeds 256KB");
-  }
-
-  if (hasPwdMode && passwordMode !== "view" && passwordMode !== "edit" && passwordMode !== null) {
-    return createError("Invalid passwordMode");
-  }
-
-  return null;
 }
 
 export async function handleUpdate(request: Request, env: Env, codeParam: string): Promise<Response> {
@@ -350,6 +171,7 @@ export async function handleUpdate(request: Request, env: Env, codeParam: string
   if (body.passwordMode !== undefined) meta.passwordMode = body.passwordMode as PasswordMode | null;
   if (body.expiresAt !== undefined) meta.expiresAt = (body.expiresAt as string) || null;
   if (body.isOneTimeView !== undefined) meta.isOneTimeView = Boolean(body.isOneTimeView);
+  if (body.expiryPreset !== undefined) meta.expiryPreset = (body.expiryPreset as string) || null;
 
   const ttl = ttlSeconds(meta.expiresAt) ?? null;
   await setMeta(env, code, meta, ttl);

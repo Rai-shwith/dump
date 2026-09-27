@@ -2,6 +2,7 @@ import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { CreateForm } from "@/components/CreateForm";
+import { SearchBar } from "@/components/SearchBar";
 import { StarredStrip } from "@/components/StarredStrip";
 import { SuccessCard } from "@/components/SuccessCard";
 import type { CreateClipboardResponse } from "@/types";
@@ -13,16 +14,22 @@ export default function HomePage() {
     <div className="mx-auto max-w-xl space-y-10">
       <Helmet>
         <title>Dump | Free Online Clipboard & Secure Copy Paste</title>
-        <meta name="description" content="Create an anonymous online clipboard to share text between devices. Dump is a free, secure, and fast copy-paste tool." />
+        <meta
+          name="description"
+          content="Create an anonymous online clipboard to share text between devices. Dump is a free, secure, and fast copy-paste tool."
+        />
       </Helmet>
       <section>
-        <header className="mb-4">
-          <h1 className="font-mono text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
-            dump
-          </h1>
-          <p className="mt-1 text-sm text-[var(--text-secondary)]">
-            Anonymous clipboards. Share text between devices in seconds.
-          </p>
+        <header className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 className="font-mono text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
+              dump
+            </h1>
+            <p className="mt-1 text-sm text-[var(--text-secondary)]">
+              Anonymous clipboards. Share text between devices in seconds.
+            </p>
+          </div>
+          <SearchBar />
         </header>
 
         <AnimatePresence mode="wait" initial={false}>
