@@ -62,6 +62,7 @@ For the current task, also read the specific task file in docs/tasks/.
 - TASK-022: Frontend Docs Section implemented with minimalist layout, responsive features grid, and FAQ accordion
 - TASK-023: SEO Optimization implemented with static meta tags, react-helmet-async for dynamic tags, and robots/sitemap
 - TASK-024: Independent view and edit passwords, edit password verification, autofill blocking, and UX improvements
+- TASK-025: Lightweight modern QR code generation on creation success card with lossless PNG download and native Web Share
 - V1 functional implementation complete. Ready for Lovable UI polish phase.
 
 ### In Progress

@@ -1,16 +1,16 @@
 # Graph Report - dump  (2026-10-04)
 
 ## Corpus Check
-- 486 files · ~233,501 words
+- 486 files · ~233,482 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 5831 nodes · 6152 edges · 771 communities (535 shown, 236 thin omitted)
+- 5831 nodes · 6152 edges · 772 communities (537 shown, 235 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `92dc800c`
+- Built from commit: `80366d37`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -615,6 +615,7 @@
 - Startup Methods
 - Performance Tips
 - Tail Workers Gotchas & Debugging
+- Best Practices
 - Framework-Specific Setup
 - Debugging
 - Network Access
@@ -769,7 +770,7 @@
 - **WAF Components** — _agents_skills_cloudflare_references_waf_readme_managed_rulesets, _agents_skills_cloudflare_references_waf_readme_custom_rules, _agents_skills_cloudflare_references_waf_readme_rate_limiting [EXTRACTED 1.00]
 - **One-Time View Flow** — docs_api_one_time_view, docs_decisions_one_time_view, docs_tasks_task_009__one_time_view_logic_handleraw [INFERRED 0.85]
 
-## Communities (771 total, 236 thin omitted)
+## Communities (772 total, 235 thin omitted)
 
 ### Community 0 - "Apps Dump"
 Cohesion: 0.13
@@ -829,7 +830,7 @@ Nodes (14): @cloudflare/workers-types, compilerOptions, lib, module, moduleResol
 
 ### Community 14 - "React Apps"
 Cohesion: 0.15
-Nodes (13): dependencies, @radix-ui/react-dialog, @radix-ui/react-dropdown-menu, @radix-ui/react-tabs, react-dom, react-router-dom, sonner, @radix-ui/react-dialog (+5 more)
+Nodes (13): dependencies, @radix-ui/react-accordion, @radix-ui/react-dialog, @radix-ui/react-dropdown-menu, @radix-ui/react-tabs, react-dom, react-router-dom, @radix-ui/react-accordion (+5 more)
 
 ### Community 15 - "Apps Dump"
 Cohesion: 0.20
@@ -1040,7 +1041,7 @@ Cohesion: 0.12
 Nodes (16): API Protection, Block AI Scrapers, Bot Management Patterns, Conditional Delay (Tarpit), Datacenter Detection, E-commerce Protection, Layered Defense, Mobile App Allowlisting (+8 more)
 
 ### Community 220 - "Agents Skills"
-Cohesion: 0.12
+Cohesion: 0.13
 Nodes (15): Browser, Client Provider (Browser), Flagship Configuration, Generate Types, Local Development, Multiple Apps, OpenFeature SDK Installation, Provider Options Reference (+7 more)
 
 ### Community 221 - "Workers Agents"
@@ -1188,8 +1189,8 @@ Cohesion: 0.14
 Nodes (14): "Cannot connect to meeting", Common Errors, "CORS errors in API calls", "Echo or audio feedback", "Events not firing", "How do I schedule meetings?", Issue: Echo or audio feedback, "No video/audio tracks" (+6 more)
 
 ### Community 280 - "Configuration"
-Cohesion: 0.14
-Nodes (14): Adding Bindings, Basic Binding, CI/CD, Configuration, Creating Secrets, Dashboard, Environment-Specific, GitHub Actions (+6 more)
+Cohesion: 0.20
+Nodes (10): Adding Bindings, Basic Binding, CI/CD, Configuration, Creating Secrets, Dashboard, Environment-Specific, GitHub Actions (+2 more)
 
 ### Community 281 - "Stream Live Streaming API"
 Cohesion: 0.14
@@ -1536,8 +1537,8 @@ Cohesion: 0.18
 Nodes (11): Access Locations, Available Data, Bot Analytics, Bot Management API, Common Patterns, JA4 Signals (Enterprise), Logpush Fields, Testing with Miniflare (+3 more)
 
 ### Community 367 - "api.md"
-Cohesion: 0.18
-Nodes (10): Container Class API, External state check, Internal state check, Routing, Scheduling, start() - Basic start (8s timeout), startAndWaitForPorts() - Recommended (20s timeout), Startup Methods (+2 more)
+Cohesion: 0.17
+Nodes (7): Container Class API, External state check, Internal state check, Lifecycle Hooks, Routing, Scheduling, State Inspection
 
 ### Community 368 - "Cron Triggers Configuration"
 Cohesion: 0.18
@@ -2148,7 +2149,7 @@ Cohesion: 0.25
 Nodes (8): Email Workers API Reference, EmailMessage Constructor, mimetext API Quick Reference, postal-mime Parsed Output, SendEmail Binding Types, SendEmail Interface, TypeScript Types, Usage
 
 ### Community 523 - "Anti-Patterns"
-Cohesion: 0.25
+Cohesion: 0.22
 Nodes (8): Anti-Patterns, Evaluating Flags in a Tight Loop, Flagship Gotchas & Troubleshooting, Limits, Partial PUT Updates, Propagation Behavior, Stale Flag Cleanup, Using the SDK Inside Workers When Binding Is Available
 
 ### Community 524 - "Configuration"
@@ -2503,6 +2504,10 @@ Nodes (5): Angular UI Kit, Client SDK Configuration, Core SDK Configuration, Rea
 Cohesion: 0.40
 Nodes (5): Cloudflare Properties (`request.cf`), Header Operations, HTTP Properties, Request Object, URL Operations
 
+### Community 628 - "Startup Methods"
+Cohesion: 0.50
+Nodes (4): start() - Basic start (8s timeout), startAndWaitForPorts() - Recommended (20s timeout), Startup Methods, waitForPort() - Wait for specific port
+
 ### Community 629 - "Performance Tips"
 Cohesion: 0.40
 Nodes (5): 1. Use Hashed Filenames, 2. Minimize Worker Invocations, 3. Leverage Browser Cache, 4. Use .assetsignore, Performance Tips
@@ -2510,6 +2515,10 @@ Nodes (5): 1. Use Hashed Filenames, 2. Minimize Worker Invocations, 3. Leverage 
 ### Community 631 - "Tail Workers Gotchas & Debugging"
 Cohesion: 0.40
 Nodes (5): Common Errors, Debugging, Performance Notes, Tail Workers Gotchas & Debugging, Testing
+
+### Community 633 - "Best Practices"
+Cohesion: 0.50
+Nodes (4): Local Development, Secret Management (Production), Store Management, Wrangler Commands
 
 ### Community 635 - "Framework-Specific Setup"
 Cohesion: 0.40
@@ -2710,14 +2719,14 @@ Nodes (5): Best Practices, Configuration, Operations, Performance, Security
 ## Knowledge Gaps
 - **4267 isolated node(s):** `TASK-005.sh script`, `TASK-006.sh script`, `TASK-007.sh script`, `TASK-008.sh script`, `TASK-009.sh script` (+4262 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **236 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **235 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `cn()` connect `Apps Dump` to `form.tsx`, `Badge Apps`, `Apps Dump`, `Apps Dump`, `Apps Dump`, `carousel.tsx`, `Apps Dump`, `Menubar Apps`, `Apps Dump`, `Apps Dump`, `Table Apps`, `Breadcrumb Apps`, `accordion.tsx`, `Drawer Apps`, `Apps Dump`, `Card Apps`, `Apps Dump`, `Toggle Apps`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
-- **Why does `dependencies` connect `React Apps` to `react-day-picker`, `Apps Dump`, `clsx`, `Apps Dump`, `Debugging`, `cmdk`, `Date Fns`, `Embla Carousel`, `Fontsource Geist`, `Fontsource Geist`, `Framer Motion`, `Hookform Resolvers`, `Input Otp`, `Lucide React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `React Helmet`, `React Hook`, `React Resizable`, `Startup Methods`, `Recharts Apps`, `Tailwind Merge`, `Tailwindcss Apps`, `Tanstack React`, `Vaul Apps`, `Zod Apps`, `qrcode.react`, `@radix-ui/react-scroll-area`, `Connectivity Requirements`, `@radix-ui/react-aspect-ratio`?**
+- **Why does `dependencies` connect `React Apps` to `react-day-picker`, `Apps Dump`, `clsx`, `Apps Dump`, `Debugging`, `cmdk`, `Date Fns`, `Embla Carousel`, `Fontsource Geist`, `Fontsource Geist`, `Framer Motion`, `Hookform Resolvers`, `Input Otp`, `Lucide React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `React Helmet`, `React Hook`, `React Resizable`, `Recharts Apps`, `Sonner Apps`, `Tailwind Merge`, `Tailwindcss Apps`, `Tanstack React`, `Vaul Apps`, `Zod Apps`, `qrcode.react`, `@radix-ui/react-scroll-area`, `Connectivity Requirements`, `@radix-ui/react-aspect-ratio`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
 - **Why does `react` connect `Apps Dump` to `Apps Dump`, `React Apps`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._

@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Check, Copy, Plus } from "lucide-react";
 import { toast } from "sonner";
 import type { CreateClipboardResponse } from "@/types";
+import { QRCodeCard } from "./QRCodeCard";
 
 interface Props {
   result: CreateClipboardResponse;
@@ -65,6 +66,8 @@ export function SuccessCard({ result, onCreateAnother }: Props): React.JSX.Eleme
           <Plus className="h-4 w-4" /> Create Another
         </button>
       </div>
+
+      <QRCodeCard url={url} code={result.code} />
     </motion.div>
   );
 }

@@ -3,17 +3,7 @@ export type PasswordMode = "view" | "edit" | null;
 export type Theme = "dark" | "light";
 
 export type ExpiryPreset =
-  | "1m"
-  | "5m"
-  | "15m"
-  | "1h"
-  | "1d"
-  | "1w"
-  | "1mo"
-  | "1y"
-  | "infinite"
-  | "otv"
-  | "custom";
+  "1m" | "5m" | "15m" | "1h" | "1d" | "1w" | "1mo" | "1y" | "infinite" | "otv" | "custom";
 
 export interface CreateClipboardPayload {
   code?: string;

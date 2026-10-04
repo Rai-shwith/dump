@@ -903,7 +903,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "apps_dump_web_package_dependencies_radix_ui_react_accordion",
-      "community": 628,
+      "community": 14,
       "norm_label": "@radix-ui/react-accordion"
     },
     {
@@ -913,7 +913,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "radix_ui_react_accordion",
-      "community": 628,
+      "community": 14,
       "norm_label": "@radix-ui/react-accordion"
     },
     {
@@ -1783,7 +1783,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "apps_dump_web_package_dependencies_sonner",
-      "community": 14,
+      "community": 117,
       "norm_label": "sonner"
     },
     {
@@ -1793,7 +1793,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "sonner",
-      "community": 14,
+      "community": 117,
       "norm_label": "sonner"
     },
     {
@@ -7920,7 +7920,7 @@
       "label": "In Progress",
       "file_type": "document",
       "source_file": ".agents/AGENTS.md",
-      "source_location": "L68",
+      "source_location": "L67",
       "_origin": "ast",
       "id": "agents_agents_in_progress",
       "community": 202,
@@ -7930,7 +7930,7 @@
       "label": "Not Started",
       "file_type": "document",
       "source_file": ".agents/AGENTS.md",
-      "source_location": "L71",
+      "source_location": "L70",
       "_origin": "ast",
       "id": "agents_agents_not_started",
       "community": 202,
@@ -7940,7 +7940,7 @@
       "label": "Repository Structure",
       "file_type": "document",
       "source_file": ".agents/AGENTS.md",
-      "source_location": "L76",
+      "source_location": "L75",
       "_origin": "ast",
       "id": "agents_agents_repository_structure",
       "community": 202,
@@ -7950,7 +7950,7 @@
       "label": "Language and Tooling",
       "file_type": "document",
       "source_file": ".agents/AGENTS.md",
-      "source_location": "L105",
+      "source_location": "L104",
       "_origin": "ast",
       "id": "agents_agents_language_and_tooling",
       "community": 202,
@@ -7960,7 +7960,7 @@
       "label": "Architectural Constraints (summary \u2014 full rules in AI_RULES.md)",
       "file_type": "document",
       "source_file": ".agents/AGENTS.md",
-      "source_location": "L116",
+      "source_location": "L115",
       "_origin": "ast",
       "id": "agents_agents_architectural_constraints_summary_full_rules_in_ai_rules_md",
       "community": 202,
@@ -7970,7 +7970,7 @@
       "label": "Size Limits",
       "file_type": "document",
       "source_file": ".agents/AGENTS.md",
-      "source_location": "L118",
+      "source_location": "L117",
       "_origin": "ast",
       "id": "agents_agents_size_limits",
       "community": 202,
@@ -7980,7 +7980,7 @@
       "label": "Layer Rules",
       "file_type": "document",
       "source_file": ".agents/AGENTS.md",
-      "source_location": "L127",
+      "source_location": "L126",
       "_origin": "ast",
       "id": "agents_agents_layer_rules",
       "community": 202,
@@ -7990,7 +7990,7 @@
       "label": "Key Decisions Summary",
       "file_type": "document",
       "source_file": ".agents/AGENTS.md",
-      "source_location": "L137",
+      "source_location": "L136",
       "_origin": "ast",
       "id": "agents_agents_key_decisions_summary",
       "community": 202,
@@ -8000,7 +8000,7 @@
       "label": "Environment Variables",
       "file_type": "document",
       "source_file": ".agents/AGENTS.md",
-      "source_location": "L156",
+      "source_location": "L155",
       "_origin": "ast",
       "id": "agents_agents_environment_variables",
       "community": 202,
@@ -8010,7 +8010,7 @@
       "label": "Task Sequence",
       "file_type": "document",
       "source_file": ".agents/AGENTS.md",
-      "source_location": "L167",
+      "source_location": "L166",
       "_origin": "ast",
       "id": "agents_agents_task_sequence",
       "community": 202,
@@ -8020,7 +8020,7 @@
       "label": "How to Update This File After Each Task",
       "file_type": "document",
       "source_file": ".agents/AGENTS.md",
-      "source_location": "L200",
+      "source_location": "L199",
       "_origin": "ast",
       "id": "agents_agents_how_to_update_this_file_after_each_task",
       "community": 202,
@@ -16343,7 +16343,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_containers_api_startup_methods",
-      "community": 367,
+      "community": 628,
       "norm_label": "startup methods"
     },
     {
@@ -16353,7 +16353,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_containers_api_start_basic_start_8s_timeout",
-      "community": 367,
+      "community": 628,
       "norm_label": "start() - basic start (8s timeout)"
     },
     {
@@ -16363,7 +16363,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_containers_api_startandwaitforports_recommended_20s_timeout",
-      "community": 367,
+      "community": 628,
       "norm_label": "startandwaitforports() - recommended (20s timeout)"
     },
     {
@@ -16373,7 +16373,7 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_containers_api_waitforport_wait_for_specific_port",
-      "community": 367,
+      "community": 628,
       "norm_label": "waitforport() - wait for specific port"
     },
     {
@@ -16433,7 +16433,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_containers_api_lifecycle_hooks",
-      "community": 117,
+      "community": 367,
       "norm_label": "lifecycle hooks"
     },
     {
@@ -16443,7 +16443,7 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_containers_api_onstart",
-      "community": 117,
+      "community": 367,
       "norm_label": "onstart()"
     },
     {
@@ -16453,7 +16453,7 @@
       "source_location": "L119",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_containers_api_onstop",
-      "community": 117,
+      "community": 367,
       "norm_label": "onstop()"
     },
     {
@@ -16463,7 +16463,7 @@
       "source_location": "L129",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_containers_api_onerror",
-      "community": 117,
+      "community": 367,
       "norm_label": "onerror()"
     },
     {
@@ -16473,7 +16473,7 @@
       "source_location": "L139",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_containers_api_onactivityexpired",
-      "community": 117,
+      "community": 367,
       "norm_label": "onactivityexpired()"
     },
     {
@@ -22033,7 +22033,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_flagship_configuration",
-      "community": 220,
+      "community": 419,
       "norm_label": "configuration.md"
     },
     {
@@ -22193,7 +22193,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_flagship_gotchas",
-      "community": 419,
+      "community": 523,
       "norm_label": "gotchas.md"
     },
     {
@@ -34183,7 +34183,7 @@
       "source_location": "L80",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_secrets_store_configuration_wrangler_commands",
-      "community": 280,
+      "community": 633,
       "norm_label": "wrangler commands"
     },
     {
@@ -34193,7 +34193,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_secrets_store_configuration_store_management",
-      "community": 280,
+      "community": 633,
       "norm_label": "store management"
     },
     {
@@ -34203,7 +34203,7 @@
       "source_location": "L90",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_secrets_store_configuration_secret_management_production",
-      "community": 280,
+      "community": 633,
       "norm_label": "secret management (production)"
     },
     {
@@ -34213,7 +34213,7 @@
       "source_location": "L112",
       "_origin": "ast",
       "id": "agents_skills_cloudflare_references_secrets_store_configuration_local_development",
-      "community": 280,
+      "community": 633,
       "norm_label": "local development"
     },
     {
@@ -56835,7 +56835,7 @@
       "rationale": "React + Vite + TypeScript frontend, Hono + Cloudflare Workers backend, Cloudflare KV storage.",
       "community": 78,
       "norm_label": "dump architecture",
-      "id": "agents_agents_agents_agents_agents_agents_agents_agents_agents_agents_agents_agents_agents_agents_agents_dump"
+      "id": "agents_agents_agents_agents_agents_agents_agents_agents_agents_agents_agents_agents_agents_agents_dump"
     },
     {
       "label": "Architecture Rules",
@@ -71510,7 +71510,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": ".agents/AGENTS.md",
-      "source_location": "L116",
+      "source_location": "L115",
       "weight": 1.0,
       "source": "agents_agents_agents_md",
       "target": "agents_agents_architectural_constraints_summary_full_rules_in_ai_rules_md",
@@ -71530,7 +71530,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": ".agents/AGENTS.md",
-      "source_location": "L156",
+      "source_location": "L155",
       "weight": 1.0,
       "source": "agents_agents_agents_md",
       "target": "agents_agents_environment_variables",
@@ -71540,7 +71540,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": ".agents/AGENTS.md",
-      "source_location": "L200",
+      "source_location": "L199",
       "weight": 1.0,
       "source": "agents_agents_agents_md",
       "target": "agents_agents_how_to_update_this_file_after_each_task",
@@ -71550,7 +71550,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": ".agents/AGENTS.md",
-      "source_location": "L137",
+      "source_location": "L136",
       "weight": 1.0,
       "source": "agents_agents_agents_md",
       "target": "agents_agents_key_decisions_summary",
@@ -71560,7 +71560,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": ".agents/AGENTS.md",
-      "source_location": "L105",
+      "source_location": "L104",
       "weight": 1.0,
       "source": "agents_agents_agents_md",
       "target": "agents_agents_language_and_tooling",
@@ -71580,7 +71580,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": ".agents/AGENTS.md",
-      "source_location": "L76",
+      "source_location": "L75",
       "weight": 1.0,
       "source": "agents_agents_agents_md",
       "target": "agents_agents_repository_structure",
@@ -71590,7 +71590,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": ".agents/AGENTS.md",
-      "source_location": "L167",
+      "source_location": "L166",
       "weight": 1.0,
       "source": "agents_agents_agents_md",
       "target": "agents_agents_task_sequence",
@@ -71620,7 +71620,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": ".agents/AGENTS.md",
-      "source_location": "L68",
+      "source_location": "L67",
       "weight": 1.0,
       "source": "agents_agents_current_project_state",
       "target": "agents_agents_in_progress",
@@ -71630,7 +71630,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": ".agents/AGENTS.md",
-      "source_location": "L71",
+      "source_location": "L70",
       "weight": 1.0,
       "source": "agents_agents_current_project_state",
       "target": "agents_agents_not_started",
@@ -71640,7 +71640,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": ".agents/AGENTS.md",
-      "source_location": "L127",
+      "source_location": "L126",
       "weight": 1.0,
       "source": "agents_agents_architectural_constraints_summary_full_rules_in_ai_rules_md",
       "target": "agents_agents_layer_rules",
@@ -71650,7 +71650,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": ".agents/AGENTS.md",
-      "source_location": "L118",
+      "source_location": "L117",
       "weight": 1.0,
       "source": "agents_agents_architectural_constraints_summary_full_rules_in_ai_rules_md",
       "target": "agents_agents_size_limits",
@@ -121221,5 +121221,5 @@
       "source_file": "docs/API.md"
     }
   ],
-  "built_at_commit": "92dc800c2b41525f679e211e6d4331e24f1f6a87"
+  "built_at_commit": "80366d37570aead9f2ffd8f71b08f4c5d14b746d"
 }
