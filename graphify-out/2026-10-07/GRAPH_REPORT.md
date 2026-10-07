@@ -1,16 +1,16 @@
-# Graph Report - dump  (2026-10-07)
+# Graph Report - dump  (2026-10-04)
 
 ## Corpus Check
-- 486 files · ~233,448 words
+- 486 files · ~233,501 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 5831 nodes · 6154 edges · 770 communities (534 shown, 236 thin omitted)
+- 5831 nodes · 6152 edges · 771 communities (535 shown, 236 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `0ac005b7`
+- Built from commit: `92dc800c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -47,7 +47,6 @@
 - Sandbox Agents
 - Smart Placement
 - Workers For
-- README.md
 - Badge Apps
 - Apps Dump
 - Task 013
@@ -616,13 +615,13 @@
 - Startup Methods
 - Performance Tips
 - Tail Workers Gotchas & Debugging
-- sonner
 - Framework-Specific Setup
 - Debugging
 - Network Access
 - Gotchas & Limits
 - Observability
 - Best Practices
+- configuration.md
 - Orchestration Patterns
 - Containers
 - SDK Configuration
@@ -645,6 +644,7 @@
 - Expression Syntax
 - Features
 - Key Concepts
+- cmdk
 - KV (Key-Value Store)
 - R2 (Object Storage)
 - Vectorize (Vector Database)
@@ -698,6 +698,7 @@
 - Smart Placement
 - Cloudflare Static Assets
 - tail_consumers
+- cmdk
 - Managed Rulesets
 - Outbound Worker
 - User Worker
@@ -768,11 +769,11 @@
 - **WAF Components** — _agents_skills_cloudflare_references_waf_readme_managed_rulesets, _agents_skills_cloudflare_references_waf_readme_custom_rules, _agents_skills_cloudflare_references_waf_readme_rate_limiting [EXTRACTED 1.00]
 - **One-Time View Flow** — docs_api_one_time_view, docs_decisions_one_time_view, docs_tasks_task_009__one_time_view_logic_handleraw [INFERRED 0.85]
 
-## Communities (770 total, 236 thin omitted)
+## Communities (771 total, 236 thin omitted)
 
 ### Community 0 - "Apps Dump"
-Cohesion: 0.09
-Nodes (27): ActionProps, DesktopAction(), MobileAction(), Props, DeleteConfirm(), Props, Props, EditPasswordModal() (+19 more)
+Cohesion: 0.13
+Nodes (15): ActionProps, DesktopAction(), MobileAction(), Props, DeleteConfirm(), Props, Props, EditPasswordModal() (+7 more)
 
 ### Community 1 - "Workers Dump"
 Cohesion: 0.09
@@ -828,7 +829,7 @@ Nodes (14): @cloudflare/workers-types, compilerOptions, lib, module, moduleResol
 
 ### Community 14 - "React Apps"
 Cohesion: 0.15
-Nodes (13): dependencies, cmdk, @radix-ui/react-dialog, @radix-ui/react-dropdown-menu, @radix-ui/react-tabs, react-dom, react-router-dom, cmdk (+5 more)
+Nodes (13): dependencies, @radix-ui/react-dialog, @radix-ui/react-dropdown-menu, @radix-ui/react-tabs, react-dom, react-router-dom, sonner, @radix-ui/react-dialog (+5 more)
 
 ### Community 15 - "Apps Dump"
 Cohesion: 0.20
@@ -877,10 +878,6 @@ Nodes (8): allowConcurrency Option, Breaking Gates (DANGER), Concurrency Model (
 ### Community 27 - "Workers Dump"
 Cohesion: 0.04
 Nodes (44): Analytics Engine Binding Types, Analytics Engine SQL API, API Reference, Console Logging API, GraphQL Analytics API, Tail Consumer Event Type, Configuration Patterns, Configure Analytics Engine (+36 more)
-
-### Community 32 - "README.md"
-Cohesion: 0.18
-Nodes (11): Authentication Issues, Binding Not Available, Configuration Errors, Deployment Failures, Limits, Local Development Issues, Resources, See Also (+3 more)
 
 ### Community 33 - "Badge Apps"
 Cohesion: 0.67
@@ -943,8 +940,8 @@ Cohesion: 0.07
 Nodes (26): Always await or waitUntil Promises, Architecture, Be aware of platform limits, Code Patterns, Configuration, Development & Testing, Do not store request-scoped state in global scope, Enable nodejs_compat (+18 more)
 
 ### Community 156 - "Agents Skills"
-Cohesion: 0.14
-Nodes (14): "Auto-provisioned resources not appearing", "Binding ID vs name mismatch", Common Errors, "Durable Object binding not working", "Environment not inheriting config", "Local dev behavior differs from production", "Node.js compatibility error", "outboundService not mocking fetch" (+6 more)
+Cohesion: 0.08
+Nodes (25): Authentication Issues, "Auto-provisioned resources not appearing", "Binding ID vs name mismatch", Binding Not Available, Common Errors, Configuration Errors, Deployment Failures, "Durable Object binding not working" (+17 more)
 
 ### Community 157 - "Agents Skills"
 Cohesion: 0.08
@@ -967,8 +964,8 @@ Cohesion: 0.15
 Nodes (13): Cloudflare Durable Objects, Decision Trees, Essential Commands, In This Reference, Overview, Quick Start, Reading Order, Resources (+5 more)
 
 ### Community 174 - "Agents Skills"
-Cohesion: 0.08
-Nodes (26): Assuming Single Read Gets All Data, Blocked Destinations, Certificate Validation, Common Errors, Connection Limits, Data Handling Issues, Debugging Tips, Error: Connection timeout (+18 more)
+Cohesion: 0.10
+Nodes (20): Assuming Single Read Gets All Data, Blocked Destinations, Certificate Validation, Connection Limits, Data Handling Issues, Debugging Tips, Forgetting to Close Sockets, Gotchas and Troubleshooting (+12 more)
 
 ### Community 178 - "Agents Skills"
 Cohesion: 0.10
@@ -1043,7 +1040,7 @@ Cohesion: 0.12
 Nodes (16): API Protection, Block AI Scrapers, Bot Management Patterns, Conditional Delay (Tarpit), Datacenter Detection, E-commerce Protection, Layered Defense, Mobile App Allowlisting (+8 more)
 
 ### Community 220 - "Agents Skills"
-Cohesion: 0.13
+Cohesion: 0.12
 Nodes (15): Browser, Client Provider (Browser), Flagship Configuration, Generate Types, Local Development, Multiple Apps, OpenFeature SDK Installation, Provider Options Reference (+7 more)
 
 ### Community 221 - "Workers Agents"
@@ -1059,8 +1056,8 @@ Cohesion: 0.20
 Nodes (10): Backend Worker (Smart Placement Enabled), Cloudflare Pages/Assets Warning, Dashboard Configuration, Frontend + Backend Split Configuration, Frontend Worker (No Smart Placement), Local Development, Placement Mode Values, Smart Placement Configuration (+2 more)
 
 ### Community 245 - "Workers Dump"
-Cohesion: 0.23
-Nodes (8): Props, Props, QRCodeCard(), Props, SuccessCard(), CreateClipboardResponse, downloadQrCanvas(), shareQrCanvas()
+Cohesion: 0.19
+Nodes (10): CreateForm(), Props, Props, QRCodeCard(), Props, SuccessCard(), CreateClipboardResponse, generateCode() (+2 more)
 
 ### Community 247 - "Executive Summary"
 Cohesion: 0.40
@@ -1147,8 +1144,8 @@ Cohesion: 0.13
 Nodes (14): Anti-Patterns to Flag, Architecture, Code Patterns, Configuration, FIRST: Fetch Latest References, Observability, Principles, Reference Documentation (+6 more)
 
 ### Community 269 - "clipboardApi.ts"
-Cohesion: 0.43
-Nodes (4): StarredStrip(), useStarred(), getStarred(), StarredClipboard
+Cohesion: 0.16
+Nodes (16): StarredStrip(), useStarred(), buildHeaders(), createClipboard(), getStarred(), parseError(), request(), RequestAuthOptions (+8 more)
 
 ### Community 270 - "Configuration & Setup"
 Cohesion: 0.15
@@ -1191,8 +1188,8 @@ Cohesion: 0.14
 Nodes (14): "Cannot connect to meeting", Common Errors, "CORS errors in API calls", "Echo or audio feedback", "Events not firing", "How do I schedule meetings?", Issue: Echo or audio feedback, "No video/audio tracks" (+6 more)
 
 ### Community 280 - "Configuration"
-Cohesion: 0.20
-Nodes (10): Adding Bindings, Basic Binding, CI/CD, Configuration, Creating Secrets, Dashboard, Environment-Specific, GitHub Actions (+2 more)
+Cohesion: 0.14
+Nodes (14): Adding Bindings, Basic Binding, CI/CD, Configuration, Creating Secrets, Dashboard, Environment-Specific, GitHub Actions (+6 more)
 
 ### Community 281 - "Stream Live Streaming API"
 Cohesion: 0.14
@@ -1368,7 +1365,7 @@ Nodes (13): Basic Worker Example, Cloudflare Worker Integration, Environment Var
 
 ### Community 324 - "Troubleshooting & Gotchas"
 Cohesion: 0.15
-Nodes (13): Common Errors, Framework Gotchas, Limits & Constraints, Misconfigurations, Missing Environment Variables, Next.js: SSR Hydration, React StrictMode: Double Render, React: Widget Re-mounting (+5 more)
+Nodes (13): Common Errors, Critical Rules, ❌ Exposing Secret Key, Limits & Constraints, Misconfigurations, Missing Environment Variables, ❌ Not Handling Token Expiry, Reference (+5 more)
 
 ### Community 325 - "Critical Warnings"
 Cohesion: 0.15
@@ -1515,8 +1512,8 @@ Cohesion: 0.17
 Nodes (12): Best Practices, Dynamic Reconfiguration, Event System, getPlatformProxy, Multi-Worker Registry, Options, Remote Mode, See Also (+4 more)
 
 ### Community 361 - "HomePage.tsx"
-Cohesion: 0.24
-Nodes (14): CreateForm(), EditPanel(), DESCRIPTIONS, DURATIONS, ExpirySelector(), Props, ClipboardMode, ExpiryPreset (+6 more)
+Cohesion: 0.28
+Nodes (12): EditPanel(), DESCRIPTIONS, DURATIONS, ExpirySelector(), Props, ClipboardMode, ExpiryPreset, detectExpiryPreset() (+4 more)
 
 ### Community 362 - "Dump — Serverless Online Clipboard"
 Cohesion: 0.17
@@ -1843,15 +1840,15 @@ Cohesion: 0.20
 Nodes (10): Best Practices, Full-Stack Upload Flow, In This Reference, React Stream Player, See Also, Self-Sign JWT (High Volume Tokens), Stream Patterns, TUS Resumable Upload (+2 more)
 
 ### Community 445 - "Tunnel Gotchas"
-Cohesion: 0.11
-Nodes (18): Best Practices, Common Errors, Configuration, "Connection already registered", "Connection timeout", Debug Mode, "Error 1016 (Origin DNS Error)", From Ngrok (+10 more)
+Cohesion: 0.29
+Nodes (7): Common Errors, "Connection already registered", "Connection timeout", "Error 1016 (Origin DNS Error)", "Self-signed certificate rejected", "Tunnel credentials rotated but connections fail", "Tunnel not starting"
 
 ### Community 446 - "Cloudflare WAF Expert Skill Reference"
 Cohesion: 0.20
 Nodes (10): Cloudflare WAF Expert Skill Reference, Create Custom Rule, Create Rate Limit, Deploy Cloudflare Managed Ruleset, Managed Ruleset Quick Reference, Overview, Phases, Quick Start (+2 more)
 
 ### Community 447 - "Framework Integration"
-Cohesion: 0.20
+Cohesion: 0.29
 Nodes (6): Basic HTML, Configuration, CSP Headers, Framework Examples, Framework Integration, GDPR Consent
 
 ### Community 448 - "Configuration"
@@ -2151,7 +2148,7 @@ Cohesion: 0.25
 Nodes (8): Email Workers API Reference, EmailMessage Constructor, mimetext API Quick Reference, postal-mime Parsed Output, SendEmail Binding Types, SendEmail Interface, TypeScript Types, Usage
 
 ### Community 523 - "Anti-Patterns"
-Cohesion: 0.22
+Cohesion: 0.25
 Nodes (8): Anti-Patterns, Evaluating Flags in a Tight Loop, Flagship Gotchas & Troubleshooting, Limits, Partial PUT Updates, Propagation Behavior, Stale Flag Cleanup, Using the SDK Inside Workers When Binding Is Available
 
 ### Community 524 - "Configuration"
@@ -2227,7 +2224,7 @@ Cohesion: 0.25
 Nodes (7): Filtering, Insert/Upsert, Other Operations, Performance, Query, Types, Vectorize API Reference
 
 ### Community 542 - "Web Analytics Gotchas"
-Cohesion: 0.25
+Cohesion: 0.29
 Nodes (7): Configuration Issues, Framework-Specific, Gatsby Window Undefined, Limits, Next.js Hydration Warning, Web Analytics Gotchas, When NOT to Use Web Analytics
 
 ### Community 543 - "Zaraz Patterns"
@@ -2323,8 +2320,8 @@ Cohesion: 0.29
 Nodes (7): Live stream not connecting, Player shows infinite loading, Signed URL returns 403, Troubleshooting, Video stuck in "inprogress" state, Video uploads but isn't visible, Webhook signature verification fails
 
 ### Community 567 - "Common Errors"
-Cohesion: 0.40
-Nodes (5): Critical Rules, ❌ Exposing Secret Key, ❌ Not Handling Token Expiry, ❌ Reusing Tokens (Single-Use Rule), ❌ Skipping Server-Side Validation
+Cohesion: 0.33
+Nodes (6): Common Errors, Error: Connection timeout, Error: "Port 25 prohibited", Error: "proxy request failed", Error: "socket is not open", Error: "TCP Loop detected"
 
 ### Community 568 - "Common Mistakes"
 Cohesion: 0.29
@@ -2427,8 +2424,8 @@ Cohesion: 0.40
 Nodes (5): Compression, Content-Type Inference, Default Headers, ETag Generation, Response Behavior
 
 ### Community 594 - "Framework Gotchas"
-Cohesion: 0.50
-Nodes (4): Local Development, Secret Management (Production), Store Management, Wrangler Commands
+Cohesion: 0.40
+Nodes (5): Framework Gotchas, Next.js: SSR Hydration, React StrictMode: Double Render, React: Widget Re-mounting, SPA: Navigation Without Cleanup
 
 ### Community 595 - "D1 (SQL Database)"
 Cohesion: 0.33
@@ -2537,6 +2534,10 @@ Nodes (5): Analytics Engine, GraphQL, Logpush, Observability, Tail Workers
 ### Community 644 - "Best Practices"
 Cohesion: 0.40
 Nodes (5): Architecture, Best Practices, Limits & Security, Routing, Tags
+
+### Community 646 - "configuration.md"
+Cohesion: 0.17
+Nodes (6): Debug Mode, From Ngrok, From VPN, Limits, Migration Strategies, Tunnel Gotchas
 
 ### Community 648 - "Orchestration Patterns"
 Cohesion: 0.40
@@ -2702,6 +2703,10 @@ Nodes (3): Local Testing with Vitest, Test Scheduled Events, Testing
 Cohesion: 0.50
 Nodes (4): Native Binding (Recommended), REST API, SDK Approach Decision Tree, Vercel AI SDK Integration
 
+### Community 732 - "cmdk"
+Cohesion: 0.40
+Nodes (5): Best Practices, Configuration, Operations, Performance, Security
+
 ## Knowledge Gaps
 - **4267 isolated node(s):** `TASK-005.sh script`, `TASK-006.sh script`, `TASK-007.sh script`, `TASK-008.sh script`, `TASK-009.sh script` (+4262 more)
   These have ≤1 connection - possible missing edges or undocumented components.
@@ -2712,14 +2717,14 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `cn()` connect `Apps Dump` to `form.tsx`, `Badge Apps`, `Apps Dump`, `Apps Dump`, `Apps Dump`, `carousel.tsx`, `Apps Dump`, `Menubar Apps`, `Apps Dump`, `Apps Dump`, `Table Apps`, `Breadcrumb Apps`, `accordion.tsx`, `Drawer Apps`, `Apps Dump`, `Card Apps`, `Apps Dump`, `Toggle Apps`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
-- **Why does `dependencies` connect `React Apps` to `react-day-picker`, `Apps Dump`, `clsx`, `Apps Dump`, `Debugging`, `Date Fns`, `Embla Carousel`, `Fontsource Geist`, `Fontsource Geist`, `Framer Motion`, `Hookform Resolvers`, `Input Otp`, `Lucide React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Vaul Apps`, `Radix React`, `Radix React`, `React Helmet`, `React Hook`, `React Resizable`, `Startup Methods`, `Recharts Apps`, `Tailwind Merge`, `Tailwindcss Apps`, `Tanstack React`, `sonner`, `Zod Apps`, `qrcode.react`, `@radix-ui/react-scroll-area`, `Connectivity Requirements`, `@radix-ui/react-aspect-ratio`?**
+- **Why does `dependencies` connect `React Apps` to `react-day-picker`, `Apps Dump`, `clsx`, `Apps Dump`, `Debugging`, `cmdk`, `Date Fns`, `Embla Carousel`, `Fontsource Geist`, `Fontsource Geist`, `Framer Motion`, `Hookform Resolvers`, `Input Otp`, `Lucide React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `React Helmet`, `React Hook`, `React Resizable`, `Startup Methods`, `Recharts Apps`, `Tailwind Merge`, `Tailwindcss Apps`, `Tanstack React`, `Vaul Apps`, `Zod Apps`, `qrcode.react`, `@radix-ui/react-scroll-area`, `Connectivity Requirements`, `@radix-ui/react-aspect-ratio`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
 - **Why does `react` connect `Apps Dump` to `Apps Dump`, `React Apps`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
 - **What connects `TASK-005.sh script`, `TASK-006.sh script`, `TASK-007.sh script` to the rest of the system?**
   _4274 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Apps Dump` be split into smaller, more focused modules?**
-  _Cohesion score 0.0944741532976827 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.13157894736842105 - nodes in this community are weakly interconnected._
 - **Should `Workers Dump` be split into smaller, more focused modules?**
   _Cohesion score 0.09081081081081081 - nodes in this community are weakly interconnected._
 - **Should `Apps Dump` be split into smaller, more focused modules?**
