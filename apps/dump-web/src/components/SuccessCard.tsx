@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Check, Copy, Plus } from "lucide-react";
 import { toast } from "sonner";
@@ -37,12 +38,12 @@ export function SuccessCard({ result, onCreateAnother }: Props): React.JSX.Eleme
         <h2 className="text-base font-semibold text-[var(--text-primary)]">Clipboard created!</h2>
       </div>
 
-      <a
-        href={url}
+      <Link
+        to={`/${result.code}`}
         className="mt-4 block break-all rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 font-mono text-sm text-[var(--accent)] hover:text-[var(--accent-hover)] transition-colors"
       >
         {url}
-      </a>
+      </Link>
 
       {result.isOneTimeView && (
         <p className="mt-3 text-xs text-[var(--warning)]">

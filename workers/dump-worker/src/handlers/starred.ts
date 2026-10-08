@@ -29,9 +29,6 @@ export async function handleStar(_request: Request, env: Env, codeParam: string)
     return createError("Clipboard not found or expired", 404);
   }
 
-  if (meta.isOneTimeView) {
-    return createError("One-time view clipboards cannot be starred", 400);
-  }
 
   if (meta.isStarred) {
     return new Response(JSON.stringify({ success: true, isStarred: true }), {

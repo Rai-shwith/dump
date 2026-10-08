@@ -63,6 +63,7 @@ For the current task, also read the specific task file in docs/tasks/.
 - TASK-023: SEO Optimization implemented with static meta tags, react-helmet-async for dynamic tags, and robots/sitemap
 - TASK-024: Independent view and edit passwords, edit password verification, autofill blocking, and UX improvements
 - TASK-025: Lightweight modern QR code generation on creation success card with lossless PNG download and native Web Share
+- TASK-026: Enable starring one-time view clipboards, deduplicate in-flight read requests to prevent double-fetch burning, and use client-side navigation
 - V1 functional implementation complete. Ready for Lovable UI polish phase.
 
 ### In Progress

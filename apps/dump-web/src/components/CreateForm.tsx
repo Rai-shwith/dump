@@ -42,7 +42,6 @@ export function CreateForm({ onCreated }: Props): React.JSX.Element {
 
   useEffect(() => {
     if (mode === "protected" && expiry === "infinite") setExpiry("1d");
-    if (expiry === "otv") setIsStarred(false);
   }, [mode, expiry]);
 
   function regenCode(): void {
@@ -133,7 +132,7 @@ export function CreateForm({ onCreated }: Props): React.JSX.Element {
         const pwToSave = (requireViewPw ? viewPassword : "") || (requireEditPw ? editPassword : "");
         if (pwToSave) saveBypassPassword(res.code, pwToSave);
       }
-      if (isStarred && !isOTV) {
+      if (isStarred) {
         try {
           await starClipboard(res.code);
           window.dispatchEvent(new Event("refresh-starred"));
@@ -222,20 +221,18 @@ export function CreateForm({ onCreated }: Props): React.JSX.Element {
           </div>
         </div>
 
-        {expiry !== "otv" && (
-          <button
-            type="button"
-            onClick={() => setIsStarred(!isStarred)}
-            className={`flex w-max items-center gap-2 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors cursor-pointer ${
-              isStarred
-                ? "border-[var(--accent)] bg-[var(--accent)] text-[#0a0a0a]"
-                : "border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
-            }`}
-          >
-            <Star className={`h-4 w-4 ${isStarred ? "fill-current" : ""}`} />
-            {isStarred ? "Starred globally" : "Star globally"}
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={() => setIsStarred(!isStarred)}
+          className={`flex w-max items-center gap-2 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors cursor-pointer ${
+            isStarred
+              ? "border-[var(--accent)] bg-[var(--accent)] text-[#0a0a0a]"
+              : "border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+          }`}
+        >
+          <Star className={`h-4 w-4 ${isStarred ? "fill-current" : ""}`} />
+          {isStarred ? "Starred globally" : "Star globally"}
+        </button>
 
         {mode === "protected" && (
           <ProtectedPasswordInputs

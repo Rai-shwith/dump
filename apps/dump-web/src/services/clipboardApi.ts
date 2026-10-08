@@ -73,18 +73,39 @@ export async function createClipboard(
   return data;
 }
 
+const inFlightReads = new Map<string, Promise<ClipboardData | LockedResponse>>();
+
 export async function readClipboard(
   code: string,
   token?: string,
   password?: string,
 ): Promise<ClipboardData | LockedResponse> {
-  const { data } = await request<ClipboardData | LockedResponse>(`/clipboard/${code}`, {
-    method: "GET",
-    token,
-    password,
-    viewPassword: password,
-  });
-  return data;
+  const normalizedCode = code.toLowerCase();
+  const key = `${normalizedCode}:${token ?? ""}:${password ?? ""}`;
+  const existing = inFlightReads.get(key);
+  if (existing) {
+    return existing;
+  }
+
+  const promise = (async () => {
+    try {
+      const { data } = await request<ClipboardData | LockedResponse>(
+        `/clipboard/${normalizedCode}`,
+        {
+          method: "GET",
+          token,
+          password,
+          viewPassword: password,
+        },
+      );
+      return data;
+    } finally {
+      inFlightReads.delete(key);
+    }
+  })();
+
+  inFlightReads.set(key, promise);
+  return promise;
 }
 
 export async function updateClipboard(

@@ -1,16 +1,16 @@
 # Graph Report - dump  (2026-10-08)
 
 ## Corpus Check
-- 487 files · ~233,980 words
+- 487 files · ~233,961 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 5834 nodes · 6156 edges · 769 communities (532 shown, 237 thin omitted)
+- 5834 nodes · 6156 edges · 770 communities (533 shown, 237 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ed087750`
+- Built from commit: `4b48a4f9`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -614,7 +614,6 @@
 - Common Errors
 - Client SDK Configuration
 - Request Object
-- Startup Methods
 - Performance Tips
 - Tail Workers Gotchas & Debugging
 - sonner
@@ -646,6 +645,7 @@
 - Expression Syntax
 - Features
 - Key Concepts
+- cmdk
 - KV (Key-Value Store)
 - R2 (Object Storage)
 - Vectorize (Vector Database)
@@ -769,7 +769,7 @@
 - **WAF Components** — _agents_skills_cloudflare_references_waf_readme_managed_rulesets, _agents_skills_cloudflare_references_waf_readme_custom_rules, _agents_skills_cloudflare_references_waf_readme_rate_limiting [EXTRACTED 1.00]
 - **One-Time View Flow** — docs_api_one_time_view, docs_decisions_one_time_view, docs_tasks_task_009__one_time_view_logic_handleraw [INFERRED 0.85]
 
-## Communities (769 total, 237 thin omitted)
+## Communities (770 total, 237 thin omitted)
 
 ### Community 0 - "Apps Dump"
 Cohesion: 0.13
@@ -800,8 +800,8 @@ Cohesion: 0.07
 Nodes (28): compilerOptions, allowImportingTsExtensions, jsx, lib, module, moduleResolution, noEmit, noFallthroughCasesInSwitch (+20 more)
 
 ### Community 7 - "Apps Dump"
-Cohesion: 0.25
-Nodes (8): Logo(), Navbar(), useTheme(), LockedResponse, PasswordMode, Theme, applyTheme(), getInitialTheme()
+Cohesion: 0.33
+Nodes (6): Logo(), Navbar(), useTheme(), Theme, applyTheme(), getInitialTheme()
 
 ### Community 8 - "Apps Dump"
 Cohesion: 0.05
@@ -829,7 +829,7 @@ Nodes (14): @cloudflare/workers-types, compilerOptions, lib, module, moduleResol
 
 ### Community 14 - "React Apps"
 Cohesion: 0.15
-Nodes (13): dependencies, cmdk, @radix-ui/react-dialog, @radix-ui/react-dropdown-menu, @radix-ui/react-tabs, react-dom, react-router-dom, cmdk (+5 more)
+Nodes (13): dependencies, @radix-ui/react-accordion, @radix-ui/react-dialog, @radix-ui/react-dropdown-menu, @radix-ui/react-tabs, react-dom, react-router-dom, @radix-ui/react-accordion (+5 more)
 
 ### Community 15 - "Apps Dump"
 Cohesion: 0.20
@@ -848,8 +848,8 @@ Cohesion: 0.22
 Nodes (8): Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow
 
 ### Community 19 - "Breadcrumb Apps"
-Cohesion: 0.24
-Nodes (7): EditPasswordSection(), Props, PasswordGate(), Props, Props, ProtectedPasswordInputs(), Switch
+Cohesion: 0.32
+Nodes (5): PasswordGate(), Props, Props, ProtectedPasswordInputs(), Switch
 
 ### Community 20 - "Drawer Apps"
 Cohesion: 0.25
@@ -924,8 +924,8 @@ Cohesion: 0.33
 Nodes (6): Connectivity Requirements, Firewall Rules, Full (Recommended), IP Ranges, Minimal (Production), Outbound Ports
 
 ### Community 95 - "Radix React"
-Cohesion: 0.13
-Nodes (16): StarredStrip(), useStarred(), ApiError, buildHeaders(), createClipboard(), getStarred(), inFlightReads, parseError() (+8 more)
+Cohesion: 0.19
+Nodes (13): ApiError, buildHeaders(), inFlightReads, parseError(), request(), RequestAuthOptions, CreateClipboardPayload, GetStarredResponse (+5 more)
 
 ### Community 111 - "React Dom"
 Cohesion: 0.33
@@ -1032,8 +1032,8 @@ Cohesion: 0.12
 Nodes (17): Basic Patterns, Common Patterns, Connection Pooling, Destination Allowlist (Prevent SSRF), Error Handling Patterns, Fallback, MQTT, Multi-Protocol Gateway (+9 more)
 
 ### Community 214 - "Agents Skills"
-Cohesion: 0.24
-Nodes (7): App(), SearchBar(), Toaster(), ToasterProps, queryClient, NotFound(), ViewPage()
+Cohesion: 0.17
+Nodes (10): App(), SearchBar(), SearchBarProps, Toaster(), ToasterProps, queryClient, NotFound(), ViewPage() (+2 more)
 
 ### Community 215 - "Agents Skills"
 Cohesion: 0.12
@@ -1148,8 +1148,8 @@ Cohesion: 0.13
 Nodes (14): Anti-Patterns to Flag, Architecture, Code Patterns, Configuration, FIRST: Fetch Latest References, Observability, Principles, Reference Documentation (+6 more)
 
 ### Community 269 - "clipboardApi.ts"
-Cohesion: 0.31
-Nodes (4): SearchBarProps, APP_CONFIG, checkClipboardExists(), validateCode()
+Cohesion: 0.20
+Nodes (12): EditPanel(), EditPasswordSection(), Props, StarredStrip(), useStarred(), getStarred(), updateClipboard(), detectExpiryPreset() (+4 more)
 
 ### Community 270 - "Configuration & Setup"
 Cohesion: 0.15
@@ -1292,7 +1292,7 @@ Cohesion: 0.15
 Nodes (13): Agent (Base Class), Agent Classes, AI Integration, AIChatAgent, API Reference, Client Hooks (React), Connections & AI, Context & Cleanup (+5 more)
 
 ### Community 305 - "README.md"
-Cohesion: 0.25
+Cohesion: 0.22
 Nodes (8): Common Patterns, Dynamic Routing, Limitations, Metadata, Monitoring, Node Types, Usage, Version Management
 
 ### Community 306 - "API Reference"
@@ -1472,7 +1472,7 @@ Cohesion: 0.17
 Nodes (12): Account-Scoped (cross-domain), Cloudflare GraphQL Analytics API, Core Concepts, Dataset Naming Convention, In This Reference, Key Datasets by Product, Overview, Query Structure (+4 more)
 
 ### Community 350 - "API Reference"
-Cohesion: 0.17
+Cohesion: 0.18
 Nodes (11): API Reference, Direct Creator Upload, Draw/Watermark, Error Codes, Other Operations, REST API, Transform Images, Transform Options (+3 more)
 
 ### Community 351 - "Cloudflare Network Interconnect (CNI)"
@@ -1516,8 +1516,8 @@ Cohesion: 0.17
 Nodes (12): Best Practices, Dynamic Reconfiguration, Event System, getPlatformProxy, Multi-Worker Registry, Options, Remote Mode, See Also (+4 more)
 
 ### Community 361 - "HomePage.tsx"
-Cohesion: 0.24
-Nodes (14): CreateForm(), EditPanel(), DESCRIPTIONS, DURATIONS, ExpirySelector(), Props, ClipboardMode, ExpiryPreset (+6 more)
+Cohesion: 0.23
+Nodes (10): CreateForm(), DESCRIPTIONS, DURATIONS, ExpirySelector(), Props, APP_CONFIG, createClipboard(), ClipboardMode (+2 more)
 
 ### Community 362 - "Dump — Serverless Online Clipboard"
 Cohesion: 0.17
@@ -1616,8 +1616,8 @@ Cohesion: 0.18
 Nodes (11): API Reference, Auth, Basic Access, Binding API, Error Handling, Multiple Secrets & Patterns, Responses, REST API (+3 more)
 
 ### Community 386 - "API Reference"
-Cohesion: 0.15
-Nodes (12): 404 Handling, Advanced Usage, API Reference, Compression, Conditional Serving, Content-Type Inference, Default Headers, Error Handling (+4 more)
+Cohesion: 0.18
+Nodes (10): 404 Handling, Advanced Usage, API Reference, ASSETS Binding, Conditional Serving, Error Handling, Error Responses, Method Signatures (+2 more)
 
 ### Community 387 - "Tail Workers API Reference"
 Cohesion: 0.18
@@ -1756,7 +1756,7 @@ Cohesion: 0.20
 Nodes (10): Dimensions, Firewall Dimensions (firewallEventsAdaptive), GraphQL Analytics API Reference, HTTP Request Dimensions (httpRequestsAdaptiveGroups), Pagination & Sorting, Query Root, See Also, Settings Node (+2 more)
 
 ### Community 422 - "Cloudflare Images Skill Reference"
-Cohesion: 0.20
+Cohesion: 0.29
 Nodes (7): Cloudflare Images Skill Reference, Core Methods, In This Reference, Key Features, Quick Decision Tree, Reading Order, See Also
 
 ### Community 423 - "KV API Reference"
@@ -1896,7 +1896,7 @@ Cohesion: 0.22
 Nodes (9): Cloudflare Agents SDK, Core Value, In This Reference, Package Entry Points, Quick Start, Reading Order, See Also, What Type of Agent? (+1 more)
 
 ### Community 458 - "AI Gateway SDK Integration"
-Cohesion: 0.20
+Cohesion: 0.22
 Nodes (9): AI Gateway SDK Integration, Anthropic SDK, Headers Reference, HTTP / cURL, LangChain / LlamaIndex, OpenAI SDK, Options, Vercel AI SDK (Recommended) (+1 more)
 
 ### Community 459 - "AI Search Patterns"
@@ -2244,8 +2244,8 @@ Cohesion: 0.25
 Nodes (7): Architectural Decisions, Notes, Objective, Prerequisites, Scope, TASK-020 — Password Bypass Feature, User Preferences
 
 ### Community 545 - "ASSETS Binding"
-Cohesion: 0.67
-Nodes (3): ASSETS Binding, Method Signatures, Type Definition
+Cohesion: 0.40
+Nodes (5): Compression, Content-Type Inference, Default Headers, ETag Generation, Response Behavior
 
 ### Community 546 - "Best Practices"
 Cohesion: 0.29
@@ -2713,7 +2713,7 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `cn()` connect `Apps Dump` to `form.tsx`, `Badge Apps`, `Apps Dump`, `Apps Dump`, `Apps Dump`, `carousel.tsx`, `Apps Dump`, `Menubar Apps`, `Apps Dump`, `Apps Dump`, `Table Apps`, `Breadcrumb Apps`, `accordion.tsx`, `Drawer Apps`, `Apps Dump`, `Card Apps`, `Apps Dump`, `Toggle Apps`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
-- **Why does `dependencies` connect `React Apps` to `react-day-picker`, `Apps Dump`, `clsx`, `Apps Dump`, `Debugging`, `Date Fns`, `Embla Carousel`, `Fontsource Geist`, `Fontsource Geist`, `Framer Motion`, `Hookform Resolvers`, `Input Otp`, `Lucide React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Vaul Apps`, `Radix React`, `Radix React`, `React Helmet`, `React Hook`, `React Resizable`, `Startup Methods`, `Recharts Apps`, `Tailwind Merge`, `Tailwindcss Apps`, `Tanstack React`, `sonner`, `Zod Apps`, `qrcode.react`, `@radix-ui/react-scroll-area`, `Connectivity Requirements`, `@radix-ui/react-aspect-ratio`?**
+- **Why does `dependencies` connect `React Apps` to `react-day-picker`, `Apps Dump`, `clsx`, `Apps Dump`, `Debugging`, `cmdk`, `Date Fns`, `Embla Carousel`, `Fontsource Geist`, `Fontsource Geist`, `Framer Motion`, `Hookform Resolvers`, `Input Otp`, `Lucide React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Radix React`, `Vaul Apps`, `Radix React`, `Radix React`, `React Helmet`, `React Hook`, `React Resizable`, `Recharts Apps`, `Tailwind Merge`, `Tailwindcss Apps`, `Tanstack React`, `sonner`, `Zod Apps`, `qrcode.react`, `@radix-ui/react-scroll-area`, `Connectivity Requirements`, `@radix-ui/react-aspect-ratio`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
 - **Why does `react` connect `Apps Dump` to `Apps Dump`, `React Apps`?**
   _High betweenness centrality (0.003) - this node is a cross-community bridge._
