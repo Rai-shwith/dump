@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Loader2, RefreshCw, Star } from "lucide-react";
 import { toast } from "sonner";
@@ -19,10 +19,13 @@ import { ProtectedPasswordInputs } from "./ProtectedPasswordInputs";
 
 interface Props {
   onCreated: (res: CreateClipboardResponse) => void;
+  initialCode?: string;
 }
 
-export function CreateForm({ onCreated }: Props): React.JSX.Element {
-  const [code, setCode] = useState<string>("");
+export function CreateForm({ onCreated, initialCode }: Props): React.JSX.Element {
+  const [code, setCode] = useState<string>(() => {
+    return initialCode ? initialCode.toLowerCase() : generateCode();
+  });
   const [content, setContent] = useState<string>("");
   const [mode, setMode] = useState<ClipboardMode>("public");
   const [requireViewPw, setRequireViewPw] = useState<boolean>(true);
@@ -32,13 +35,21 @@ export function CreateForm({ onCreated }: Props): React.JSX.Element {
   const [bypass, setBypass] = useState<boolean>(false);
   const [expiry, setExpiry] = useState<ExpiryPreset>("1h");
   const [customDt, setCustomDt] = useState<string>("");
-  const [codeError, setCodeError] = useState<string | null>(null);
+  const [codeError, setCodeError] = useState<string | null>(() => {
+    return initialCode ? validateCode(initialCode.toLowerCase()) : null;
+  });
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [isStarred, setIsStarred] = useState<boolean>(false);
+  const hasAutoSelectedRef = useRef<boolean>(false);
 
   useEffect(() => {
-    setCode(generateCode());
-  }, []);
+    if (initialCode) {
+      const lower = initialCode.toLowerCase();
+      setCode(lower);
+      setCodeError(validateCode(lower));
+      hasAutoSelectedRef.current = false;
+    }
+  }, [initialCode]);
 
   useEffect(() => {
     if (mode === "protected" && expiry === "infinite") setExpiry("1d");
@@ -47,6 +58,20 @@ export function CreateForm({ onCreated }: Props): React.JSX.Element {
   function regenCode(): void {
     setCode(generateCode());
     setCodeError(null);
+    hasAutoSelectedRef.current = false;
+  }
+
+  function handleCodeFocus(e: React.FocusEvent<HTMLInputElement>): void {
+    if (!hasAutoSelectedRef.current) {
+      e.target.select();
+    }
+  }
+
+  function handleCodeClick(e: React.MouseEvent<HTMLInputElement>): void {
+    if (!hasAutoSelectedRef.current) {
+      (e.target as HTMLInputElement).select();
+      hasAutoSelectedRef.current = true;
+    }
   }
 
   function handleCodeChange(v: string): void {
@@ -166,8 +191,8 @@ export function CreateForm({ onCreated }: Props): React.JSX.Element {
             <input
               value={code}
               onChange={(e) => handleCodeChange(e.target.value)}
-              onFocus={(e) => e.target.select()}
-              onClick={(e) => (e.target as HTMLInputElement).select()}
+              onFocus={handleCodeFocus}
+              onClick={handleCodeClick}
               spellCheck={false}
               autoCapitalize="off"
               autoComplete="off"

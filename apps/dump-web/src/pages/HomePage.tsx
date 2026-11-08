@@ -1,6 +1,8 @@
 import { AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { toast } from "sonner";
 import { CreateForm } from "@/components/CreateForm";
 import { SearchBar } from "@/components/SearchBar";
 import { StarredStrip } from "@/components/StarredStrip";
@@ -9,6 +11,16 @@ import type { CreateClipboardResponse } from "@/types";
 
 export default function HomePage() {
   const [result, setResult] = useState<CreateClipboardResponse | null>(null);
+  const [searchParams] = useSearchParams();
+  const queryCode = searchParams.get("code")?.trim().toLowerCase() || "";
+  const notifiedCodeRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (queryCode && notifiedCodeRef.current !== queryCode) {
+      notifiedCodeRef.current = queryCode;
+      toast.info(`Clipboard "${queryCode}" does not exist yet. Create it below!`);
+    }
+  }, [queryCode]);
 
   return (
     <div className="mx-auto max-w-xl space-y-10">
@@ -36,7 +48,11 @@ export default function HomePage() {
           {result ? (
             <SuccessCard key="success" result={result} onCreateAnother={() => setResult(null)} />
           ) : (
-            <CreateForm key="form" onCreated={setResult} />
+            <CreateForm
+              key={queryCode || "form"}
+              initialCode={queryCode || undefined}
+              onCreated={setResult}
+            />
           )}
         </AnimatePresence>
       </section>

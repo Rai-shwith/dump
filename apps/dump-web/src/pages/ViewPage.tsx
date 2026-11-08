@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
@@ -58,6 +58,7 @@ export default function ViewPage() {
 }
 
 function ViewInner({ code }: { code: string }) {
+  const navigate = useNavigate();
   const { state, unlock, setData } = useClipboard(code);
 
   const isProtectedOk = state.status === "ok" && state.data.mode === "protected";
@@ -67,6 +68,12 @@ function ViewInner({ code }: { code: string }) {
       toast.success("Password bypassed using saved token");
     }
   }, [isProtectedOk, code]);
+
+  useEffect(() => {
+    if (state.status === "not-found") {
+      navigate(`/?code=${encodeURIComponent(code)}`, { replace: true });
+    }
+  }, [state.status, code, navigate]);
 
   return (
     <AnimatePresence mode="wait">
@@ -105,8 +112,6 @@ function ViewInner({ code }: { code: string }) {
         </motion.div>
       )}
 
-      {state.status === "not-found" && <NotFoundInline key="404" />}
-
       {state.status === "error" && (
         <motion.div
           key="err"
@@ -119,33 +124,5 @@ function ViewInner({ code }: { code: string }) {
         </motion.div>
       )}
     </AnimatePresence>
-  );
-}
-
-function NotFoundInline() {
-  return (
-    <motion.div
-      key="404"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="grid min-h-[50vh] place-items-center text-center"
-    >
-      <Helmet>
-        <title>404 Not Found | Dump</title>
-      </Helmet>
-      <div>
-        <h1 className="font-mono text-6xl font-bold text-[var(--text-primary)]">404</h1>
-        <p className="mt-3 text-sm text-[var(--text-secondary)]">
-          This clipboard doesn't exist or has expired.
-        </p>
-        <Link
-          to="/"
-          className="mt-6 inline-flex items-center justify-center rounded-md bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-[#0a0a0a] hover:bg-[var(--accent-hover)] transition-colors"
-        >
-          Go home
-        </Link>
-      </div>
-    </motion.div>
   );
 }
